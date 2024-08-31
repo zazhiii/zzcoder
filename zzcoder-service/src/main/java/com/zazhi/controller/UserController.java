@@ -1,16 +1,16 @@
 package com.zazhi.controller;
 
+import com.zazhi.common.constant.ErrorMsg;
+import com.zazhi.common.constant.ValidationMsg;
 import com.zazhi.common.result.Result;
 import com.zazhi.entity.User;
 import com.zazhi.service.UserService;
 import com.zazhi.dto.*;
 import com.zazhi.service.impl.VerificationCodeService;
+import jakarta.validation.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author zazhi
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/user")
+@Validated
 public class UserController {
 
     @Autowired
@@ -28,30 +29,33 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/send-email-verification-code")
-    public Result sendEmailVerificationCode(@RequestBody @Validated SendEmailCodeDTO sendEmailCodeDTO){
-        // 若是注册验证码，判断邮箱是否已注册
-        if(sendEmailCodeDTO.getPurpose().equals("register")){
-            User user = userService.findByEmail(sendEmailCodeDTO.getEmail());
-            System.out.println(user);
-            if(user != null) return Result.error("该邮箱已注册！");
-        }
+    public Result sendEmailVerificationCode(
+            @RequestParam
+            @Email(message = ValidationMsg.INVALID_EMAIL_FORMAT)
+            String email){
 
         // 发送验证码
-        verificationCodeService.sendVerificationCode(sendEmailCodeDTO.getEmail());
+        verificationCodeService.sendVerificationCode(email);
         return Result.success();
     }
 
     @PostMapping("/register")
     public Result register(@RequestBody @Validated RegisterDTO registerDTO){
-        // 判断用户名是否注册
-        User user = userService.findByUsername(registerDTO.getUsername());
+        //判断邮箱是否注册
+        User user = userService.findByEmail(registerDTO.getEmail());
         if(user != null){
-            return Result.error("该用户名已注册！");
+            return Result.error(ErrorMsg.EMAIL_ALREADY_REGISTERED);
+        }
+
+        // 判断用户名是否注册
+        user = userService.findByUsername(registerDTO.getUsername());
+        if(user != null){
+            return Result.error(ErrorMsg.USERNAME_ALREADY_REGISTERED);
         }
 
         //判断验证码是否正确
         if(!verificationCodeService.verifyCode(registerDTO.getEmail(), registerDTO.getEmailVerificationCode())){
-            return Result.error("验证码不正确或已过期！");
+            return Result.error(ErrorMsg.INVALID_VERIFICATION_CODE);
         }
 
         userService.add(registerDTO);
