@@ -1,4 +1,4 @@
-package com.zazhi.excetion;
+package com.zazhi.handler;
 
 import com.zazhi.common.result.Result;
 import org.springframework.util.StringUtils;

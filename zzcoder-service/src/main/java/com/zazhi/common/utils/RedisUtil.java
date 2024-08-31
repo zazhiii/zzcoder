@@ -40,4 +40,25 @@ public class RedisUtil {
     public String get(String key) {
         return redisTemplate.opsForValue().get(key);
     }
+
+    /**
+     * 判断 Redis 中是否包含某个键
+     * @param key 要判断的键
+     * @return 如果包含返回 true，否则返回 false
+     */
+    public boolean hasKey(String key) {
+        Boolean hasKey = redisTemplate.hasKey(key);
+        return hasKey != null && hasKey;
+    }
+
+    /**
+     * 获取某个键的剩余过期时间
+     * @param key 要查询的键
+     * @return 剩余过期时间，单位为秒；如果键不存在，返回 -2；如果键存在且没有设置过期时间，返回 -1
+     */
+    public Long getExpire(String key) {
+        return redisTemplate.getExpire(key, TimeUnit.SECONDS);
+    }
+
+
 }

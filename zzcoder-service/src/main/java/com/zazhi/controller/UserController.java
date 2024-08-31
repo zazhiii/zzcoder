@@ -28,7 +28,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/send-email-verification-code")
+    @GetMapping("/send-email-verification-code")
     public Result sendEmailVerificationCode(
             @RequestParam
             @Email(message = ValidationMsg.INVALID_EMAIL_FORMAT)

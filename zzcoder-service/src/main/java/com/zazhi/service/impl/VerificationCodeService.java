@@ -1,6 +1,7 @@
 package com.zazhi.service.impl;
 
 import com.zazhi.common.utils.RedisUtil;
+import com.zazhi.excetion.TooManyRequestsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -43,8 +44,14 @@ public class VerificationCodeService {
         // 1. 生成验证码
         String verificationCode = generateVerificationCode();
 
-        // 2. 存储验证码到 Redis
         String redisKey = VERIFICATION_CODE_PREFIX + email;
+
+        // 若键以存在则判断为操作频繁
+        if(redisUtil.hasKey(redisKey)){
+            throw new TooManyRequestsException("操作过快，请" + redisUtil.getExpire(redisKey) + "秒后重试！");
+        }
+
+        // 2. 存储验证码到 Redis
         redisUtil.set(redisKey, verificationCode, CODE_EXPIRY, TimeUnit.SECONDS);
 
         // 3. 发送邮件
