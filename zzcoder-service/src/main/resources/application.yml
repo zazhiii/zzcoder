@@ -23,3 +23,11 @@ spring:
           auth: true
           starttls:
             enable: true
+
+logging:
+  level:
+    com:
+      zazhi:
+        mapper: debug
+        service: info
+        controller: info

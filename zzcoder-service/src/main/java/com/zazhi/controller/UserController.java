@@ -8,6 +8,7 @@ import com.zazhi.service.UserService;
 import com.zazhi.dto.*;
 import com.zazhi.service.impl.VerificationCodeService;
 import jakarta.validation.constraints.Email;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user")
 @Validated
+@Slf4j
 public class UserController {
 
     @Autowired
@@ -35,12 +37,14 @@ public class UserController {
             String email){
 
         // 发送验证码
+        log.info("开始发送验证码，{}", email);
         verificationCodeService.sendVerificationCode(email);
         return Result.success();
     }
 
     @PostMapping("/register")
     public Result register(@RequestBody @Validated RegisterDTO registerDTO){
+        log.info("开始注册：{}", registerDTO);
         //判断邮箱是否注册
         User user = userService.findByEmail(registerDTO.getEmail());
         if(user != null){
