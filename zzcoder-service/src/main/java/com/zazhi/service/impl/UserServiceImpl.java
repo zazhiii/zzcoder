@@ -1,10 +1,12 @@
 package com.zazhi.service.impl;
 
+import com.zazhi.common.constant.RegexConstant;
 import com.zazhi.common.utils.Md5Util;
 import com.zazhi.dto.RegisterDTO;
 import com.zazhi.entity.User;
 import com.zazhi.mapper.UserMapper;
 import com.zazhi.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
  * @description: 用户相关业务
  */
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -21,7 +24,6 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 通过邮箱查找用户
-     *
      * @param email
      * @return
      */
@@ -39,6 +41,32 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 通过手机号查询用户
+     * @param phoneNumber
+     * @return
+     */
+    public User findByPhoneNumber(String phoneNumber) {
+        return userMapper.findByPhoneNumber(phoneNumber);
+    }
+
+    /**
+     * 通过用户名、手机号、邮箱查找用户
+     * @param identification
+     * @return
+     */
+    public User findUserByIdentification(String identification) {
+        if (identification.matches(RegexConstant.EMAIL_REGEX)) {
+            return findByEmail(identification);
+        } else if (identification.matches(RegexConstant.PHONE_REGEX)) {
+            log.info("在以手机号登录，{}", identification);
+            return findByPhoneNumber(identification);
+        } else {
+            log.info("在以用户名登录，{}", identification);
+            return findByUsername(identification);
+        }
+    }
+
+    /**
      * 新增用户
      * @param registerDTO
      */
@@ -47,7 +75,6 @@ public class UserServiceImpl implements UserService {
         user.setUsername(registerDTO.getUsername());
         user.setPassword(Md5Util.getMD5String(registerDTO.getPassword()));
         user.setEmail(registerDTO.getEmail());
-
         userMapper.insert(user);
     }
 }

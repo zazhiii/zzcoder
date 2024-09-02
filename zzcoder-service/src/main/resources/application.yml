@@ -1,4 +1,8 @@
 spring:
+  # mybatis
+  mybatis:
+    configuration:
+      map-underscore-to-camel-case: true #开启驼峰命名和下划线命名的映射
   # mysql
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -31,3 +35,4 @@ logging:
         mapper: debug
         service: info
         controller: info
+

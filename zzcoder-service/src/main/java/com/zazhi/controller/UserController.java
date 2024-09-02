@@ -1,8 +1,12 @@
 package com.zazhi.controller;
 
 import com.zazhi.common.constant.ErrorMsg;
+import com.zazhi.common.constant.RegexConstant;
 import com.zazhi.common.constant.ValidationMsg;
 import com.zazhi.common.result.Result;
+import com.zazhi.common.utils.JwtUtil;
+import com.zazhi.common.utils.Md5Util;
+import com.zazhi.common.utils.RedisUtil;
 import com.zazhi.entity.User;
 import com.zazhi.service.UserService;
 import com.zazhi.dto.*;
@@ -12,6 +16,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author zazhi
@@ -29,6 +37,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RedisUtil redisUtil;
 
     @GetMapping("/send-email-verification-code")
     public Result sendEmailVerificationCode(
@@ -64,5 +75,26 @@ public class UserController {
 
         userService.add(registerDTO);
         return Result.success();
+    }
+
+    @PostMapping("/login")
+    public Result<String> login(@Validated @RequestBody LoginDTO loginDTO){
+        String identification = loginDTO.getIdentification();
+        String password = loginDTO.getPassword();
+
+        User user = userService.findUserByIdentification(identification);
+        // 查找到该用户且密码正确
+        if(user != null && user.getPassword().equals(Md5Util.getMD5String(password))){
+            Map<String, Object> claims = new HashMap<>();
+            claims.put("id", user.getId());
+            claims.put("username", user.getUsername());
+            String token = JwtUtil.genToken(claims);
+
+            // 登录后 token 存入redis
+            redisUtil.set(token, token, 7, TimeUnit.DAYS);
+
+            return Result.success(token);
+        }
+        return Result.error("用户名或密码错误");
     }
 }

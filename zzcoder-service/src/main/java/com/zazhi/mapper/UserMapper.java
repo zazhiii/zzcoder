@@ -30,4 +30,13 @@ public interface UserMapper {
     @Insert("insert into user(username, password, email, create_time, update_time) " +
             "values(#{username}, #{password}, #{email}, now(), now())")
     void insert(User user);
+
+    /**
+     * 通过手机号查找用户
+     *
+     * @param phoneNumber
+     * @return
+     */
+    @Select("select * from user where phone_number = #{phoneNumber}")
+    User findByPhoneNumber(String phoneNumber);
 }
