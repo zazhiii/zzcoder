@@ -4,6 +4,7 @@ import com.zazhi.entity.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface UserMapper {
@@ -39,4 +40,21 @@ public interface UserMapper {
      */
     @Select("select * from user where phone_number = #{phoneNumber}")
     User findByPhoneNumber(String phoneNumber);
+
+    /**
+     * 通过id查询用户
+     *
+     * @param userId
+     * @return
+     */
+    @Select("select * from user where id = #{userId}")
+    User findById(Long userId);
+
+    /**
+     * 更新用户的密码
+     * @param id
+     * @param password
+     */
+    @Update("update user set password = #{password} where id = #{id}")
+    void updatePsw(Long id, String password);
 }

@@ -77,4 +77,23 @@ public class UserServiceImpl implements UserService {
         user.setEmail(registerDTO.getEmail());
         userMapper.insert(user);
     }
+
+    /**
+     * 通过id查询用户
+     *
+     * @param userId
+     * @return
+     */
+    public User findUserById(Long userId) {
+        return userMapper.findById(userId);
+    }
+
+    /**
+     * 更新用户的密码
+     * @param id
+     * @param password
+     */
+    public void updatePsw(Long id, String password) {
+        userMapper.updatePsw(id, Md5Util.getMD5String(password));
+    }
 }

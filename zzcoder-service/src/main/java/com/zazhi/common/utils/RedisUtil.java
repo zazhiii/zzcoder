@@ -60,5 +60,13 @@ public class RedisUtil {
         return redisTemplate.getExpire(key, TimeUnit.SECONDS);
     }
 
+    /**
+     * 删除键
+     * @param key
+     */
+    public void delete(String key){
+        redisTemplate.delete(key);
+    }
+
 
 }

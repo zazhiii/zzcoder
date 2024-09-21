@@ -1,12 +1,12 @@
 package com.zazhi.controller;
 
 import com.zazhi.common.constant.ErrorMsg;
-import com.zazhi.common.constant.RegexConstant;
 import com.zazhi.common.constant.ValidationMsg;
 import com.zazhi.common.result.Result;
 import com.zazhi.common.utils.JwtUtil;
 import com.zazhi.common.utils.Md5Util;
 import com.zazhi.common.utils.RedisUtil;
+import com.zazhi.common.utils.ThreadLocalUtil;
 import com.zazhi.entity.User;
 import com.zazhi.service.UserService;
 import com.zazhi.dto.*;
@@ -98,7 +98,7 @@ public class UserController {
             claims.put("username", user.getUsername());
             String token = JwtUtil.genToken(claims);
 
-            // 登录后 token 存入redis
+            // 登录后 token 存入redis {token: token}的形式
             redisUtil.set(token, token, 7, TimeUnit.DAYS);
 
             return Result.success(token);
@@ -110,6 +110,8 @@ public class UserController {
     @PostMapping("/login-by-email-code")
     @Operation(summary = "通过邮箱验证码登录")
     public Result<String> loginByEmail(@Validated @RequestBody LoginByEmailDTO loginByEmailDTO){
+        log.info("用户通过邮箱登录:，{}", loginByEmailDTO.getEmail());
+
         String email = loginByEmailDTO.getEmail();
         String code = loginByEmailDTO.getEmailVerificationCode();
         User user = userService.findByEmail(email);
@@ -118,7 +120,7 @@ public class UserController {
             return Result.error("用户不存在");
         }
         if(!verificationCodeService.verifyCode(email, code)){
-            return Result.error("验证码不正确");
+            return Result.error("验证码不正确或已过期");
         }
 
         // 生成token
@@ -131,5 +133,59 @@ public class UserController {
         redisUtil.set(token, token, 7, TimeUnit.DAYS);
 
         return Result.success(token);
+    }
+
+    @PostMapping("/update-password")
+    @Operation(summary = "更新密码")
+    public Result updatePsw(@Validated @RequestBody UpdatePasswordDTO updatePasswordDTO, @RequestHeader("Authorization") String token){
+        log.info("更新密码");
+
+        Map<String, Object> map = ThreadLocalUtil.get();
+        Long userId = (Long) map.get("id");
+
+        User user = userService.findUserById(userId);
+        if(!Md5Util.getMD5String(updatePasswordDTO.getOldPassword()).equals(user.getPassword())){
+            return Result.error("原密码不正确");
+        }
+
+        // 更新密码
+        userService.updatePsw(userId, updatePasswordDTO.getNewPassword());
+
+        // 删除旧token
+        redisUtil.delete(token);
+
+        return Result.success();
+    }
+
+    @PostMapping("/update-password-by-email")
+    @Operation(summary = "通过邮箱验证码更改密码")
+    public Result updatePswByEmail(@Validated @RequestBody UpdatePasswordByEmailDTO updatePasswordByEmailDTO){
+        log.info("通过邮箱更新密码：{}", updatePasswordByEmailDTO.getEmail());
+
+        String email = updatePasswordByEmailDTO.getEmail();
+        String code = updatePasswordByEmailDTO.getEmailVerificationCode();
+        //判断用户是否存在
+        User user = userService.findByEmail(updatePasswordByEmailDTO.getEmail());
+
+        if(user == null){
+            return Result.error("用户不存在");
+        }
+        if(!verificationCodeService.verifyCode(email, code)){
+            return Result.error("验证码错误或已过期");
+        }
+
+        //更新密码
+        userService.updatePsw(user.getId(), updatePasswordByEmailDTO.getNewPassword());
+
+        return Result.success();
+    }
+
+    @GetMapping("/logout")
+    @Operation(summary = "登出")
+    public Result logout(@RequestHeader("Authorization") String token){
+        log.info("登出：{}", token);
+
+        redisUtil.delete(token);
+        return Result.success();
     }
 }

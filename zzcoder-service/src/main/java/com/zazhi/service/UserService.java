@@ -40,6 +40,18 @@ public interface UserService {
      */
     void add(RegisterDTO registerDTO);
 
+    /**
+     * 通过id查询用户
+     *
+     * @param userId
+     * @return
+     */
+    User findUserById(Long userId);
 
-
+    /**
+     * 更新用户的密码
+     * @param id
+     * @param password
+     */
+    void updatePsw(Long id, String password);
 }
