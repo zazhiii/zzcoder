@@ -11,6 +11,8 @@ import com.zazhi.entity.User;
 import com.zazhi.service.UserService;
 import com.zazhi.dto.*;
 import com.zazhi.service.impl.VerificationCodeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Email;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping("/user")
 @Validated
 @Slf4j
+@Tag(name = "用户")
 public class UserController {
 
     @Autowired
@@ -42,6 +45,7 @@ public class UserController {
     private RedisUtil redisUtil;
 
     @GetMapping("/send-email-verification-code")
+    @Operation(summary = "发送邮箱验证码")
     public Result sendEmailVerificationCode(
             @RequestParam
             @Email(message = ValidationMsg.INVALID_EMAIL_FORMAT)
@@ -54,6 +58,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
+    @Operation(summary = "用户注册")
     public Result register(@RequestBody @Validated RegisterDTO registerDTO){
         log.info("开始注册：{}", registerDTO);
         //判断邮箱是否注册
@@ -78,6 +83,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
+    @Operation(summary = "用户登录")
     public Result<String> login(@Validated @RequestBody LoginDTO loginDTO){
         String identification = loginDTO.getIdentification();
         String password = loginDTO.getPassword();
