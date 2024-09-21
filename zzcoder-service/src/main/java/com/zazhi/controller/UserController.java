@@ -44,6 +44,7 @@ public class UserController {
     @Autowired
     private RedisUtil redisUtil;
 
+
     @GetMapping("/send-email-verification-code")
     @Operation(summary = "发送邮箱验证码")
     public Result sendEmailVerificationCode(
@@ -91,6 +92,7 @@ public class UserController {
         User user = userService.findUserByIdentification(identification);
         // 查找到该用户且密码正确
         if(user != null && user.getPassword().equals(Md5Util.getMD5String(password))){
+            // 生成token
             Map<String, Object> claims = new HashMap<>();
             claims.put("id", user.getId());
             claims.put("username", user.getUsername());
@@ -100,7 +102,34 @@ public class UserController {
             redisUtil.set(token, token, 7, TimeUnit.DAYS);
 
             return Result.success(token);
+        }else{
+            return Result.error("用户名或密码错误");
         }
-        return Result.error("用户名或密码错误");
+    }
+
+    @PostMapping("/login-by-email-code")
+    @Operation(summary = "通过邮箱验证码登录")
+    public Result<String> loginByEmail(@Validated @RequestBody LoginByEmailDTO loginByEmailDTO){
+        String email = loginByEmailDTO.getEmail();
+        String code = loginByEmailDTO.getEmailVerificationCode();
+        User user = userService.findByEmail(email);
+
+        if(user == null){
+            return Result.error("用户不存在");
+        }
+        if(!verificationCodeService.verifyCode(email, code)){
+            return Result.error("验证码不正确");
+        }
+
+        // 生成token
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("id", user.getId());
+        claims.put("username", user.getUsername());
+        String token = JwtUtil.genToken(claims);
+
+        // token 存入redis
+        redisUtil.set(token, token, 7, TimeUnit.DAYS);
+
+        return Result.success(token);
     }
 }
