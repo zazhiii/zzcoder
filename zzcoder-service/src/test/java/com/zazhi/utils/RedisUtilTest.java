@@ -2,6 +2,7 @@ package com.zazhi.utils;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.concurrent.TimeUnit;
 
@@ -13,9 +14,9 @@ class RedisUtilTest {
 
     @Test
     void set() {
-        redisUtil.set("AAA", "BBB", 20, TimeUnit.SECONDS);
+        redisUtil.set("email_verification_code:lixinhuan666", "123456", 20, TimeUnit.SECONDS);
 
 
-        System.out.println(redisUtil.get("AAA"));
+        System.out.println(redisUtil.get("email_verification_code:lixinhuan666"));
     }
 }

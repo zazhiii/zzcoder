@@ -1,7 +1,5 @@
 package com.zazhi.controller;
 
-import com.zazhi.constant.ErrorMsg;
-import com.zazhi.constant.ValidationMsg;
 import com.zazhi.result.Result;
 import com.zazhi.utils.JwtUtil;
 import com.zazhi.utils.Md5Util;
@@ -26,14 +24,14 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author zazhi
  * @date 2024/8/30
- * @description: 用户相关接口
+ * @description: 注册、登录、更改密码相关接口
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api")
 @Validated
 @Slf4j
 @Tag(name = "用户")
-public class UserController {
+public class PassportController {
 
     @Autowired
     private VerificationCodeService verificationCodeService;
@@ -47,13 +45,9 @@ public class UserController {
 
     @GetMapping("/send-email-verification-code")
     @Operation(summary = "发送邮箱验证码")
-    public Result sendEmailVerificationCode(
-            @RequestParam
-            @Email(message = ValidationMsg.INVALID_EMAIL_FORMAT)
-            String email){
-
-        // 发送验证码
+    public Result sendEmailVerificationCode(@RequestParam @Email String email){
         log.info("开始发送验证码，{}", email);
+
         verificationCodeService.sendVerificationCode(email);
         return Result.success();
     }
@@ -62,49 +56,18 @@ public class UserController {
     @Operation(summary = "用户注册")
     public Result register(@RequestBody @Validated RegisterDTO registerDTO){
         log.info("开始注册：{}", registerDTO);
-        //判断邮箱是否注册
-        User user = userService.findByEmail(registerDTO.getEmail());
-        if(user != null){
-            return Result.error(ErrorMsg.EMAIL_ALREADY_REGISTERED);
-        }
 
-        // 判断用户名是否注册
-        user = userService.findByUsername(registerDTO.getUsername());
-        if(user != null){
-            return Result.error(ErrorMsg.USERNAME_ALREADY_REGISTERED);
-        }
-
-        //判断验证码是否正确
-        if(!verificationCodeService.verifyCode(registerDTO.getEmail(), registerDTO.getEmailVerificationCode())){
-            return Result.error(ErrorMsg.INVALID_VERIFICATION_CODE);
-        }
-
-        userService.add(registerDTO);
+        userService.register(registerDTO);
         return Result.success();
     }
 
     @PostMapping("/login")
     @Operation(summary = "用户登录")
     public Result<String> login(@Validated @RequestBody LoginDTO loginDTO){
-        String identification = loginDTO.getIdentification();
-        String password = loginDTO.getPassword();
+        log.info("用户正在登录：{}", loginDTO);
 
-        User user = userService.findUserByIdentification(identification);
-        // 查找到该用户且密码正确
-        if(user != null && user.getPassword().equals(Md5Util.getMD5String(password))){
-            // 生成token
-            Map<String, Object> claims = new HashMap<>();
-            claims.put("id", user.getId());
-            claims.put("username", user.getUsername());
-            String token = JwtUtil.genToken(claims);
-
-            // 登录后 token 存入redis {token: token}的形式
-            redisUtil.set(token, token, 7, TimeUnit.DAYS);
-
-            return Result.success(token);
-        }else{
-            return Result.error("用户名或密码错误");
-        }
+        String token = userService.login(loginDTO);
+        return Result.success(token);
     }
 
     @PostMapping("/login-by-email-code")
@@ -112,26 +75,7 @@ public class UserController {
     public Result<String> loginByEmail(@Validated @RequestBody LoginByEmailDTO loginByEmailDTO){
         log.info("用户通过邮箱登录:，{}", loginByEmailDTO.getEmail());
 
-        String email = loginByEmailDTO.getEmail();
-        String code = loginByEmailDTO.getEmailVerificationCode();
-        User user = userService.findByEmail(email);
-
-        if(user == null){
-            return Result.error("用户不存在");
-        }
-        if(!verificationCodeService.verifyCode(email, code)){
-            return Result.error("验证码不正确或已过期");
-        }
-
-        // 生成token
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("id", user.getId());
-        claims.put("username", user.getUsername());
-        String token = JwtUtil.genToken(claims);
-
-        // token 存入redis
-        redisUtil.set(token, token, 7, TimeUnit.DAYS);
-
+        String token = userService.loginByEmail(loginByEmailDTO);
         return Result.success(token);
     }
 

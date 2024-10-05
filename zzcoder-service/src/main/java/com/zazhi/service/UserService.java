@@ -1,5 +1,7 @@
 package com.zazhi.service;
 
+import com.zazhi.dto.LoginByEmailDTO;
+import com.zazhi.dto.LoginDTO;
 import com.zazhi.dto.RegisterDTO;
 import com.zazhi.entity.User;
 
@@ -35,12 +37,6 @@ public interface UserService {
     User findUserByIdentification(String identification);
 
     /**
-     * 新增用户
-     * @param registerDTO
-     */
-    void add(RegisterDTO registerDTO);
-
-    /**
      * 通过id查询用户
      *
      * @param userId
@@ -54,4 +50,25 @@ public interface UserService {
      * @param password
      */
     void updatePsw(Long id, String password);
+
+    /**
+     * 用户注册
+     * @param registerDTO
+     */
+    void register(RegisterDTO registerDTO);
+
+    /**
+     * 用户登录
+     *
+     * @param loginDTO
+     * @return
+     */
+    String login(LoginDTO loginDTO);
+
+    /**
+     * 通过邮箱验证码登录
+     * @param loginByEmailDTO
+     * @return
+     */
+    String loginByEmail(LoginByEmailDTO loginByEmailDTO);
 }

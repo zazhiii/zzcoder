@@ -19,6 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         // 对swagger、登录注册的请求不进行拦截
         String[] excludePatterns = new String[]{
+                // knife4j 的请求
                 "/swagger-resources/**",
                 "/webjars/**",
                 "/v3/**",
@@ -27,10 +28,12 @@ public class WebConfig implements WebMvcConfigurer {
                 "/api-docs",
                 "/api-docs/**",
                 "/doc.html/**",
-                "/user/login",
-                "/user/register",
-                "/user/send-email-verification-code",
-                "/user/update-password-by-email"
+                // 本项目的请求
+                "/api/register",
+                "/api/login",
+                "/api/login-by-email-code",
+                "/api/send-email-verification-code",
+                "/api/update-password-by-email"
         };
 
         //登录接口和注册接口放行
