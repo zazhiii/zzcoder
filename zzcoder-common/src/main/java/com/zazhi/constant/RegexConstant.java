@@ -1,4 +1,4 @@
-package com.zazhi.common.constant;
+package com.zazhi.constant;
 
 /**
  * @author zazhi

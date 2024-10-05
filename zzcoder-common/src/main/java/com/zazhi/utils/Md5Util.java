@@ -1,4 +1,4 @@
-package com.zazhi.common.utils;
+package com.zazhi.utils;
 
 
 import java.security.MessageDigest;

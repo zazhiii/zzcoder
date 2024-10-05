@@ -1,4 +1,4 @@
-package com.zazhi.common.constant;
+package com.zazhi.constant;
 
 public class ErrorMsg {
     public static final String EMAIL_ALREADY_REGISTERED = "该邮箱已注册！";

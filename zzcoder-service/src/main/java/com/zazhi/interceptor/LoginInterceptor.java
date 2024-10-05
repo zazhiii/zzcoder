@@ -1,8 +1,8 @@
 package com.zazhi.interceptor;
 
-import com.zazhi.common.utils.JwtUtil;
-import com.zazhi.common.utils.RedisUtil;
-import com.zazhi.common.utils.ThreadLocalUtil;
+import com.zazhi.utils.JwtUtil;
+import com.zazhi.utils.RedisUtil;
+import com.zazhi.utils.ThreadLocalUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.zazhi.common.utils;
+package com.zazhi.utils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

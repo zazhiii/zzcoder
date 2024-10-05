@@ -1,4 +1,4 @@
-package com.zazhi.common.utils;
+package com.zazhi.utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;

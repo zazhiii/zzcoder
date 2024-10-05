@@ -1,4 +1,4 @@
-package com.zazhi.common.result;
+package com.zazhi.result;
 
 import lombok.Data;
 

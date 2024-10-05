@@ -1,4 +1,4 @@
-package com.zazhi.common.constant;
+package com.zazhi.constant;
 
 public class ValidationMsg {
     public static final String INVALID_EMAIL_FORMAT = "邮箱格式不正确";

@@ -1,12 +1,12 @@
 package com.zazhi.controller;
 
-import com.zazhi.common.constant.ErrorMsg;
-import com.zazhi.common.constant.ValidationMsg;
-import com.zazhi.common.result.Result;
-import com.zazhi.common.utils.JwtUtil;
-import com.zazhi.common.utils.Md5Util;
-import com.zazhi.common.utils.RedisUtil;
-import com.zazhi.common.utils.ThreadLocalUtil;
+import com.zazhi.constant.ErrorMsg;
+import com.zazhi.constant.ValidationMsg;
+import com.zazhi.result.Result;
+import com.zazhi.utils.JwtUtil;
+import com.zazhi.utils.Md5Util;
+import com.zazhi.utils.RedisUtil;
+import com.zazhi.utils.ThreadLocalUtil;
 import com.zazhi.entity.User;
 import com.zazhi.service.UserService;
 import com.zazhi.dto.*;

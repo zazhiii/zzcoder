@@ -1,7 +1,4 @@
-package com.zazhi.common.utils;
-
-import java.util.HashMap;
-import java.util.Map;
+package com.zazhi.utils;
 
 /**
  * ThreadLocal 工具类

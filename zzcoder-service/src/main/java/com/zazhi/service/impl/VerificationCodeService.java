@@ -1,7 +1,7 @@
 package com.zazhi.service.impl;
 
-import com.zazhi.common.utils.RedisUtil;
-import com.zazhi.excetion.TooManyRequestsException;
+import com.zazhi.utils.RedisUtil;
+import com.zazhi.exception.TooManyRequestsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;

@@ -1,6 +1,6 @@
 package com.zazhi.handler;
 
-import com.zazhi.common.result.Result;
+import com.zazhi.result.Result;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

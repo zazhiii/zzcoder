@@ -1,7 +1,7 @@
 package com.zazhi.service.impl;
 
-import com.zazhi.common.constant.RegexConstant;
-import com.zazhi.common.utils.Md5Util;
+import com.zazhi.constant.RegexConstant;
+import com.zazhi.utils.Md5Util;
 import com.zazhi.dto.RegisterDTO;
 import com.zazhi.entity.User;
 import com.zazhi.mapper.UserMapper;
