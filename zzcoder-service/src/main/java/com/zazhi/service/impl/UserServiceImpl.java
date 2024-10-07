@@ -1,9 +1,12 @@
 package com.zazhi.service.impl;
 
+import com.zazhi.constant.MsgConstant;
 import com.zazhi.constant.RegexConstant;
 import com.zazhi.dto.LoginByEmailDTO;
 import com.zazhi.dto.LoginDTO;
+import com.zazhi.dto.UpdatePasswordDTO;
 import com.zazhi.exception.*;
+import com.zazhi.result.Result;
 import com.zazhi.utils.JwtUtil;
 import com.zazhi.utils.Md5Util;
 import com.zazhi.dto.RegisterDTO;
@@ -11,6 +14,7 @@ import com.zazhi.entity.User;
 import com.zazhi.mapper.UserMapper;
 import com.zazhi.service.UserService;
 import com.zazhi.utils.RedisUtil;
+import com.zazhi.utils.ThreadLocalUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,11 +98,22 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 更新用户的密码
-     * @param id
-     * @param password
+     * @param updatePasswordDTO
+     * @param token
      */
-    public void updatePsw(Long id, String password) {
-        userMapper.updatePsw(id, Md5Util.getMD5String(password));
+    public void updatePsw(UpdatePasswordDTO updatePasswordDTO, String token) {
+        String oldPassword = updatePasswordDTO.getOldPassword();
+        String newPassword = updatePasswordDTO.getNewPassword();
+        // 判断原密码是否正确
+        Long userId = ThreadLocalUtil.getCurrentId();
+        User user = userMapper.findById(userId);
+        if(!Md5Util.getMD5String(oldPassword).equals(user.getPassword())){
+            throw new InvalidCredentialsException(MsgConstant.ORIGINAL_PASSWORD_INCORRECT);
+        }
+        // 删除旧token
+        redisUtil.delete(token);
+        // 更新密码
+        userMapper.updatePsw(userId, Md5Util.getMD5String(newPassword));
     }
 
     /**
@@ -131,7 +146,6 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 用户登录
-     *
      * @param loginDTO
      * @return
      */
@@ -147,7 +161,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // 用户名或者密码错误
-        if(user == null || user.getPassword().equals(Md5Util.getMD5String(loginDTO.getPassword()))){
+        if(user == null || !user.getPassword().equals(Md5Util.getMD5String(loginDTO.getPassword()))){
             throw new InvalidCredentialsException();
         }
 

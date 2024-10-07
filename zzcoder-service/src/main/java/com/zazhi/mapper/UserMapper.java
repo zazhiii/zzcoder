@@ -55,6 +55,6 @@ public interface UserMapper {
      * @param id
      * @param password
      */
-    @Update("update user set password = #{password} where id = #{id}")
+    @Update("update user set password = #{password}, update_time = now() where id = #{id}")
     void updatePsw(Long id, String password);
 }

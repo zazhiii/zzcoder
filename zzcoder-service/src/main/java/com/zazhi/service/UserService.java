@@ -3,6 +3,7 @@ package com.zazhi.service;
 import com.zazhi.dto.LoginByEmailDTO;
 import com.zazhi.dto.LoginDTO;
 import com.zazhi.dto.RegisterDTO;
+import com.zazhi.dto.UpdatePasswordDTO;
 import com.zazhi.entity.User;
 
 public interface UserService {
@@ -46,10 +47,10 @@ public interface UserService {
 
     /**
      * 更新用户的密码
-     * @param id
-     * @param password
+     * @param updatePasswordDTO
+     * @param token
      */
-    void updatePsw(Long id, String password);
+    void updatePsw(UpdatePasswordDTO updatePasswordDTO, String token);
 
     /**
      * 用户注册

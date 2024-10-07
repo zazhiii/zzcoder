@@ -1,5 +1,7 @@
 package com.zazhi.utils;
 
+import java.util.Map;
+
 /**
  * ThreadLocal 工具类
  */
@@ -11,6 +13,12 @@ public class ThreadLocalUtil {
     //根据键获取值
     public static <T> T get(){
         return (T) THREAD_LOCAL.get();
+    }
+
+    // 获取用户id
+    public static Long getCurrentId(){
+        Map<String, Object> map = get();
+        return ((Number)map.get("id")).longValue();
     }
 	
     //存储键值对

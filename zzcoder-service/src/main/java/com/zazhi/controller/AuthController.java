@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 @Validated
 @Slf4j
 @Tag(name = "用户")
-public class PassportController {
+public class AuthController {
 
     @Autowired
     private VerificationCodeService verificationCodeService;
@@ -84,20 +84,8 @@ public class PassportController {
     public Result updatePsw(@Validated @RequestBody UpdatePasswordDTO updatePasswordDTO, @RequestHeader("Authorization") String token){
         log.info("更新密码");
 
-        Map<String, Object> map = ThreadLocalUtil.get();
-        Long userId = (Long) map.get("id");
-
-        User user = userService.findUserById(userId);
-        if(!Md5Util.getMD5String(updatePasswordDTO.getOldPassword()).equals(user.getPassword())){
-            return Result.error("原密码不正确");
-        }
-
         // 更新密码
-        userService.updatePsw(userId, updatePasswordDTO.getNewPassword());
-
-        // 删除旧token
-        redisUtil.delete(token);
-
+        userService.updatePsw(updatePasswordDTO, token);
         return Result.success();
     }
 
@@ -119,7 +107,7 @@ public class PassportController {
         }
 
         //更新密码
-        userService.updatePsw(user.getId(), updatePasswordByEmailDTO.getNewPassword());
+//        userService.updatePsw(user.getId(), updatePasswordByEmailDTO.getNewPassword());
 
         return Result.success();
     }
