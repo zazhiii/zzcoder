@@ -1,26 +1,28 @@
 spring:
+  profiles:
+    active: dev
   # mybatis
   mybatis:
     configuration:
       map-underscore-to-camel-case: true #开启驼峰命名和下划线命名的映射
   # mysql
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/zzcoder
-    username: root
-    password: 123456
+    driver-class-name: ${datasource.driver-class-name} #com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${datasource.host}:${datasource.port}/${datasource.database}
+    username: ${datasource.username}
+    password: ${datasource.password}
   # redis
   data:
     redis:
-      host: localhost
-      port: 6379
-      password: 123456
+      host: ${redis.host}
+      port: ${redis.port}
+      password: ${redis.password}
   # mail
   mail:
-    host: smtp.qq.com
-    port: 587
-    username: 2354807547@qq.com
-    password: kwylpojovuzadjjg
+    host: ${mail.host}
+    port: ${mail.port}
+    username: ${mail.username}
+    password: ${mail.password}
     properties:
       mail:
         smtp:
