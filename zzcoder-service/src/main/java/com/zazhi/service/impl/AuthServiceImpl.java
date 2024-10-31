@@ -2,17 +2,13 @@ package com.zazhi.service.impl;
 
 import com.zazhi.constant.MsgConstant;
 import com.zazhi.constant.RegexConstant;
-import com.zazhi.dto.LoginByEmailDTO;
-import com.zazhi.dto.LoginDTO;
-import com.zazhi.dto.UpdatePasswordDTO;
+import com.zazhi.dto.*;
 import com.zazhi.exception.*;
-import com.zazhi.result.Result;
+import com.zazhi.mapper.AuthMapper;
+import com.zazhi.service.AuthService;
 import com.zazhi.utils.JwtUtil;
 import com.zazhi.utils.Md5Util;
-import com.zazhi.dto.RegisterDTO;
 import com.zazhi.entity.User;
-import com.zazhi.mapper.UserMapper;
-import com.zazhi.service.UserService;
 import com.zazhi.utils.RedisUtil;
 import com.zazhi.utils.ThreadLocalUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -27,20 +23,20 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author zazhi
  * @date 2024/8/30
- * @description: 用户相关业务
+ * @description: 登录鉴权相关业务
  */
 @Service
 @Slf4j
-public class UserServiceImpl implements UserService {
+public class AuthServiceImpl implements AuthService {
 
     @Autowired
-    UserMapper userMapper;
+    AuthMapper authMapper;
 
     @Autowired
     VerificationCodeService verificationCodeService;
 
     @Autowired
-    private RedisUtil redisUtil;
+    RedisUtil redisUtil;
 
     /**
      * 通过邮箱查找用户
@@ -48,7 +44,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     public User findByEmail(String email) {
-        return userMapper.findByEmail(email);
+        return authMapper.findByEmail(email);
     }
 
     /**
@@ -57,7 +53,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     public User findByUsername(String username) {
-        return userMapper.findByUsername(username);
+        return authMapper.findByUsername(username);
     }
 
     /**
@@ -66,24 +62,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     public User findByPhoneNumber(String phoneNumber) {
-        return userMapper.findByPhoneNumber(phoneNumber);
-    }
-
-    /**
-     * 通过用户名、手机号、邮箱查找用户
-     * @param identification
-     * @return
-     */
-    public User findUserByIdentification(String identification) {
-        if (identification.matches(RegexConstant.EMAIL_REGEX)) {
-            return findByEmail(identification);
-        } else if (identification.matches(RegexConstant.PHONE_REGEX)) {
-            log.info("在以手机号登录，{}", identification);
-            return findByPhoneNumber(identification);
-        } else {
-            log.info("在以用户名登录，{}", identification);
-            return findByUsername(identification);
-        }
+        return authMapper.findByPhoneNumber(phoneNumber);
     }
 
     /**
@@ -93,7 +72,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     public User findUserById(Long userId) {
-        return userMapper.findById(userId);
+        return authMapper.findById(userId);
     }
 
     /**
@@ -106,14 +85,14 @@ public class UserServiceImpl implements UserService {
         String newPassword = updatePasswordDTO.getNewPassword();
         // 判断原密码是否正确
         Long userId = ThreadLocalUtil.getCurrentId();
-        User user = userMapper.findById(userId);
+        User user = authMapper.findById(userId);
         if(!Md5Util.getMD5String(oldPassword).equals(user.getPassword())){
             throw new InvalidCredentialsException(MsgConstant.ORIGINAL_PASSWORD_INCORRECT);
         }
         // 删除旧token
         redisUtil.delete(token);
         // 更新密码
-        userMapper.updatePsw(userId, Md5Util.getMD5String(newPassword));
+        authMapper.updatePsw(userId, Md5Util.getMD5String(newPassword));
     }
 
     /**
@@ -122,13 +101,13 @@ public class UserServiceImpl implements UserService {
      */
     public void register(RegisterDTO registerDTO) {
         //判断邮箱是否注册
-        User user = userMapper.findByEmail(registerDTO.getEmail());
+        User user = authMapper.findByEmail(registerDTO.getEmail());
         if(user != null){
             throw new EmailAlreadyRegisteredException();
         }
 
         // 判断用户名是否注册
-        user = userMapper.findByUsername(registerDTO.getUsername());
+        user = authMapper.findByUsername(registerDTO.getUsername());
         if(user != null){
             throw new UsernameAlreadyRegisteredException();
         }
@@ -141,7 +120,7 @@ public class UserServiceImpl implements UserService {
         user = new User();
         BeanUtils.copyProperties(registerDTO, user); // 拷贝属性
         user.setPassword(Md5Util.getMD5String(user.getPassword())); // 加密密码
-        userMapper.insert(user);
+        authMapper.insert(user);
     }
 
     /**
@@ -152,12 +131,12 @@ public class UserServiceImpl implements UserService {
     public String login(LoginDTO loginDTO) {
         String identification = loginDTO.getIdentification();
         // 根据用户输入的用户名或邮箱或手机号查找用户
-        User user = userMapper.findByUsername(identification);
+        User user = authMapper.findByUsername(identification);
         if(user == null){
-            user = userMapper.findByEmail(identification);
+            user = authMapper.findByEmail(identification);
         }
         if(user == null){
-            user = userMapper.findByPhoneNumber(identification);
+            user = authMapper.findByPhoneNumber(identification);
         }
 
         // 用户名或者密码错误
@@ -184,7 +163,7 @@ public class UserServiceImpl implements UserService {
     public String loginByEmail(LoginByEmailDTO loginByEmailDTO) {
         String email = loginByEmailDTO.getEmail();
         String code = loginByEmailDTO.getEmailVerificationCode();
-        User user = userMapper.findByEmail(email);
+        User user = authMapper.findByEmail(email);
 
         // 判断邮箱和验证码是否正确
         if(user == null){
@@ -203,5 +182,26 @@ public class UserServiceImpl implements UserService {
         redisUtil.set(token, token, 7, TimeUnit.DAYS);
 
         return token;
+    }
+
+    /**
+     * 通过邮箱验证码更新密码
+     * @param updatePasswordByEmailDTO
+     */
+    public void updatePswByEmail(UpdatePasswordByEmailDTO updatePasswordByEmailDTO) {
+        String email = updatePasswordByEmailDTO.getEmail();
+        String code = updatePasswordByEmailDTO.getEmailVerificationCode();
+        // 判断用户是否存在
+        User user = authMapper.findByEmail(email);
+        if(user == null){
+            throw new UserNotFoundException();
+        }
+        // 判断验证码是否正确
+        if(!verificationCodeService.verifyCode(email, code)){
+            throw new VerificationCodeException();
+        }
+
+        String newPassword = updatePasswordByEmailDTO.getNewPassword();
+        authMapper.updatePsw(user.getId(), Md5Util.getMD5String(newPassword));
     }
 }

@@ -47,9 +47,9 @@ public class VerificationCodeService {
         String redisKey = VERIFICATION_CODE_PREFIX + email;
 
         // 若键以存在则判断为操作频繁
-        if(redisUtil.hasKey(redisKey)){
-            throw new TooManyRequestsException("操作过快，请" + redisUtil.getExpire(redisKey) + "秒后重试！");
-        }
+//        if(redisUtil.hasKey(redisKey)){
+//            throw new TooManyRequestsException("操作过快，请" + redisUtil.getExpire(redisKey) + "秒后重试！");
+//        }
 
         // 2. 存储验证码到 Redis
         redisUtil.set(redisKey, verificationCode, CODE_EXPIRY, TimeUnit.SECONDS);

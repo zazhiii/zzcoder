@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 @Mapper
-public interface UserMapper {
+public interface AuthMapper {
     /**
      * 根据邮箱地址查找用户
      * @param email

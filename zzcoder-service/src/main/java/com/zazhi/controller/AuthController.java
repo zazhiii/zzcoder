@@ -1,12 +1,8 @@
 package com.zazhi.controller;
 
 import com.zazhi.result.Result;
-import com.zazhi.utils.JwtUtil;
-import com.zazhi.utils.Md5Util;
+import com.zazhi.service.AuthService;
 import com.zazhi.utils.RedisUtil;
-import com.zazhi.utils.ThreadLocalUtil;
-import com.zazhi.entity.User;
-import com.zazhi.service.UserService;
 import com.zazhi.dto.*;
 import com.zazhi.service.impl.VerificationCodeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,10 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
 /**
  * @author zazhi
  * @date 2024/8/30
@@ -30,14 +22,14 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping("/api")
 @Validated
 @Slf4j
-@Tag(name = "用户")
+@Tag(name = "注册、登录、更改密码相关接口")
 public class AuthController {
 
     @Autowired
     private VerificationCodeService verificationCodeService;
 
     @Autowired
-    private UserService userService;
+    private AuthService authService;
 
     @Autowired
     private RedisUtil redisUtil;
@@ -57,7 +49,7 @@ public class AuthController {
     public Result register(@RequestBody @Validated RegisterDTO registerDTO){
         log.info("开始注册：{}", registerDTO);
 
-        userService.register(registerDTO);
+        authService.register(registerDTO);
         return Result.success();
     }
 
@@ -66,7 +58,7 @@ public class AuthController {
     public Result<String> login(@Validated @RequestBody LoginDTO loginDTO){
         log.info("用户正在登录：{}", loginDTO);
 
-        String token = userService.login(loginDTO);
+        String token = authService.login(loginDTO);
         return Result.success(token);
     }
 
@@ -75,7 +67,7 @@ public class AuthController {
     public Result<String> loginByEmail(@Validated @RequestBody LoginByEmailDTO loginByEmailDTO){
         log.info("用户通过邮箱登录:，{}", loginByEmailDTO.getEmail());
 
-        String token = userService.loginByEmail(loginByEmailDTO);
+        String token = authService.loginByEmail(loginByEmailDTO);
         return Result.success(token);
     }
 
@@ -85,7 +77,7 @@ public class AuthController {
         log.info("更新密码");
 
         // 更新密码
-        userService.updatePsw(updatePasswordDTO, token);
+        authService.updatePsw(updatePasswordDTO, token);
         return Result.success();
     }
 
@@ -94,21 +86,7 @@ public class AuthController {
     public Result updatePswByEmail(@Validated @RequestBody UpdatePasswordByEmailDTO updatePasswordByEmailDTO){
         log.info("通过邮箱更新密码：{}", updatePasswordByEmailDTO.getEmail());
 
-        String email = updatePasswordByEmailDTO.getEmail();
-        String code = updatePasswordByEmailDTO.getEmailVerificationCode();
-        //判断用户是否存在
-        User user = userService.findByEmail(updatePasswordByEmailDTO.getEmail());
-
-        if(user == null){
-            return Result.error("用户不存在");
-        }
-        if(!verificationCodeService.verifyCode(email, code)){
-            return Result.error("验证码错误或已过期");
-        }
-
-        //更新密码
-//        userService.updatePsw(user.getId(), updatePasswordByEmailDTO.getNewPassword());
-
+        authService.updatePswByEmail(updatePasswordByEmailDTO);
         return Result.success();
     }
 

@@ -1,12 +1,9 @@
 package com.zazhi.service;
 
-import com.zazhi.dto.LoginByEmailDTO;
-import com.zazhi.dto.LoginDTO;
-import com.zazhi.dto.RegisterDTO;
-import com.zazhi.dto.UpdatePasswordDTO;
+import com.zazhi.dto.*;
 import com.zazhi.entity.User;
 
-public interface UserService {
+public interface AuthService {
 
     /**
      * 通过邮箱查找用户
@@ -29,13 +26,6 @@ public interface UserService {
      * @return
      */
     User findByPhoneNumber(String phoneNumber);
-
-    /**
-     * 通过用户名、手机号、邮箱查找用户
-     * @param identification
-     * @return
-     */
-    User findUserByIdentification(String identification);
 
     /**
      * 通过id查询用户
@@ -72,4 +62,10 @@ public interface UserService {
      * @return
      */
     String loginByEmail(LoginByEmailDTO loginByEmailDTO);
+
+    /**
+     * 通过邮箱验证码更新密码
+     * @param updatePasswordByEmailDTO
+     */
+    void updatePswByEmail(UpdatePasswordByEmailDTO updatePasswordByEmailDTO);
 }
