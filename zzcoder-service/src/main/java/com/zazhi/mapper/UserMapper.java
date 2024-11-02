@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 @Mapper
-public interface AuthMapper {
+public interface UserMapper {
     /**
      * 根据邮箱地址查找用户
      * @param email
@@ -57,4 +57,10 @@ public interface AuthMapper {
      */
     @Update("update user set password = #{password}, update_time = now() where id = #{id}")
     void updatePsw(Long id, String password);
+
+    /**
+     * 更新用户信息通用方法
+     * @param user
+     */
+    void update(User user);
 }

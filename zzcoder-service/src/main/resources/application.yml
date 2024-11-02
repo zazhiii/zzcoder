@@ -3,8 +3,11 @@ spring:
     active: dev
   # mybatis
   mybatis:
+#    mapper-locations: classpath*:mapper/*.xml
+#    type-aliases-package: com.zazhi.entity
     configuration:
       map-underscore-to-camel-case: true #开启驼峰命名和下划线命名的映射
+
   # mysql
   datasource:
     driver-class-name: ${datasource.driver-class-name} #com.mysql.cj.jdbc.Driver

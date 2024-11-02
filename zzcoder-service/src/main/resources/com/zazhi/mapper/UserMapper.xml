@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zazhi.mapper.UserMapper">
+
+    <update id="update" parameterType="com.zazhi.entity.User">
+        update user
+        <set>
+            <if test="username != null">username = #{username},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="phoneNumber != null">phone_number = #{phoneNumber},</if>
+            <if test="avatarUrl != null">avatar_url = #{avatarUrl},</if>
+            <if test="cfUsername != null">cf_username = #{cfUsername},</if>
+            <if test="status != null">status = #{status},</if>
+            update_time = now()
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+</mapper>
