@@ -54,4 +54,16 @@ public class UserServiceImpl implements UserService {
             throw new VerificationCodeException();
         }
     }
+
+    /**
+     * 更新用户头像
+     * @param avatarUrl
+     */
+    public void updateAvatar(String avatarUrl) {
+        Long userId = ThreadLocalUtil.getCurrentId();
+        User user = new User();
+        user.setAvatarUrl(avatarUrl);
+        user.setId(userId);
+        userMapper.update(user);
+    }
 }

@@ -42,4 +42,13 @@ public class UserController {
         return Result.success();
     }
 
+    @PutMapping("/avatar")
+    @Operation(summary = "上传用户头像")
+    public Result updateAvatar(@RequestParam String avatarUrl){
+        log.info("更新用户头像，{}", avatarUrl);
+        userService.updateAvatar(avatarUrl);
+        return Result.success();
+    }
+
+
 }

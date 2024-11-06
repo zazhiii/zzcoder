@@ -2,7 +2,6 @@ package com.zazhi.service;
 
 import com.zazhi.dto.UpdateEmailDTO;
 import com.zazhi.dto.UserInfoDTO;
-import com.zazhi.result.Result;
 
 public interface UserService {
 
@@ -17,4 +16,10 @@ public interface UserService {
      * @param updateEmailDTO
      */
     void updateEmail(UpdateEmailDTO updateEmailDTO);
+
+    /**
+     * 更新用户头像
+     * @param avatarUrl
+     */
+    void updateAvatar(String avatarUrl);
 }

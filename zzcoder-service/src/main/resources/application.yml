@@ -1,37 +1,53 @@
 spring:
   profiles:
     active: dev
-  # mybatis
-  mybatis:
-#    mapper-locations: classpath*:mapper/*.xml
-#    type-aliases-package: com.zazhi.entity
-    configuration:
-      map-underscore-to-camel-case: true #开启驼峰命名和下划线命名的映射
+
 
   # mysql
   datasource:
-    driver-class-name: ${datasource.driver-class-name} #com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${datasource.host}:${datasource.port}/${datasource.database}
-    username: ${datasource.username}
-    password: ${datasource.password}
+    driver-class-name: ${zz.datasource.driver-class-name} #com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${zz.datasource.host}:${zz.datasource.port}/${zz.datasource.database}
+    username: ${zz.datasource.username}
+    password: ${zz.datasource.password}
   # redis
   data:
     redis:
-      host: ${redis.host}
-      port: ${redis.port}
-      password: ${redis.password}
+      host: ${zz.redis.host}
+      port: ${zz.redis.port}
+      password: ${zz.redis.password}
   # mail
   mail:
-    host: ${mail.host}
-    port: ${mail.port}
-    username: ${mail.username}
-    password: ${mail.password}
+    host: ${zz.mail.host}
+    port: ${zz.mail.port}
+    username: ${zz.mail.username}
+    password: ${zz.mail.password}
     properties:
       mail:
         smtp:
           auth: true
           starttls:
             enable: true
+zz:
+#  jwt:
+#    # 设置jwt签名加密时使用的秘钥
+#    admin-secret-key: zazhi
+#    # 设置jwt过期时间
+#    admin-ttl: 7200000
+#    # 设置前端传递过来的令牌名称
+#    admin-token-name: token
+#    user-secret-key: zazhi
+#    user-ttl: 7200000
+#    user-token-name: authentication
+  alioss:
+    endpoint: ${zz.alioss.endpoint}
+    access-key-id: ${zz.alioss.access-key-id}
+    access-key-secret: ${zz.alioss.access-key-secret}
+    bucket-name: ${zz.alioss.bucket-name}
+
+# mybatis
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
 
 logging:
   level:
