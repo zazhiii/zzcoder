@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zazhi.mapper.ProblemMapper">
+
+    <!-- 插入题目 -->
+    <insert id="insert" parameterType="com.zazhi.dto.ProblemDTO">
+        INSERT INTO `problem` (
+        `problem_id`,
+        `title`,
+        `time_limit`,
+        `memory_limit`,
+        `stack_limit`,
+        `description`,
+        `input_description`,
+        `output_description`,
+        `examples`,
+        `source`,
+        `difficulty`,
+        `hint`,
+        `auth`,
+        `create_user`,
+        `update_user`
+        ) VALUES (
+        #{problemId},
+        #{title},
+        #{timeLimit},
+        #{memoryLimit},
+        #{stackLimit},
+        #{description},
+        #{inputDescription},
+        #{outputDescription},
+        #{examples},
+        #{source},
+        #{difficulty},
+        #{hint},
+        #{auth},
+        #{createUser},
+        #{updateUser}
+        )
+    </insert>
+</mapper>
