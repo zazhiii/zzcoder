@@ -19,7 +19,7 @@
         `source`,
         `difficulty`,
         `hint`,
-        `auth`,
+        `status`,
         `create_user`,
         `update_user`
         ) VALUES (
@@ -35,9 +35,88 @@
         #{source},
         #{difficulty},
         #{hint},
-        #{auth},
+        #{status},
         #{createUser},
         #{updateUser}
         )
     </insert>
+
+    <select id="page" parameterType="com.zazhi.dto.ProblemQueryDTO" resultType="com.zazhi.vo.ProblemVO">
+        select * from problem
+        <where>
+            <if test="keyword != null and keyword.trim() != ''">
+                AND title LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="tagId != null and tagId.size() > 0">
+                AND id IN (
+                SELECT problem_id FROM problem_tag
+                WHERE tag_id IN
+                <foreach item="id" collection="tagId" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+                )
+            </if>
+            <if test="difficulty != null">
+                AND difficulty = #{difficulty}
+            </if>
+            <if test="source != null and source.trim() != ''">
+                AND source = #{source}
+            </if>
+        </where>
+    </select>
+
+    <update id="update" parameterType="com.zazhi.entity.Problem">
+        UPDATE problem
+        <set>
+            <if test="problemId != null">
+                problem_id = #{problemId},
+            </if>
+            <if test="title != null">
+                title = #{title},
+            </if>
+            <if test="timeLimit != null">
+                time_limit = #{timeLimit},
+            </if>
+            <if test="memoryLimit != null">
+                memory_limit = #{memoryLimit},
+            </if>
+            <if test="stackLimit != null">
+                stack_limit = #{stackLimit},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="inputDescription != null">
+                input_description = #{inputDescription},
+            </if>
+            <if test="outputDescription != null">
+                output_description = #{outputDescription},
+            </if>
+            <if test="examples != null">
+                examples = #{examples},
+            </if>
+            <if test="source != null">
+                source = #{source},
+            </if>
+            <if test="difficulty != null">
+                difficulty = #{difficulty},
+            </if>
+            <if test="hint != null">
+                hint = #{hint},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="createUser != null">
+                create_user = #{createUser},
+            </if>
+            <if test="updateUser != null">
+                update_user = #{updateUser},
+            </if>
+<!--            update_time = CURRENT_TIMESTAMP-->
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
 </mapper>

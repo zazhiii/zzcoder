@@ -13,6 +13,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class ProblemDTO implements Serializable {
 
+    private Integer id; // 主键id
+
     private String problemId; // 题目展示id
     
     private String title; // 题目标题
@@ -37,7 +39,7 @@ public class ProblemDTO implements Serializable {
     
     private String hint; // 备注提醒
     
-    private String auth = "0"; // 权限（0公开，1私有，3比赛中）
+    private String status = "0"; // 权限（0公开，1私有，3比赛中）
 
     private Long createUser; // 创建人
 
