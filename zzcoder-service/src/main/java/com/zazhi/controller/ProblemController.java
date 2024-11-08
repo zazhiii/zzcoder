@@ -73,7 +73,7 @@ public class ProblemController {
 
     @PostMapping("/add-tag-to-problem")
     @Operation(summary = "为题目添加标签")
-    public Result addTagToProblem(Integer problemId, List<Integer> tagIds){
+    public Result addTagToProblem(Integer problemId, @RequestParam List<Integer> tagIds){
         log.info("添加标签到题目：{}, {}", problemId, tagIds);
         problemService.addTagToProblem(problemId, tagIds);
         return Result.success();

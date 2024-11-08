@@ -53,8 +53,8 @@ public class ProblemServiceImpl implements ProblemService {
         PageHelper.startPage(problemQueryDTO.getCurrentPage(), problemQueryDTO.getLimit());
         Page<ProblemVO> res = problemMapper.page(problemQueryDTO);
         for (ProblemVO problemVO : res) { // 查询出每个题目的标签
-            List<ProblemTag> tags = problemTagMapper.getTagByProblemId(problemVO.getId());
-            problemVO.setTags(tags);
+            List<String> tagNames = problemTagMapper.getTagByProblemId(problemVO.getId());
+            problemVO.setTagNames(tagNames);
         }
         return new PageResult<>(res.getTotal(), res.getResult());
     }

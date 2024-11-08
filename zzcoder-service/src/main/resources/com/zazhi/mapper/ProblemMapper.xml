@@ -45,12 +45,16 @@
         select * from problem
         <where>
             <if test="keyword != null and keyword.trim() != ''">
-                AND title LIKE CONCAT('%', #{keyword}, '%')
+                AND (
+                title LIKE CONCAT('%', #{keyword}, '%')
+                OR
+                problem_id LIKE CONCAT('%', #{keyword}, '%')
+                )
             </if>
             <if test="tagId != null and tagId.size() > 0">
                 AND id IN (
-                SELECT problem_id FROM problem_tag
-                WHERE tag_id IN
+                SELECT pid FROM problem_tag
+                WHERE tid IN
                 <foreach item="id" collection="tagId" open="(" separator="," close=")">
                     #{id}
                 </foreach>
