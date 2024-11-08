@@ -11,6 +11,7 @@ import com.zazhi.mapper.ProblemTagMapper;
 import com.zazhi.result.PageResult;
 import com.zazhi.service.ProblemService;
 import com.zazhi.utils.ThreadLocalUtil;
+import com.zazhi.vo.ProblemInfoVO;
 import com.zazhi.vo.ProblemVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,12 @@ public class ProblemServiceImpl implements ProblemService {
     public void addProblem(ProblemDTO problemDTO) {
         Long id = ThreadLocalUtil.getCurrentId();
         problemDTO.setCreateUser(id);
+        problemDTO.setUpdateUser(id);
+        List<Integer> tagIds = problemDTO.getTagIds();
         problemMapper.insert(problemDTO);
+        for (Integer tagId : tagIds){
+            problemTagMapper.addTagToProblem(tagId, problemDTO.getId());
+        }
     }
 
     /**
@@ -87,8 +93,11 @@ public class ProblemServiceImpl implements ProblemService {
      * @param id
      * @return
      */
-    public Problem getProblemInfo(Integer id) {
-        return problemMapper.getById(id);
+    public ProblemInfoVO getProblemInfo(Integer id) {
+        ProblemInfoVO problemInfoVO = problemMapper.getById(id);
+        List<String> tagNames = problemTagMapper.getTagByProblemId(id);
+        problemInfoVO.setTagNames(tagNames);
+        return problemInfoVO;
     }
 
     /**

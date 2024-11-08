@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.zazhi.dto.ProblemDTO;
 import com.zazhi.dto.ProblemQueryDTO;
 import com.zazhi.entity.Problem;
+import com.zazhi.vo.ProblemInfoVO;
 import com.zazhi.vo.ProblemVO;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
@@ -48,6 +49,6 @@ public interface ProblemMapper {
      * @return
      */
     @Select("select * from problem where id = #{id}")
-    Problem getById(Integer id);
+    ProblemInfoVO getById(Integer id);
 
 }

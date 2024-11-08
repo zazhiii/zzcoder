@@ -5,6 +5,7 @@ import com.zazhi.dto.ProblemQueryDTO;
 import com.zazhi.entity.Problem;
 import com.zazhi.result.PageResult;
 import com.zazhi.result.Result;
+import com.zazhi.vo.ProblemInfoVO;
 import com.zazhi.vo.ProblemVO;
 
 import java.util.List;
@@ -44,7 +45,7 @@ public interface ProblemService {
      * @param id
      * @return
      */
-    Problem getProblemInfo(Integer id);
+    ProblemInfoVO getProblemInfo(Integer id);
 
     /**
      * 添加标签到题目

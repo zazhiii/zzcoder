@@ -1,8 +1,8 @@
 package com.zazhi.controller;
 
 import com.zazhi.dto.ProblemDTO;
+import com.zazhi.vo.ProblemInfoVO;
 import com.zazhi.dto.ProblemQueryDTO;
-import com.zazhi.entity.Problem;
 import com.zazhi.result.PageResult;
 import com.zazhi.result.Result;
 import com.zazhi.service.ProblemService;
@@ -10,7 +10,6 @@ import com.zazhi.vo.ProblemVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +41,7 @@ public class ProblemController {
 
     @PostMapping("/list")
     @Operation(summary = "题目条件分页查询")
-    // TODO 关键字查询需要包含题目、题号等。 待测试功能。
+    // TODO 分页查询 bug
     public Result<PageResult<ProblemVO>> list(@RequestBody ProblemQueryDTO problemQueryDTO){
         log.info("分页查询题目，{}", problemQueryDTO);
         return Result.success(problemService.page(problemQueryDTO));
@@ -66,7 +65,7 @@ public class ProblemController {
 
     @GetMapping("/{id}")
     @Operation(summary = "查看题目详细信息")
-    public Result<Problem> getProblemInfo(@PathVariable Integer id){
+    public Result<ProblemInfoVO> getProblemInfo(@PathVariable Integer id){
         log.info("查看题目：{}", id);
         return Result.success(problemService.getProblemInfo(id));
     }
