@@ -1,9 +1,12 @@
 package com.zazhi.service.impl;
 
+import com.zazhi.entity.ProblemTag;
 import com.zazhi.mapper.TagMapper;
 import com.zazhi.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author zazhi
@@ -31,5 +34,13 @@ public class TagServiceImpl implements TagService {
      */
     public void deletById(Integer id) {
        tagMapper.deleteById(id);
+    }
+
+
+    /**
+     * 获取所有标签
+     */
+    public List<ProblemTag> list() {
+        return tagMapper.list();
     }
 }

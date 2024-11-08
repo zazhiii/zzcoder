@@ -1,6 +1,6 @@
 package com.zazhi.mapper;
 
-import com.zazhi.entity.Tag;
+import com.zazhi.entity.ProblemTag;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -24,7 +24,7 @@ public interface ProblemTagMapper {
      * @return
      */
     @Select("select * from problem_tag p_t left join tag t on p_t.tid = t.id where p_t.pid = #{pid}")
-    List<Tag> getTagByProblemId(Integer pid);
+    List<ProblemTag> getTagByProblemId(Integer pid);
 
     /**
      * 添加标签到题目

@@ -1,6 +1,6 @@
 package com.zazhi.vo;
 
-import com.zazhi.entity.Tag;
+import com.zazhi.entity.ProblemTag;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,5 +25,5 @@ public class ProblemVO implements Serializable {
 
 //    private Integer type;
 
-    private List<Tag> tags; // 标签
+    private List<ProblemTag> tags; // 标签
 }

@@ -5,7 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.zazhi.dto.ProblemDTO;
 import com.zazhi.dto.ProblemQueryDTO;
 import com.zazhi.entity.Problem;
-import com.zazhi.entity.Tag;
+import com.zazhi.entity.ProblemTag;
 import com.zazhi.mapper.ProblemMapper;
 import com.zazhi.mapper.ProblemTagMapper;
 import com.zazhi.result.PageResult;
@@ -53,7 +53,7 @@ public class ProblemServiceImpl implements ProblemService {
         PageHelper.startPage(problemQueryDTO.getCurrentPage(), problemQueryDTO.getLimit());
         Page<ProblemVO> res = problemMapper.page(problemQueryDTO);
         for (ProblemVO problemVO : res) { // 查询出每个题目的标签
-            List<Tag> tags = problemTagMapper.getTagByProblemId(problemVO.getId());
+            List<ProblemTag> tags = problemTagMapper.getTagByProblemId(problemVO.getId());
             problemVO.setTags(tags);
         }
         return new PageResult<>(res.getTotal(), res.getResult());

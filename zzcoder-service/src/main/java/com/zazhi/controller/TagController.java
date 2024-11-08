@@ -4,10 +4,13 @@ import com.zazhi.result.Result;
 import com.zazhi.service.TagService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import com.zazhi.entity.ProblemTag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author zazhi
@@ -23,6 +26,13 @@ public class TagController {
 
     @Autowired
     TagService tagService;
+
+    @GetMapping
+    @Operation(summary = "获取所有标签")
+    public Result<List<ProblemTag>> list(){
+        log.info("获取所有标签");
+        return Result.success(tagService.list());
+    }
 
     @PostMapping
     @Operation(summary = "新增标签")

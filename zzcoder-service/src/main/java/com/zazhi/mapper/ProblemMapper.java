@@ -4,13 +4,10 @@ import com.github.pagehelper.Page;
 import com.zazhi.dto.ProblemDTO;
 import com.zazhi.dto.ProblemQueryDTO;
 import com.zazhi.entity.Problem;
-import com.zazhi.entity.Tag;
 import com.zazhi.vo.ProblemVO;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
-
-import java.util.List;
 
 @Mapper
 public interface ProblemMapper {
