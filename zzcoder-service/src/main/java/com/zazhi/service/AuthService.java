@@ -1,7 +1,11 @@
 package com.zazhi.service;
 
 import com.zazhi.dto.*;
+import com.zazhi.entity.Permission;
 import com.zazhi.entity.User;
+import com.zazhi.entity.Role;
+
+import java.util.List;
 
 public interface AuthService {
 
@@ -68,4 +72,48 @@ public interface AuthService {
      * @param updatePasswordByEmailDTO
      */
     void updatePswByEmail(UpdatePasswordByEmailDTO updatePasswordByEmailDTO);
+
+    /**
+     * 添加角色
+     * @param roleName
+     */
+    void addRole(String roleName, String description);
+
+    /**
+     * 更新角色信息
+     * @param role
+     */
+    void updateRole(Role role);
+
+    /**
+     * 删除角色
+     * @param id
+     */
+    void deleteRole(Integer id);
+
+    /**
+     * 获取所有角色
+     * @return
+     */
+    List<Role> getRoles();
+
+    /**
+     * 添加权限到角色
+     * @param roleId
+     * @param permissionId
+     */
+    void addPermissionToRole(Integer roleId, Integer permissionId);
+
+    /**
+     * 添加角色到用户
+     * @param roleId
+     * @param userId
+     */
+    void addRoleToUser(Integer roleId, Integer userId);
+
+    /**
+     * 获取所有权限
+     * @return
+     */
+    List<Permission> getPermissions();
 }

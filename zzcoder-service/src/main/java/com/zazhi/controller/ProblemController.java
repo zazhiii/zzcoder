@@ -33,6 +33,7 @@ public class ProblemController {
 
     @PostMapping()
     @Operation(summary = "添加题目")
+    // TODO 权限验证
     public Result addProblem(@RequestBody ProblemDTO problemDTO) {
         log.info("添加题目：{}", problemDTO);
         problemService.addProblem(problemDTO);
@@ -41,7 +42,6 @@ public class ProblemController {
 
     @PostMapping("/list")
     @Operation(summary = "题目条件分页查询")
-    // TODO 分页查询 bug
     public Result<PageResult<ProblemVO>> list(@RequestBody ProblemQueryDTO problemQueryDTO){
         log.info("分页查询题目，{}", problemQueryDTO);
         return Result.success(problemService.page(problemQueryDTO));

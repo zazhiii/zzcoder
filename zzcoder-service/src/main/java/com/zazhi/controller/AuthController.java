@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 @Validated
 @Slf4j
-@Tag(name = "注册、登录、更改密码相关接口")
+@Tag(name = "注册、登录、更改密码、权限相关接口")
 public class AuthController {
 
     @Autowired

@@ -2,7 +2,10 @@ package com.zazhi.service.impl;
 
 import com.zazhi.constant.MsgConstant;
 import com.zazhi.dto.*;
+import com.zazhi.entity.Permission;
+import com.zazhi.entity.Role;
 import com.zazhi.exception.*;
+import com.zazhi.mapper.AuthMapper;
 import com.zazhi.mapper.UserMapper;
 import com.zazhi.service.AuthService;
 import com.zazhi.utils.JwtUtil;
@@ -16,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -30,6 +34,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    AuthMapper authMapper;
 
     @Autowired
     VerificationCodeService verificationCodeService;
@@ -202,5 +209,63 @@ public class AuthServiceImpl implements AuthService {
 
         String newPassword = updatePasswordByEmailDTO.getNewPassword();
         userMapper.updatePsw(user.getId(), Md5Util.getMD5String(newPassword));
+    }
+
+    /**
+     * 添加角色
+     * @param roleName
+     */
+    public void addRole(String roleName, String description) {
+        authMapper.addRole(roleName, description);
+    }
+
+    /**
+     * 更新角色信息
+     * @param role
+     */
+    public void updateRole(Role role) {
+       authMapper.updateRole(role);
+    }
+
+    /**
+     * 删除角色
+     * @param id
+     */
+    public void deleteRole(Integer id) {
+       authMapper.deleteRole(id);
+    }
+
+    /**
+     * 获取用户的角色
+     * @return
+     */
+    public List<Role> getRoles() {
+        return authMapper.getRoles();
+    }
+
+    /**
+     * 添加权限到角色
+     * @param roleId
+     * @param permissionId
+     */
+    public void addPermissionToRole(Integer roleId, Integer permissionId) {
+        authMapper.addPermissionToRole(roleId, permissionId);
+    }
+
+    /**
+     * 添加角色到用户
+     * @param roleId
+     * @param userId
+     */
+    public void addRoleToUser(Integer roleId, Integer userId) {
+       authMapper.addRoleToUser(roleId, userId);
+    }
+
+    /**
+     * 获取所有权限
+     * @return
+     */
+    public List<Permission> getPermissions() {
+        return authMapper.getPermissions();
     }
 }
