@@ -56,7 +56,7 @@ public class ProblemController {
     }
 
     @DeleteMapping()
-    @Operation(summary = "删除题目")
+    @Operation(summary = "删除题目") // TODO 权限管理
     public Result delete(Integer id){
         log.info("删除题目：{}", id);
         problemService.deleteProblemWithTags(id);
@@ -71,7 +71,7 @@ public class ProblemController {
     }
 
     @PostMapping("/add-tag-to-problem")
-    @Operation(summary = "为题目添加标签")
+    @Operation(summary = "为题目添加标签")// TODO 权限管理
     public Result addTagToProblem(Integer problemId, @RequestParam List<Integer> tagIds){
         log.info("添加标签到题目：{}, {}", problemId, tagIds);
         problemService.addTagToProblem(problemId, tagIds);
@@ -79,7 +79,7 @@ public class ProblemController {
     }
 
     @DeleteMapping("/delete-tag-from-problem")
-    @Operation(summary = "删除题目上的标签")
+    @Operation(summary = "删除题目上的标签")// TODO 权限管理
     public Result deleteTagFromProblem(Integer problemId, Integer tagId){
         log.info("删除题目{}上的标签：{}", problemId, tagId);
         problemService.deleteTagFromProblem(problemId, tagId);

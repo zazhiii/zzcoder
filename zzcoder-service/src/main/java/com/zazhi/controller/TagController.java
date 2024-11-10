@@ -35,7 +35,7 @@ public class TagController {
     }
 
     @PostMapping
-    @Operation(summary = "新增标签")
+    @Operation(summary = "新增标签")// TODO 权限验证
     public Result add(String name){
         log.info("添加标签：{}", name);
         tagService.insert(name);
@@ -43,7 +43,7 @@ public class TagController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "删除标签")
+    @Operation(summary = "删除标签") // TODO 权限管理
     public Result delete(@PathVariable Integer id){
         log.info("删除标签：{}", id);
         tagService.deletById(id);

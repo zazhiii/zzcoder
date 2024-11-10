@@ -33,7 +33,10 @@ public class WebConfig implements WebMvcConfigurer {
                 "/api/login",
                 "/api/login-by-email-code",
                 "/api/send-email-verification-code",
-                "/api/update-password-by-email"
+                "/api/update-password-by-email",
+                "/api/problem/list",
+                "/api/problem/{id}",
+                "/api/tag",
         };
 
         //登录接口和注册接口放行
