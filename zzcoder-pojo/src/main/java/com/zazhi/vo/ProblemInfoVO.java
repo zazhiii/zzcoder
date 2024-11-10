@@ -1,5 +1,6 @@
 package com.zazhi.vo;
 
+import com.zazhi.entity.ProblemTag;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -48,5 +49,5 @@ public class ProblemInfoVO implements Serializable {
 
     private Long createUser; // 创建人
 
-    private List<String> tagNames; // 题目标签
+    private List<ProblemTag> tags; // 题目标签
 }

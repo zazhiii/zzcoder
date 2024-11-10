@@ -23,8 +23,8 @@ public interface ProblemTagMapper {
      * @param pid
      * @return
      */
-    @Select("select t.name from tag t left outer join problem_tag p_t on p_t.tid = t.id where p_t.pid = #{pid}")
-    List<String> getTagByProblemId(Integer pid);
+    @Select("select t.* from tag t left outer join problem_tag p_t on p_t.tid = t.id where p_t.pid = #{pid}")
+    List<ProblemTag> getTagByProblemId(Integer pid);
 
     /**
      * 添加标签到题目

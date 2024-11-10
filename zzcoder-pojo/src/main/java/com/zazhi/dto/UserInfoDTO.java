@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * @author zazhi
  * @date 2024/10/31
@@ -29,4 +31,9 @@ public class UserInfoDTO {
     private String cfUsername;
 
     private Integer status;
+
+    private List<String> roles;
+
+    private List<String> permissions;
+
 }

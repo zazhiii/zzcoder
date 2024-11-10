@@ -2,6 +2,7 @@ package com.zazhi.service.impl;
 
 import com.zazhi.dto.UpdateEmailDTO;
 import com.zazhi.dto.UserInfoDTO;
+import com.zazhi.entity.Role;
 import com.zazhi.entity.User;
 import com.zazhi.exception.VerificationCodeException;
 import com.zazhi.mapper.UserMapper;
@@ -10,6 +11,9 @@ import com.zazhi.utils.ThreadLocalUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author zazhi
@@ -34,6 +38,12 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.findById(userId);
         UserInfoDTO userInfoDTO = new UserInfoDTO();
         BeanUtils.copyProperties(user, userInfoDTO);
+        // 获取用户角色名称加入到userInfoDTO中
+        List<Role> roles = userMapper.findRolesByUserId(userId);
+        userInfoDTO.setRoles(roles.stream().map(Role::getName).toList());
+        // 获取用户权限名称加入到userInfoDTO中
+        List<String> permissions = userMapper.findPermissionsByRoles(roles);
+        userInfoDTO.setPermissions(permissions);
         return userInfoDTO;
     }
 

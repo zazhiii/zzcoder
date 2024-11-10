@@ -25,5 +25,5 @@ public class ProblemVO implements Serializable {
 
 //    private Integer type;
 
-    private List<String> tagNames; // 标签
+    private List<ProblemTag> tags; // 标签
 }

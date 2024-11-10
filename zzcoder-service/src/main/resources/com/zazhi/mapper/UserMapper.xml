@@ -19,4 +19,14 @@
             id = #{id}
         </where>
     </update>
+
+    <select id="findPermissionsByRoles">
+        select p.name
+        from permission p
+        join role_permission rp on p.id = rp.permission_id
+        where rp.role_id in
+        <foreach collection="roles" item="role" open="(" separator="," close=")">
+            #{role.id}
+        </foreach>
+    </select>
 </mapper>
