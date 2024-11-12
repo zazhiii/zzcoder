@@ -6,8 +6,10 @@ import com.zazhi.dto.ProblemDTO;
 import com.zazhi.dto.ProblemQueryDTO;
 import com.zazhi.entity.Problem;
 import com.zazhi.entity.ProblemTag;
+import com.zazhi.entity.User;
 import com.zazhi.mapper.ProblemMapper;
 import com.zazhi.mapper.ProblemTagMapper;
+import com.zazhi.mapper.UserMapper;
 import com.zazhi.result.PageResult;
 import com.zazhi.service.ProblemService;
 import com.zazhi.utils.ThreadLocalUtil;
@@ -32,6 +34,9 @@ public class ProblemServiceImpl implements ProblemService {
 
     @Autowired
     ProblemTagMapper problemTagMapper;
+
+    @Autowired
+    UserMapper userMapper;
     
     /**
      * 添加题目
@@ -94,9 +99,16 @@ public class ProblemServiceImpl implements ProblemService {
      * @return
      */
     public ProblemInfoVO getProblemInfo(Integer id) {
-        ProblemInfoVO problemInfoVO = problemMapper.getById(id);
+        ProblemInfoVO problemInfoVO = new ProblemInfoVO();
+        // 基本信息
+        Problem problem = problemMapper.getById(id);
+        BeanUtils.copyProperties(problem, problemInfoVO);
+        // 标签信息
         List<ProblemTag> tags = problemTagMapper.getTagByProblemId(id);
         problemInfoVO.setTags(tags);
+        // 创建人信息
+        User createUser = userMapper.findById(problem.getCreateUser());
+        problemInfoVO.setCreateUser(createUser.getUsername());
         return problemInfoVO;
     }
 

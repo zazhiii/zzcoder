@@ -80,3 +80,22 @@ CREATE TABLE `role_permission` (
     `create_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '关联创建时间',
     PRIMARY KEY (`role_id`, `permission_id`)
 ) COMMENT='角色-权限关联表';
+
+-- 提交记录表
+CREATE TABLE submission (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    submit_id BIGINT NOT NULL UNIQUE COMMENT '提交id',
+    submit_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '提交时间',
+    problem_id INT NOT NULL COMMENT '题目id',
+    user_id BIGINT NOT NULL COMMENT '用户id',
+    contest_id BIGINT NOT NULL COMMENT '比赛id, 非比赛提交则为0',
+    language VARCHAR(50) COMMENT '编程语言',
+    code TEXT COMMENT '代码',
+    status VARCHAR(50) COMMENT '当前判题状态：Pending, Running, Completed, etc.',
+    result TEXT COMMENT '判题结果',
+    error_message TEXT COMMENT '错误信息',
+    time_used INT COMMENT '运行时间（ms）',
+    memory_used INT COMMENT '内存使用（KB）',
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);

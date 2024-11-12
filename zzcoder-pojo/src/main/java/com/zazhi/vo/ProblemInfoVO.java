@@ -47,7 +47,7 @@ public class ProblemInfoVO implements Serializable {
 
     private String status; // 权限（0公开，1私有，3比赛中）
 
-    private Long createUser; // 创建人
+    private String createUser; // 创建人
 
     private List<ProblemTag> tags; // 题目标签
 }

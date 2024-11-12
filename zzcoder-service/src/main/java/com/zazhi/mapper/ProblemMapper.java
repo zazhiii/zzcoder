@@ -49,6 +49,6 @@ public interface ProblemMapper {
      * @return
      */
     @Select("select * from problem where id = #{id}")
-    ProblemInfoVO getById(Integer id);
+    Problem getById(Integer id);
 
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zazhi.mapper.JudgeMapper">
+    <select id="getSubmissions" resultType="com.zazhi.entity.Submission" parameterType="com.zazhi.dto.SubmissionQueryDTO">
+        select * from submission
+        <where>
+<!--            private String username;// 用户名-->
+<!--            private String result;// 结果 (AC, WA, TLE, MLE, RE, CE)-->
+<!--            private String language;// 语言-->
+<!--            private Integer contestId;// 比赛id-->
+            <if test="username != null and username != ''">
+                and user_id in (select id from user where username = #{username})
+            </if>
+            <if test="result != null and result != ''">
+                and result = #{result}
+            </if>
+            <if test="language != null and language != ''">
+                and language = #{language}
+            </if>
+            <if test="contestId != null and contestId != 0">
+                and contest_id = #{contestId}
+            </if>
+        </where>
+    </select>
+</mapper>

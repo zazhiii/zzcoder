@@ -45,7 +45,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    @Operation(summary = "用户注册")
+    @Operation(summary = "用户注册") // TODO 给新用户分配角色
     public Result register(@RequestBody @Validated RegisterDTO registerDTO){
         log.info("开始注册：{}", registerDTO);
 
