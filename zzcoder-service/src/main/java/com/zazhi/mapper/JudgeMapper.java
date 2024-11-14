@@ -15,4 +15,6 @@ public interface JudgeMapper {
      * @return
      */
     Page<Submission> getSubmissions(SubmissionQueryDTO submissionQueryDTO);
+
+    void insertSubmission(Submission submission);
 }

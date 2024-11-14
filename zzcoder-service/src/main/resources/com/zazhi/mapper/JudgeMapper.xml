@@ -6,10 +6,6 @@
     <select id="getSubmissions" resultType="com.zazhi.entity.Submission" parameterType="com.zazhi.dto.SubmissionQueryDTO">
         select * from submission
         <where>
-<!--            private String username;// 用户名-->
-<!--            private String result;// 结果 (AC, WA, TLE, MLE, RE, CE)-->
-<!--            private String language;// 语言-->
-<!--            private Integer contestId;// 比赛id-->
             <if test="username != null and username != ''">
                 and user_id in (select id from user where username = #{username})
             </if>
@@ -24,4 +20,9 @@
             </if>
         </where>
     </select>
+
+    <insert id="insertSubmission" parameterType="com.zazhi.entity.Submission" keyProperty="id" useGeneratedKeys="true">
+        insert into submission (id, user_id, problem_id, contest_id, language, code, status, result, time_used, memory_used)
+        values (#{id}, #{userId}, #{problemId}, #{contestId}, #{language}, #{code}, #{status}, #{result}, #{timeUsed}, #{memoryUsed})
+    </insert>
 </mapper>

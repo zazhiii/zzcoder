@@ -1,4 +1,10 @@
 zz:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    virtual-host: /zzcoder
+    username: zzcoder
+    password: 123456
   # mysql
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

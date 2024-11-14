@@ -1,4 +1,4 @@
-package com.zazhi.dto;
+package com.zazhi.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class JudgeDTO {
-    private Long userId;
-    private Integer problemId;
-    private String code;
-    private String language;
+public class TestCase {
+        private String input;
+        private String expectedOutput;
 }

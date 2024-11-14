@@ -18,7 +18,6 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 public class Submission {
     private Long id;
-    private Long submitId;// 提交id
     private Timestamp submitTime;// 提交时间
     private Long userId;// 用户id
     private Integer problemId;// 题目id

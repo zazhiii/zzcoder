@@ -2,7 +2,12 @@ spring:
   profiles:
     active: dev
 
-
+  rabbitmq:
+    host: ${zz.rabbitmq.host} #IP
+    port: ${zz.rabbitmq.port} # 端口
+    virtual-host: ${zz.rabbitmq.virtual-host} # 虚拟主机
+    username: ${zz.rabbitmq.username} # 用户名
+    password: ${zz.rabbitmq.password} # 密码
   # mysql
   datasource:
     driver-class-name: ${zz.datasource.driver-class-name} #com.mysql.cj.jdbc.Driver

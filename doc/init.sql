@@ -84,18 +84,28 @@ CREATE TABLE `role_permission` (
 -- 提交记录表
 CREATE TABLE submission (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    submit_id BIGINT NOT NULL UNIQUE COMMENT '提交id',
     submit_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '提交时间',
     problem_id INT NOT NULL COMMENT '题目id',
     user_id BIGINT NOT NULL COMMENT '用户id',
     contest_id BIGINT NOT NULL COMMENT '比赛id, 非比赛提交则为0',
     language VARCHAR(50) COMMENT '编程语言',
     code TEXT COMMENT '代码',
-    status VARCHAR(50) COMMENT '当前判题状态：Pending, Running, Completed, etc.',
+    status VARCHAR(50) COMMENT '当前判题状态：Pending, Judging, Completed',
     result TEXT COMMENT '判题结果',
     error_message TEXT COMMENT '错误信息',
     time_used INT COMMENT '运行时间（ms）',
     memory_used INT COMMENT '内存使用（KB）',
     create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- 测试用例表
+CREATE TABLE test_case (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+    problem_id INT NOT NULL COMMENT '关联题目的ID',
+    input TEXT NOT NULL COMMENT '输入数据',
+    expected_output TEXT NOT NULL COMMENT '期望输出',
+    is_sample BOOLEAN DEFAULT FALSE COMMENT '是否是示例用例（用于展示）',
+    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
 );
