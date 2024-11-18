@@ -16,5 +16,14 @@ public interface JudgeMapper {
      */
     Page<Submission> getSubmissions(SubmissionQueryDTO submissionQueryDTO);
 
+    /**
+     * 插入提交记录
+     * @param submission
+     */
     void insertSubmission(Submission submission);
+
+    /**
+     * 更新提交记录
+     */
+    void updateSubmission(Submission submission);
 }

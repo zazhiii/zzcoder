@@ -24,8 +24,8 @@ public class Submission {
     private Integer contestId;// 比赛id
     private String code; // 代码
     private String language;// 语言
-    private String status;// 状态
-    private String result;// 结果 (AC WA TLE MLE RE CE)
+    private String status;// 状态 (PENDING JUDGING COMPLETED)
+    private String result;// 结果 (ACCEPTED WRONG_ANSWER TIME_LIMIT_EXCEEDED MEMORY_LIMIT_EXCEEDED RUNTIME_ERROR COMPILE_ERROR)
     private String errorMessage;// 错误信息
     private Integer timeUsed;// 时间
     private Integer memoryUsed;// 内存

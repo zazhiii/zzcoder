@@ -2,6 +2,7 @@ package com.zazhi.service;
 
 import com.zazhi.dto.JudgeDTO;
 import com.zazhi.dto.SubmissionQueryDTO;
+import com.zazhi.entity.JudgeResult;
 import com.zazhi.entity.Submission;
 import com.zazhi.result.PageResult;
 
@@ -19,4 +20,10 @@ public interface JudgeService {
      * @return
      */
     PageResult<Submission> getSubmissions(SubmissionQueryDTO submissionQueryDTO);
+
+    /**
+     * 更新提交记录
+     * @param judgeResult
+     */
+    void updateSubmission(JudgeResult judgeResult);
 }

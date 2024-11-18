@@ -16,3 +16,6 @@ spring:
     url: jdbc:mysql://${zz.datasource.host}:${zz.datasource.port}/${zz.datasource.database}
     username: ${zz.datasource.username}
     password: ${zz.datasource.password}
+docker:
+  host: tcp://localhost:2375
+  api-version: 1.41

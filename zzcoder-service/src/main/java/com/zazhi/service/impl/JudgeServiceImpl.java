@@ -4,15 +4,13 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zazhi.dto.JudgeDTO;
 import com.zazhi.dto.SubmissionQueryDTO;
-import com.zazhi.entity.JudgeTask;
-import com.zazhi.entity.Problem;
-import com.zazhi.entity.Submission;
-import com.zazhi.entity.TestCase;
+import com.zazhi.entity.*;
 import com.zazhi.mapper.JudgeMapper;
 import com.zazhi.mapper.ProblemMapper;
 import com.zazhi.result.PageResult;
 import com.zazhi.service.JudgeService;
 import com.zazhi.utils.MessageQueueUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -86,5 +84,16 @@ public class JudgeServiceImpl implements JudgeService {
         PageHelper.startPage(submissionQueryDTO.getCurrentPage(), submissionQueryDTO.getLimit());
         Page<Submission> res = judgeMapper.getSubmissions(submissionQueryDTO);
         return new PageResult<>(res.getTotal(), res.getResult());
+    }
+
+    /**
+     * 更新提交记录
+     * @param judgeResult
+     */
+    public void updateSubmission(JudgeResult judgeResult) {
+        Submission submission = new Submission();
+        submission.setId(judgeResult.getTaskId());
+        BeanUtils.copyProperties(judgeResult, submission);
+        judgeMapper.updateSubmission(submission);
     }
 }

@@ -25,4 +25,26 @@
         insert into submission (id, user_id, problem_id, contest_id, language, code, status, result, time_used, memory_used)
         values (#{id}, #{userId}, #{problemId}, #{contestId}, #{language}, #{code}, #{status}, #{result}, #{timeUsed}, #{memoryUsed})
     </insert>
+
+    <update id="updateSubmission" parameterType="com.zazhi.entity.Submission">
+        update submission
+        <set>
+            <if test="status != null and status != ''">
+                status = #{status},
+            </if>
+            <if test="result != null and result != ''">
+                result = #{result},
+            </if>
+            <if test="timeUsed != null and timeUsed != 0">
+                time_used = #{timeUsed},
+            </if>
+            <if test="memoryUsed != null and memoryUsed != 0">
+                memory_used = #{memoryUsed},
+            </if>
+            <if test="errorMessage != null and errorMessage != ''">
+                error_message = #{errorMessage},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
 </mapper>
