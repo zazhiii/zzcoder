@@ -6,6 +6,7 @@ import com.zazhi.entity.Submission;
 import com.zazhi.result.PageResult;
 import com.zazhi.result.Result;
 import com.zazhi.service.JudgeService;
+import com.zazhi.vo.SubmissionInfoVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +34,11 @@ public class JudgeController {
         return Result.success(judgeService.submitCode(JudgeDTO));
     }
 
-//    @GetMapping("/submission/{submitId}")
+    @GetMapping("/submission/{submitId}")
+    @Operation(summary = "获取提交记录详情")
+    public Result<SubmissionInfoVO> getSubmissionInfo(@PathVariable Long submitId) {
+        return Result.success(judgeService.getSubmissionInfo(submitId));
+    }
 
     @PostMapping("/submission")
     @Operation(summary = "获取提交记录")

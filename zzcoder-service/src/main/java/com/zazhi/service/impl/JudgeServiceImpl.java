@@ -7,9 +7,11 @@ import com.zazhi.dto.SubmissionQueryDTO;
 import com.zazhi.entity.*;
 import com.zazhi.mapper.JudgeMapper;
 import com.zazhi.mapper.ProblemMapper;
+import com.zazhi.mapper.UserMapper;
 import com.zazhi.result.PageResult;
 import com.zazhi.service.JudgeService;
 import com.zazhi.utils.MessageQueueUtil;
+import com.zazhi.vo.SubmissionInfoVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,9 @@ public class JudgeServiceImpl implements JudgeService {
 
     @Autowired
     ProblemMapper problemMapper;
+
+    @Autowired
+    UserMapper userMapper;
 
     @Autowired
     MessageQueueUtil messageQueueUtil;
@@ -95,5 +100,21 @@ public class JudgeServiceImpl implements JudgeService {
         submission.setId(judgeResult.getTaskId());
         BeanUtils.copyProperties(judgeResult, submission);
         judgeMapper.updateSubmission(submission);
+    }
+
+    /**
+     * 获取提交记录详情
+     * @param submitId
+     * @return
+     */
+    public SubmissionInfoVO getSubmissionInfo(Long submitId) {
+        Submission submission = judgeMapper.getSubmissionById(submitId);
+        Problem problem = problemMapper.getById(submission.getProblemId());
+        User user = userMapper.findById(submission.getUserId());
+        SubmissionInfoVO submissionInfoVO = new SubmissionInfoVO();
+        submissionInfoVO.setProblemId(problem.getProblemId());
+        submissionInfoVO.setUsername(user.getUsername());
+        BeanUtils.copyProperties(submission, submissionInfoVO);
+        return submissionInfoVO;
     }
 }

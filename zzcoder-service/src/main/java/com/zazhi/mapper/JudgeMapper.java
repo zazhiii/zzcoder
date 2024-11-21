@@ -5,6 +5,7 @@ import com.zazhi.dto.SubmissionQueryDTO;
 import com.zazhi.entity.Submission;
 import com.zazhi.result.PageResult;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface JudgeMapper {
@@ -26,4 +27,13 @@ public interface JudgeMapper {
      * 更新提交记录
      */
     void updateSubmission(Submission submission);
+
+    /**
+     * 获取提交记录详情
+     * @param submitId
+     * @return
+     */
+    @Select("select * from submission where id = #{submitId}")
+    Submission getSubmissionById(Long submitId);
+
 }

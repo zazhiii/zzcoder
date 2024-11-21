@@ -5,6 +5,7 @@ import com.zazhi.dto.SubmissionQueryDTO;
 import com.zazhi.entity.JudgeResult;
 import com.zazhi.entity.Submission;
 import com.zazhi.result.PageResult;
+import com.zazhi.vo.SubmissionInfoVO;
 
 public interface JudgeService {
     /**
@@ -26,4 +27,11 @@ public interface JudgeService {
      * @param judgeResult
      */
     void updateSubmission(JudgeResult judgeResult);
+
+    /**
+     * 获取提交记录详情
+     * @param submitId
+     * @return
+     */
+    SubmissionInfoVO getSubmissionInfo(Long submitId);
 }

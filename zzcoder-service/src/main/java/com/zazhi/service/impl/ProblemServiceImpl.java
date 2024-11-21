@@ -108,7 +108,9 @@ public class ProblemServiceImpl implements ProblemService {
         problemInfoVO.setTags(tags);
         // 创建人信息
         User createUser = userMapper.findById(problem.getCreateUser());
-        problemInfoVO.setCreateUser(createUser.getUsername());
+        if(createUser != null){
+            problemInfoVO.setCreateUser(createUser.getUsername());
+        }
         return problemInfoVO;
     }
 
