@@ -94,24 +94,17 @@ public class ProblemServiceImpl implements ProblemService {
 
     /**
      * 获取单个题目信息
+     * 这里我的设计是通过联查将题目的标签信息和创建人信息一起查出来
+     * 这样的好处是只需要一次数据库查询就可以将所有信息查出来
+     * 当然也可以分开查，但是会有多次查询
+     * 由于查看题目是一个比较频繁的操作，所以这里我选择一次查出来，效率更高
+     * 但是sql语句会比较复杂
      *
-     * @param id
-     * @return
+     * @param id 题目id
+     * @return ProblemInfoVO
      */
     public ProblemInfoVO getProblemInfo(Integer id) {
-        ProblemInfoVO problemInfoVO = new ProblemInfoVO();
-        // 基本信息
-        Problem problem = problemMapper.getById(id);
-        BeanUtils.copyProperties(problem, problemInfoVO);
-        // 标签信息
-        List<ProblemTag> tags = problemTagMapper.getTagByProblemId(id);
-        problemInfoVO.setTags(tags);
-        // 创建人信息
-        User createUser = userMapper.findById(problem.getCreateUser());
-        if(createUser != null){
-            problemInfoVO.setCreateUser(createUser.getUsername());
-        }
-        return problemInfoVO;
+        return problemMapper.getProblemInfoById(id);
     }
 
     /**

@@ -1,8 +1,9 @@
 
 
 
-
-
+-- 题目表
+if exists table problem then
+    drop table problem;
 CREATE TABLE `problem` (
 	`id` INTEGER NOT NULL AUTO_INCREMENT UNIQUE COMMENT '主键id',
 	`problem_id` VARCHAR(255) NOT NULL UNIQUE COMMENT '题目展示id',
@@ -13,7 +14,7 @@ CREATE TABLE `problem` (
 	`description` TEXT(65535) NOT NULL COMMENT '内容描述',
 	`input_description` TEXT(65535) NOT NULL COMMENT '输入描述',
 	`output_description` TEXT(65535) NOT NULL,
-	`examples` VARCHAR(255) NOT NULL COMMENT '输入输出样例',
+--	`examples` VARCHAR(255) NOT NULL COMMENT '输入输出样例',(存到test_case表中)
 	`source` VARCHAR(255) NOT NULL DEFAULT 'zzcoder' COMMENT '题目来源',
 	`difficulty` INTEGER NOT NULL COMMENT '题目难度，0入门，1简单-，2简单+，3中等-，4中等+，5困难-，6困难+',
 	`hint` VARCHAR(255) COMMENT '备注提醒',
@@ -25,6 +26,7 @@ CREATE TABLE `problem` (
 	PRIMARY KEY(`id`)
 ) COMMENT='题目表';
 
+-- 题目标签表
 CREATE TABLE `tag` (
 	`id` INTEGER NOT NULL AUTO_INCREMENT UNIQUE,
 	`name` VARCHAR(32) UNIQUE COMMENT '标签名字',
@@ -33,7 +35,7 @@ CREATE TABLE `tag` (
 	PRIMARY KEY(`id`)
 ) COMMENT='题目标签表';
 
-
+-- 题目标签关联表
 CREATE TABLE `problem_tag` (
 	`id` INTEGER NOT NULL AUTO_INCREMENT UNIQUE,
 	`pid` INTEGER NOT NULL COMMENT '题目id',

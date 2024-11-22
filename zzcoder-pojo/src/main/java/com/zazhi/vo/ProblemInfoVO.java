@@ -1,6 +1,7 @@
 package com.zazhi.vo;
 
 import com.zazhi.entity.ProblemTag;
+import com.zazhi.entity.TestCase;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,7 +38,7 @@ public class ProblemInfoVO implements Serializable {
 
     private String outputDescription; // 输出描述
 
-    private String examples; // 输入输出样例
+    private List<TestCase> examples; // 输入样例
 
     private String source; // 题目来源，默认为zzcoder
 

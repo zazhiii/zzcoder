@@ -46,13 +46,21 @@ public interface ProblemMapper {
     void deleteProblemById(Integer pid);
 
     /**
-     * 获取单个题目信息
+     * 根据id查询
      *
      * @param id
      * @return
      */
     @Select("select * from problem where id = #{id}")
     Problem getById(Integer id);
+
+    /**
+     * 获取单个题目信息
+     *
+     * @param id
+     * @return
+     */
+    ProblemInfoVO getProblemInfoById(Integer id);
 
     /**
      * 获取题目测试数据

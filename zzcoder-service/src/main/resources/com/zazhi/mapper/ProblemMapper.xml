@@ -122,5 +122,48 @@
         WHERE id = #{id}
     </update>
 
+    <resultMap id="getProblemInfoByIdMap" type="com.zazhi.vo.ProblemInfoVO">
+        <id column="id" property="id"/>
+        <result column="problem_id" property="problemId"/>
+        <result column="title" property="title"/>
+        <result column="time_limit" property="timeLimit"/>
+        <result column="memory_limit" property="memoryLimit"/>
+        <result column="stack_limit" property="stackLimit"/>
+        <result column="description" property="description"/>
+        <result column="input_description" property="inputDescription"/>
+        <result column="output_description" property="outputDescription"/>
+        <result column="source" property="source"/>
+        <result column="difficulty" property="difficulty"/>
+        <result column="hint" property="hint"/>
+        <result column="status" property="status"/>
+        <result column="create_user" property="createUser"/>
+        <collection property="tags" ofType="com.zazhi.entity.ProblemTag">
+            <id column="tid" property="id"/>
+            <result column="name" property="name"/>
+        </collection>
+        <collection property="examples" ofType="com.zazhi.entity.TestCase">
+            <id column="test_case_id" property="id"/>
+            <result column="input" property="input"/>
+            <result column="expected_output" property="expectedOutput"/>
+        </collection>
+    </resultMap>
+    <select id="getProblemInfoById" resultMap="getProblemInfoByIdMap">
+        SELECT
+        <!-- 题目基本信息 -->
+        p.*,
+        <!-- 标签 -->
+        pt.tid AS tid,
+        t.name AS name,
+        <!-- 样例测试数据 -->
+        tc.id AS test_case_id,
+        tc.input AS input,
+        tc.expected_output AS expected_output
+
+        FROM problem p
+        LEFT JOIN problem_tag pt ON p.id = pt.pid
+        LEFT JOIN tag t ON pt.tid = t.id
+        LEFT JOIN test_case tc ON p.id = tc.problem_id
+        WHERE p.id = #{id}
+    </select>
 
 </mapper>
