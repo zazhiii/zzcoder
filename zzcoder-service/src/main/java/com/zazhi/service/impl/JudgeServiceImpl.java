@@ -12,6 +12,7 @@ import com.zazhi.result.PageResult;
 import com.zazhi.service.JudgeService;
 import com.zazhi.utils.MessageQueueUtil;
 import com.zazhi.vo.SubmissionInfoVO;
+import com.zazhi.vo.SubmissionPageVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -85,9 +86,9 @@ public class JudgeServiceImpl implements JudgeService {
      * @param submissionQueryDTO
      * @return
      */
-    public PageResult<Submission> getSubmissions(SubmissionQueryDTO submissionQueryDTO) {
+    public PageResult<SubmissionPageVO> getSubmissions(SubmissionQueryDTO submissionQueryDTO) {
         PageHelper.startPage(submissionQueryDTO.getCurrentPage(), submissionQueryDTO.getLimit());
-        Page<Submission> res = judgeMapper.getSubmissions(submissionQueryDTO);
+        Page<SubmissionPageVO> res = judgeMapper.getSubmissions(submissionQueryDTO);
         return new PageResult<>(res.getTotal(), res.getResult());
     }
 

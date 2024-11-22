@@ -7,6 +7,7 @@ import com.zazhi.result.PageResult;
 import com.zazhi.result.Result;
 import com.zazhi.service.JudgeService;
 import com.zazhi.vo.SubmissionInfoVO;
+import com.zazhi.vo.SubmissionPageVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +43,7 @@ public class JudgeController {
 
     @PostMapping("/submission")
     @Operation(summary = "获取提交记录")
-    public Result<PageResult<Submission>> getSubmissions(@RequestBody SubmissionQueryDTO submissionQueryDTO) {
+    public Result<PageResult<SubmissionPageVO>> getSubmissions(@RequestBody SubmissionQueryDTO submissionQueryDTO) {
         return Result.success(judgeService.getSubmissions(submissionQueryDTO));
     }
 

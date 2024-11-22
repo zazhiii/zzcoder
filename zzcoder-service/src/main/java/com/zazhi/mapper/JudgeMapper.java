@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.zazhi.dto.SubmissionQueryDTO;
 import com.zazhi.entity.Submission;
 import com.zazhi.result.PageResult;
+import com.zazhi.vo.SubmissionPageVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -15,7 +16,7 @@ public interface JudgeMapper {
      * @param submissionQueryDTO
      * @return
      */
-    Page<Submission> getSubmissions(SubmissionQueryDTO submissionQueryDTO);
+    Page<SubmissionPageVO> getSubmissions(SubmissionQueryDTO submissionQueryDTO);
 
     /**
      * 插入提交记录

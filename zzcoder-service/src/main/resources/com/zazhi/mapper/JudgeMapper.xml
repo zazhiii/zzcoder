@@ -3,20 +3,21 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zazhi.mapper.JudgeMapper">
-    <select id="getSubmissions" resultType="com.zazhi.entity.Submission" parameterType="com.zazhi.dto.SubmissionQueryDTO">
-        select * from submission
+    <select id="getSubmissions" resultType="com.zazhi.vo.SubmissionPageVO" parameterType="com.zazhi.dto.SubmissionQueryDTO">
+        select
+        s.id, s.problem_id, s.user_id, s.submit_time, s.language, s.status, s.result, s.time_used, s.memory_used, u.username, p.title
+        from submission s
+        left join user u on s.user_id = u.id
+        left join problem p on s.problem_id = p.id
         <where>
             <if test="username != null and username != ''">
-                and user_id in (select id from user where username = #{username})
+                and u.username = #{username}
             </if>
             <if test="result != null and result != ''">
-                and result = #{result}
+                and s.result = #{result}
             </if>
             <if test="language != null and language != ''">
-                and language = #{language}
-            </if>
-            <if test="contestId != null and contestId != 0">
-                and contest_id = #{contestId}
+                and s.language = #{language}
             </if>
         </where>
     </select>

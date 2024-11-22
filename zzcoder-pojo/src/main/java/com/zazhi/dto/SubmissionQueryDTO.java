@@ -20,6 +20,4 @@ public class SubmissionQueryDTO {
     private String username;// 用户名
     private String result;// 结果 (AC, WA, TLE, MLE, RE, CE)
     private String language;// 语言
-    private Integer contestId;// 比赛id
-//    private String problemTitle;// 题目标题
 }
