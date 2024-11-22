@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.zazhi.dto.SubmissionQueryDTO;
 import com.zazhi.entity.Submission;
 import com.zazhi.result.PageResult;
+import com.zazhi.vo.SubmissionInfoVO;
 import com.zazhi.vo.SubmissionPageVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -34,7 +35,7 @@ public interface JudgeMapper {
      * @param submitId
      * @return
      */
-    @Select("select * from submission where id = #{submitId}")
-    Submission getSubmissionById(Long submitId);
+//    @Select("select * from submission where id = #{submitId}")
+    SubmissionInfoVO getSubmissionInfoById(Long submitId);
 
 }

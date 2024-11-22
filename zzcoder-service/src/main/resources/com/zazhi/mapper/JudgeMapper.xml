@@ -48,4 +48,13 @@
         </set>
         where id = #{id}
     </update>
+
+    <select id="getSubmissionInfoById" resultType="com.zazhi.vo.SubmissionInfoVO" parameterType="long">
+        select
+        s.id, s.user_id, s.problem_id, s.contest_id, s.submit_time, s.language, s.code, s.status, s.result, s.time_used, s.memory_used, s.error_message, u.username, p.title
+        from submission s
+        left join user u on s.user_id = u.id
+        left join problem p on s.problem_id = p.id
+        where s.id = #{id}
+    </select>
 </mapper>

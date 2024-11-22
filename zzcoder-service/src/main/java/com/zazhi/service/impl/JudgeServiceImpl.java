@@ -109,13 +109,8 @@ public class JudgeServiceImpl implements JudgeService {
      * @return
      */
     public SubmissionInfoVO getSubmissionInfo(Long submitId) {
-        Submission submission = judgeMapper.getSubmissionById(submitId);
-        Problem problem = problemMapper.getById(submission.getProblemId());
-        User user = userMapper.findById(submission.getUserId());
-        SubmissionInfoVO submissionInfoVO = new SubmissionInfoVO();
-        submissionInfoVO.setProblemId(problem.getProblemId());
-        submissionInfoVO.setUsername(user.getUsername());
-        BeanUtils.copyProperties(submission, submissionInfoVO);
+        SubmissionInfoVO submissionInfoVO = judgeMapper.getSubmissionInfoById(submitId);
+
         return submissionInfoVO;
     }
 }

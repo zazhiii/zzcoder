@@ -17,9 +17,12 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SubmissionInfoVO {
+    private Long id; // 提交记录id
     private Timestamp submitTime;// 提交时间
-    private String username;// 用户id
-    private String problemId;// 题目编号
+    private Long userId;// 用户id
+    private String username;// 用户名
+    private Integer problemId;// 题目id
+    private String title;// 题目标题
     private String contestId;// 比赛编号
     private String code; // 代码
     private String language;// 语言
