@@ -10,6 +10,9 @@
         left join user u on s.user_id = u.id
         left join problem p on s.problem_id = p.id
         <where>
+            <if test="problemId != null and problemId != 0">
+                and s.problem_id = #{problemId}
+            </if>
             <if test="username != null and username != ''">
                 and u.username = #{username}
             </if>
@@ -20,6 +23,7 @@
                 and s.language = #{language}
             </if>
         </where>
+        ORDER BY s.submit_time DESC
     </select>
 
     <insert id="insertSubmission" parameterType="com.zazhi.entity.Submission" keyProperty="id" useGeneratedKeys="true">
