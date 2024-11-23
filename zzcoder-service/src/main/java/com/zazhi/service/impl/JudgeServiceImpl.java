@@ -11,6 +11,7 @@ import com.zazhi.mapper.UserMapper;
 import com.zazhi.result.PageResult;
 import com.zazhi.service.JudgeService;
 import com.zazhi.utils.MessageQueueUtil;
+import com.zazhi.utils.ThreadLocalUtil;
 import com.zazhi.vo.SubmissionInfoVO;
 import com.zazhi.vo.SubmissionPageVO;
 import org.springframework.beans.BeanUtils;
@@ -47,8 +48,11 @@ public class JudgeServiceImpl implements JudgeService {
     public Long submitCode(JudgeDTO judgeDTO) {
         // 记录任务状态, pending、judging、finished ( 、判题中、判题完成)
         // (生成submission存入数据库)
+        Long userId = ThreadLocalUtil.getCurrentId();
+
+//        judgeDTO.setUserId(ThreadLocalUtil.getCurrentId());
         Submission submission = Submission.builder()
-                .userId(judgeDTO.getUserId())
+                .userId(userId)
                 .problemId(judgeDTO.getProblemId())
                 .contestId(0) // TODO: 比赛id
                 .code(judgeDTO.getCode())
@@ -67,7 +71,7 @@ public class JudgeServiceImpl implements JudgeService {
         JudgeTask judgeTask = JudgeTask.builder()
                 .taskId(taskId)
                 .problemId(judgeDTO.getProblemId())
-                .userId(judgeDTO.getUserId())
+                .userId(userId)
                 .language(judgeDTO.getLanguage())
                 .code(judgeDTO.getCode())
                 .timeLimit(problem.getTimeLimit())

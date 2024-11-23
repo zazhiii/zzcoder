@@ -12,7 +12,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class JudgeDTO implements Serializable {
-    private Long userId;
+//    private Long userId;
     private Integer problemId;
     private String code;
     private String language;
