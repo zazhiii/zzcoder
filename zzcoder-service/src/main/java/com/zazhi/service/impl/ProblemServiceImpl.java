@@ -73,12 +73,10 @@ public class ProblemServiceImpl implements ProblemService {
     /**
      * 更新题目信息
      *
-     * @param problemDTO
+     * @param problem
      */
-    public void update(ProblemDTO problemDTO) {
-        Problem problem = new Problem();
+    public void update(Problem problem) {
         problem.setUpdateUser(ThreadLocalUtil.getCurrentId()); // 更新人为当前用户
-        BeanUtils.copyProperties(problemDTO, problem);
         problemMapper.update(problem);
     }
 

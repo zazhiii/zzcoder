@@ -96,9 +96,6 @@
             <if test="outputDescription != null">
                 output_description = #{outputDescription},
             </if>
-            <if test="examples != null">
-                examples = #{examples},
-            </if>
             <if test="source != null">
                 source = #{source},
             </if>
@@ -111,13 +108,9 @@
             <if test="status != null">
                 status = #{status},
             </if>
-            <if test="createUser != null">
-                create_user = #{createUser},
-            </if>
             <if test="updateUser != null">
                 update_user = #{updateUser},
             </if>
-<!--            update_time = CURRENT_TIMESTAMP-->
         </set>
         WHERE id = #{id}
     </update>

@@ -64,6 +64,7 @@ public class JudgeServiceImpl implements JudgeService {
         // 生成提交id ( 将submission的主键作为任务id )
         Long taskId = submission.getId();
 
+        // TODO 可以优化为一次查询
         Problem problem = problemMapper.getById(judgeDTO.getProblemId());
         List<TestCase> testCases = problemMapper.getTestCases(problem.getId());
 

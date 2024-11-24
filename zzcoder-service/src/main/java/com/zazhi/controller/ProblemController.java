@@ -1,6 +1,7 @@
 package com.zazhi.controller;
 
 import com.zazhi.dto.ProblemDTO;
+import com.zazhi.entity.Problem;
 import com.zazhi.vo.ProblemInfoVO;
 import com.zazhi.dto.ProblemQueryDTO;
 import com.zazhi.result.PageResult;
@@ -48,10 +49,10 @@ public class ProblemController {
     }
 
     @PutMapping()
-    @Operation(summary = "修改题目")
-    public Result update(@RequestBody ProblemDTO problemDTO){
-        log.info("修改题目：{}", problemDTO);
-        problemService.update(problemDTO);
+    @Operation(summary = "修改题目基本信息") // TODO 权限管理
+    public Result update(@RequestBody Problem problem){
+        log.info("修改题目：{}", problem);
+        problemService.update(problem);
         return Result.success();
     }
 

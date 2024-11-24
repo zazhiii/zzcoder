@@ -31,9 +31,7 @@ public class Problem implements Serializable {
     private String inputDescription; // 输入描述
     
     private String outputDescription; // 输出描述
-    
-    private String examples; // 输入输出样例
-    
+
     private String source; // 题目来源，默认为zzcoder
     
     private Integer difficulty; // 题目难度

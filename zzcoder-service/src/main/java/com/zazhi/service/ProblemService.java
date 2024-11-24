@@ -29,9 +29,9 @@ public interface ProblemService {
     /**
      * 更新题目信息
      *
-     * @param problemDTO
+     * @param problem
      */
-    void update(ProblemDTO problemDTO);
+    void update(Problem problem);
 
     /**
      * 删除题目
