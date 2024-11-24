@@ -23,7 +23,5 @@ public class ProblemVO implements Serializable {
 
     private Integer difficulty; // 难度
 
-//    private Integer type;
-
     private List<ProblemTag> tags; // 标签
 }

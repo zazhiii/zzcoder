@@ -39,8 +39,27 @@
         )
     </insert>
 
-    <select id="page" parameterType="com.zazhi.dto.ProblemQueryDTO" resultType="com.zazhi.vo.ProblemVO">
-        select * from problem
+    <resultMap id="pageMap" type="com.zazhi.vo.ProblemVO">
+        <id column="id" property="id"/>
+        <result column="problem_id" property="problemId"/>
+        <result column="title" property="title"/>
+        <result column="difficulty" property="difficulty"/>
+        <collection property="tags" ofType="com.zazhi.entity.ProblemTag">
+            <id column="tid" property="id"/>
+            <result column="name" property="name"/>
+        </collection>
+    </resultMap>
+    <select id="page" parameterType="com.zazhi.dto.ProblemQueryDTO" resultMap="pageMap">
+        select
+        p.id,
+        p.problem_id,
+        p.title,
+        p.difficulty,
+        pt.tid,
+        t.name
+        from problem p
+        LEFT JOIN problem_tag pt ON p.id = pt.pid
+        LEFT JOIN tag t ON pt.tid = t.id
         <where>
             <if test="keyword != null and keyword.trim() != ''">
                 AND (
