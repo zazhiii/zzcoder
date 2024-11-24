@@ -5,7 +5,7 @@
 <mapper namespace="com.zazhi.mapper.ProblemMapper">
 
     <!-- 插入题目 -->
-    <insert id="insert" parameterType="com.zazhi.dto.ProblemDTO" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.zazhi.entity.Problem">
         INSERT INTO `problem` (
         `problem_id`,
         `title`,
@@ -15,7 +15,6 @@
         `description`,
         `input_description`,
         `output_description`,
-        `examples`,
         `source`,
         `difficulty`,
         `hint`,
@@ -31,7 +30,6 @@
         #{description},
         #{inputDescription},
         #{outputDescription},
-        #{examples},
         #{source},
         #{difficulty},
         #{hint},

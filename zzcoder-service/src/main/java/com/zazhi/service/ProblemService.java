@@ -14,9 +14,9 @@ public interface ProblemService {
     /**
      * 添加题目
      *
-     * @param problemDTO
+     * @param problem
      */
-    void addProblem(ProblemDTO problemDTO);
+    void addProblem(Problem problem);
 
     /**
      * 题目条件分页查询

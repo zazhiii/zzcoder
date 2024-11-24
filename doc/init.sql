@@ -4,27 +4,27 @@
 -- 题目表
 if exists table problem then
     drop table problem;
-CREATE TABLE `problem` (
-	`id` INTEGER NOT NULL AUTO_INCREMENT UNIQUE COMMENT '主键id',
-	`problem_id` VARCHAR(255) NOT NULL UNIQUE COMMENT '题目展示id',
-	`title` VARCHAR(255) NOT NULL COMMENT '题目标题',
-	`time_limit` INTEGER NOT NULL COMMENT '时间限制(ms)，默认为c/c++限制,其它语言为2倍',
-	`memory_limit` INTEGER NOT NULL COMMENT '空间限制(mb)，默认为c/c++限制,其它语言为2倍',
-	`stack_limit` INTEGER NOT NULL COMMENT '栈限制(mb)，默认为128',
-	`description` TEXT(65535) NOT NULL COMMENT '内容描述',
-	`input_description` TEXT(65535) NOT NULL COMMENT '输入描述',
-	`output_description` TEXT(65535) NOT NULL,
---	`examples` VARCHAR(255) NOT NULL COMMENT '输入输出样例',(存到test_case表中)
-	`source` VARCHAR(255) NOT NULL DEFAULT 'zzcoder' COMMENT '题目来源',
-	`difficulty` INTEGER NOT NULL COMMENT '题目难度，0入门，1简单-，2简单+，3中等-，4中等+，5困难-，6困难+',
-	`hint` VARCHAR(255) COMMENT '备注提醒',
-	`status` VARCHAR(255) NOT NULL DEFAULT '0' COMMENT '默认0公开，1私有，3比赛中',
-	`create_user` BIGINT NOT NULL COMMENT '创建人',
-	`update_user` BIGINT NOT NULL COMMENT '修改人',
-	`create_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-	`update_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-	PRIMARY KEY(`id`)
-) COMMENT='题目表';
+create table problem
+(
+    id                 int auto_increment UNIQUE                       comment '主键id',
+    problem_id         varchar(255) UNIQUE                    not null comment '题目展示id',
+    title              varchar(255)                           not null comment '题目标题',
+    time_limit         int                                    not null comment '时间限制(ms)，默认为c/c++限制,其它语言为2倍',
+    memory_limit       int                                    not null comment '空间限制(mb)，默认为c/c++限制,其它语言为2倍',
+    stack_limit        int                                    not null comment '栈限制(mb)，默认为128',
+    description        mediumtext                             not null comment '内容描述',
+    input_description  mediumtext                             not null comment '输入描述',
+    output_description mediumtext                             not null,
+    source             varchar(255) default 'zzcoder'         not null comment '题目来源',
+    difficulty         int                                    not null comment '题目难度，0入门，1简单-，2简单+，3中等-，4中等+，5困难-，6困难+',
+    hint               varchar(255)                           null comment '备注提醒',
+    status             varchar(255) default '0'               not null comment '默认0公开，1私有，3比赛中',
+    create_user        bigint                                 not null comment '创建人',
+    update_user        bigint                                 not null comment '修改人',
+    create_time        timestamp    default CURRENT_TIMESTAMP comment '创建时间',
+    update_time        timestamp    default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP comment '更新时间',
+    PRIMARY KEY (`id`)
+) comment '题目表';
 
 -- 题目标签表
 CREATE TABLE `tag` (

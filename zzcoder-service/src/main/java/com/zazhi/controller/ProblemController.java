@@ -35,9 +35,9 @@ public class ProblemController {
     @PostMapping()
     @Operation(summary = "添加题目")
     // TODO 权限验证
-    public Result addProblem(@RequestBody ProblemDTO problemDTO) {
-        log.info("添加题目：{}", problemDTO);
-        problemService.addProblem(problemDTO);
+    public Result addProblem(@RequestBody Problem problem) {
+        log.info("添加题目：{}", problem);
+        problemService.addProblem(problem);
         return Result.success();
     }
 
@@ -58,6 +58,7 @@ public class ProblemController {
 
     @DeleteMapping()
     @Operation(summary = "删除题目") // TODO 权限管理
+    // TODO 删除题目和标签、测试用例、提交记录、...的关联
     public Result delete(Integer id){
         log.info("删除题目：{}", id);
         problemService.deleteProblemWithTags(id);

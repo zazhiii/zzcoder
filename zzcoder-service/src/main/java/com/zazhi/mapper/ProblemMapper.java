@@ -18,9 +18,9 @@ public interface ProblemMapper {
     /**
      * 添加题目
      *
-     * @param problemDTO
+     * @param problem
      */
-    void insert(ProblemDTO problemDTO);
+    void insert(Problem problem);
 
     /**
      * 题目条件分页查询

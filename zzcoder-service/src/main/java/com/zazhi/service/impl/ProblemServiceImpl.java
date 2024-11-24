@@ -41,17 +41,13 @@ public class ProblemServiceImpl implements ProblemService {
     /**
      * 添加题目
      *
-     * @param problemDTO
+     * @param problem
      */
-    public void addProblem(ProblemDTO problemDTO) {
+    public void addProblem(Problem problem) {
         Long id = ThreadLocalUtil.getCurrentId();
-        problemDTO.setCreateUser(id);
-        problemDTO.setUpdateUser(id);
-        List<Integer> tagIds = problemDTO.getTagIds();
-        problemMapper.insert(problemDTO);
-        for (Integer tagId : tagIds){
-            problemTagMapper.addTagToProblem(tagId, problemDTO.getId());
-        }
+        problem.setCreateUser(id);
+        problem.setUpdateUser(id);
+        problemMapper.insert(problem);
     }
 
     /**
