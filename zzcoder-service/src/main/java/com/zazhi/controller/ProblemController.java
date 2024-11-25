@@ -33,8 +33,7 @@ public class ProblemController {
     ProblemService problemService;
 
     @PostMapping()
-    @Operation(summary = "添加题目")
-    // TODO 权限验证
+    @Operation(summary = "添加题目") // TODO 权限管理
     public Result addProblem(@RequestBody Problem problem) {
         log.info("添加题目：{}", problem);
         problemService.addProblem(problem);
@@ -74,9 +73,9 @@ public class ProblemController {
 
     @PostMapping("/add-tag-to-problem")
     @Operation(summary = "为题目添加标签")// TODO 权限管理
-    public Result addTagToProblem(Integer problemId, @RequestParam List<Integer> tagIds){
-        log.info("添加标签到题目：{}, {}", problemId, tagIds);
-        problemService.addTagToProblem(problemId, tagIds);
+    public Result addTagToProblem(Integer problemId, Integer tagId){
+        log.info("添加标签到题目：{}, {}", problemId, tagId);
+        problemService.addTagToProblem(problemId, tagId);
         return Result.success();
     }
 

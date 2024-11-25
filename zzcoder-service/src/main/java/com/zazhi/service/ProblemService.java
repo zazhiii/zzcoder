@@ -50,9 +50,9 @@ public interface ProblemService {
     /**
      * 添加标签到题目
      * @param problemId
-     * @param tagIds
+     * @param tagId
      */
-    void addTagToProblem(Integer problemId, List<Integer> tagIds);
+    void addTagToProblem(Integer problemId, Integer tagId);
 
     /**
      * 删除题目上的标签

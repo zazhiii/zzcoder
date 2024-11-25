@@ -2,11 +2,8 @@ package com.zazhi.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.zazhi.dto.ProblemDTO;
 import com.zazhi.dto.ProblemQueryDTO;
 import com.zazhi.entity.Problem;
-import com.zazhi.entity.ProblemTag;
-import com.zazhi.entity.User;
 import com.zazhi.mapper.ProblemMapper;
 import com.zazhi.mapper.ProblemTagMapper;
 import com.zazhi.mapper.UserMapper;
@@ -15,11 +12,8 @@ import com.zazhi.service.ProblemService;
 import com.zazhi.utils.ThreadLocalUtil;
 import com.zazhi.vo.ProblemInfoVO;
 import com.zazhi.vo.ProblemVO;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * @author zazhi
@@ -100,12 +94,10 @@ public class ProblemServiceImpl implements ProblemService {
     /**
      * 添加标签到题目
      * @param problemId
-     * @param tagIds
+     * @param tagId
      */
-    public void addTagToProblem(Integer problemId, List<Integer> tagIds) {
-        for(Integer tagId : tagIds){
+    public void addTagToProblem(Integer problemId, Integer tagId) {
             problemTagMapper.addTagToProblem(tagId, problemId);
-        }
     }
 
     /**
