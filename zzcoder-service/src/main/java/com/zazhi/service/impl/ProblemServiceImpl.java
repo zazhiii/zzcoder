@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zazhi.dto.ProblemQueryDTO;
 import com.zazhi.entity.Problem;
+import com.zazhi.entity.TestCase;
 import com.zazhi.mapper.ProblemMapper;
 import com.zazhi.mapper.ProblemTagMapper;
 import com.zazhi.mapper.UserMapper;
@@ -107,6 +108,14 @@ public class ProblemServiceImpl implements ProblemService {
      */
     public void deleteTagFromProblem(Integer problemId, Integer tagId) {
         problemTagMapper.deleteTagFromProblem(problemId, tagId);
+    }
+
+    /**
+     * 为题目添加测试用例
+     * @param testCase
+     */
+    public void addTestCase(TestCase testCase) {
+       problemTagMapper.addTestCase(testCase);
     }
 
 

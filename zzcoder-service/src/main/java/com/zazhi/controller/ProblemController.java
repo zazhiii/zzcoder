@@ -1,7 +1,7 @@
 package com.zazhi.controller;
 
-import com.zazhi.dto.ProblemDTO;
 import com.zazhi.entity.Problem;
+import com.zazhi.entity.TestCase;
 import com.zazhi.vo.ProblemInfoVO;
 import com.zazhi.dto.ProblemQueryDTO;
 import com.zazhi.result.PageResult;
@@ -14,8 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @author zazhi
@@ -84,6 +82,14 @@ public class ProblemController {
     public Result deleteTagFromProblem(Integer problemId, Integer tagId){
         log.info("删除题目{}上的标签：{}", problemId, tagId);
         problemService.deleteTagFromProblem(problemId, tagId);
+        return Result.success();
+    }
+
+    @PostMapping("/add-test-case")
+    @Operation(summary = "为题目添加测试用例")// TODO 权限管理
+    public Result addTestCase(@RequestBody TestCase testCase){
+        log.info("添加测试用例：{}", testCase);
+        problemService.addTestCase(testCase);
         return Result.success();
     }
 }

@@ -1,6 +1,7 @@
 package com.zazhi.mapper;
 
 import com.zazhi.entity.ProblemTag;
+import com.zazhi.entity.TestCase;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -41,4 +42,11 @@ public interface ProblemTagMapper {
      */
     @Delete("delete from problem_tag where pid = #{problemId} and tid = #{tagId}")
     void deleteTagFromProblem(Integer problemId, Integer tagId);
+
+    /**
+     * 为题目添加测试用例
+     * @param testCase
+     */
+    @Insert("insert into test_case (problem_id, input, expected_output, is_sample) values (#{problemId}, #{input}, #{expectedOutput}, #{isSample})")
+    void addTestCase(TestCase testCase);
 }

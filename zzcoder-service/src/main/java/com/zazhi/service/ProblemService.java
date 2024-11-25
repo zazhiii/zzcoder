@@ -3,6 +3,7 @@ package com.zazhi.service;
 import com.zazhi.dto.ProblemDTO;
 import com.zazhi.dto.ProblemQueryDTO;
 import com.zazhi.entity.Problem;
+import com.zazhi.entity.TestCase;
 import com.zazhi.result.PageResult;
 import com.zazhi.result.Result;
 import com.zazhi.vo.ProblemInfoVO;
@@ -60,4 +61,10 @@ public interface ProblemService {
      * @param tagId
      */
     void deleteTagFromProblem(Integer problemId, Integer tagId);
+
+    /**
+     * 为题目添加测试用例
+     * @param testCase
+     */
+    void addTestCase(TestCase testCase);
 }
