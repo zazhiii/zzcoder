@@ -56,4 +56,12 @@ public interface ProblemTagMapper {
      */
     @Delete("delete from test_case where id = #{id}")
     void deleteTestCase(Integer id);
+
+    /**
+     * 获取题目的测试用例
+     * @param problemId
+     * @return
+     */
+    @Select("select * from test_case where problem_id = #{problemId}")
+    List<TestCase> getTestCases(Integer problemId);
 }

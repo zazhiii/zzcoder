@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author zazhi
  * @date 2024/11/6
@@ -83,6 +85,13 @@ public class ProblemController {
         log.info("删除题目{}上的标签：{}", problemId, tagId);
         problemService.deleteTagFromProblem(problemId, tagId);
         return Result.success();
+    }
+
+    @GetMapping("/test-cases")
+    @Operation(summary = "获取题目的测试用例")
+    public Result<List<TestCase>> getTestCases(Integer problemId){
+        log.info("获取题目{}的测试用例", problemId);
+        return Result.success(problemService.getTestCases(problemId));
     }
 
     @PostMapping("/add-test-case")

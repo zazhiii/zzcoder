@@ -16,6 +16,8 @@ import com.zazhi.vo.ProblemVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author zazhi
  * @date 2024/11/6
@@ -124,6 +126,15 @@ public class ProblemServiceImpl implements ProblemService {
      */
     public void deleteTestCase(Integer id) {
        problemTagMapper.deleteTestCase(id);
+    }
+
+    /**
+     * 获取题目的测试用例
+     * @param problemId
+     * @return
+     */
+    public List<TestCase> getTestCases(Integer problemId) {
+        return problemTagMapper.getTestCases(problemId);
     }
 
 
