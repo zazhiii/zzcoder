@@ -69,11 +69,12 @@
                 )
             </if>
             <if test="tagId != null and tagId.size() > 0">
-                AND id IN (
+                AND p.id IN
+                (
                 SELECT pid FROM problem_tag
                 WHERE tid IN
-                <foreach item="id" collection="tagId" open="(" separator="," close=")">
-                    #{id}
+                <foreach item="tid" collection="tagId" open="(" separator="," close=")">
+                    #{tid}
                 </foreach>
                 )
             </if>
