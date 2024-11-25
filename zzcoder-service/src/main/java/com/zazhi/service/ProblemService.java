@@ -67,4 +67,10 @@ public interface ProblemService {
      * @param testCase
      */
     void addTestCase(TestCase testCase);
+
+    /**
+     * 删除测试用例
+     * @param id
+     */
+    void deleteTestCase(Integer id);
 }

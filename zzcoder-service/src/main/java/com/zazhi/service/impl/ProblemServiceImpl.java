@@ -118,5 +118,13 @@ public class ProblemServiceImpl implements ProblemService {
        problemTagMapper.addTestCase(testCase);
     }
 
+    /**
+     * 删除测试用例
+     * @param id
+     */
+    public void deleteTestCase(Integer id) {
+       problemTagMapper.deleteTestCase(id);
+    }
+
 
 }

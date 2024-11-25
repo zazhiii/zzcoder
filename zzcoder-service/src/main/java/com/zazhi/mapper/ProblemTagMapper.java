@@ -49,4 +49,11 @@ public interface ProblemTagMapper {
      */
     @Insert("insert into test_case (problem_id, input, expected_output, is_sample) values (#{problemId}, #{input}, #{expectedOutput}, #{isSample})")
     void addTestCase(TestCase testCase);
+
+    /**
+     * 删除测试用例
+     * @param id
+     */
+    @Delete("delete from test_case where id = #{id}")
+    void deleteTestCase(Integer id);
 }

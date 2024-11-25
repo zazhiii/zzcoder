@@ -92,4 +92,12 @@ public class ProblemController {
         problemService.addTestCase(testCase);
         return Result.success();
     }
+
+    @DeleteMapping("/delete-test-case")
+    @Operation(summary = "删除题目的测试用例")// TODO 权限管理
+    public Result deleteTestCase(Integer id){
+        log.info("删除测试用例：{}", id);
+        problemService.deleteTestCase(id);
+        return Result.success();
+    }
 }
