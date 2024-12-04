@@ -15,6 +15,8 @@ import com.github.dockerjava.transport.DockerHttpClient;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -25,11 +27,12 @@ import java.time.Duration;
  * @description: TODO
  */
 
-
+@SpringBootTest
 public class DockerClientTest {
 
     private static final Logger log = LoggerFactory.getLogger(DockerClientTest.class);
 
+    @Autowired
     private DockerClient dockerClient;
 
     @Test
@@ -75,16 +78,6 @@ public class DockerClientTest {
     void main() {
         DockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
 
-//        DockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder()
-//                .withDockerHost("tcp://localhost:2375")
-////                .withDockerTlsVerify(true)
-////                .withDockerCertPath("/home/user/.docker")
-//                .withRegistryUsername("zazhiii")
-//                .withRegistryPassword("LXH030821")
-//                .withRegistryEmail("lixinhuan666@gamil.com")
-//                .withRegistryUrl("https://index.docker.io/v1/")
-//                .build();
-
         DockerHttpClient httpClient = new ApacheDockerHttpClient.Builder()
                 .dockerHost(config.getDockerHost())
                 .sslConfig(config.getSSLConfig())
@@ -94,5 +87,13 @@ public class DockerClientTest {
                 .build();
 
         this.dockerClient = DockerClientImpl.getInstance(config, httpClient);
+    }
+
+    @Test
+    void createContainer() {
+        CreateContainerResponse container = dockerClient.createContainerCmd("java_judger")
+                .withName("container-java-judger")
+                .exec();
+        log.info("Container ID: {}", container.getId());
     }
 }

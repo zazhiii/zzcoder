@@ -2,7 +2,7 @@ package com.zazhi.judger.listener;
 
 import com.zazhi.judger.common.pojo.JudgeResult;
 import com.zazhi.judger.common.pojo.JudgeTask;
-import com.zazhi.judger.service.JudgeService;
+import com.zazhi.judger.service.JavaSandBox;
 import com.zazhi.judger.common.utils.MessageQueueUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class JudgeTaskListener {
 
     @Autowired
-    JudgeService judgeService;
+    JavaSandBox javaSandBox;
 
     @Autowired
     MessageQueueUtil messageQueueUtil;
@@ -30,7 +30,7 @@ public class JudgeTaskListener {
         judgeResult.setStatus("Judging");
         messageQueueUtil.sendJudgeResult(judgeResult);
         // 2. 调用评测服务进行评测
-        judgeService.processTask(task, judgeResult);
+        javaSandBox.processTask(task, judgeResult);
         // 3. 设置评测状态为评测完成，发送评测结果
         judgeResult.setStatus("Completed");
         messageQueueUtil.sendJudgeResult(judgeResult);
