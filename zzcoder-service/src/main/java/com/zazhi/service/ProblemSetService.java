@@ -4,6 +4,8 @@ import com.zazhi.dto.ProblemSetDTO;
 import com.zazhi.entity.ProblemSet;
 import com.zazhi.result.PageResult;
 
+import java.util.List;
+
 public interface ProblemSetService {
     /**
      * 添加题单
@@ -25,4 +27,11 @@ public interface ProblemSetService {
      * @return
      */
     PageResult<ProblemSet> listPublicProblemSet(Integer page, Integer size, String title);
+
+
+    /**
+     * 查询我的所有题单
+     * @return
+     */
+    List<ProblemSet> listPrivateProblemSet();
 }

@@ -8,6 +8,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.util.List;
+
 @Mapper
 public interface ProblemSetMapper {
     /**
@@ -29,4 +31,11 @@ public interface ProblemSetMapper {
      * @return
      */
     Page<ProblemSet> listPublicProblemSet(String title);
+
+    /**
+     * 查询我的所有题单
+     * @return
+     */
+    @Select("select * from problem_set where create_user = #{currentId}")
+    List<ProblemSet> listPrivateProblemSet(Long currentId);
 }

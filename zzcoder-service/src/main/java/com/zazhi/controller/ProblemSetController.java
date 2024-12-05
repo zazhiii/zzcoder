@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author zazhi
  * @date 2024/12/5
@@ -50,5 +52,11 @@ public class ProblemSetController {
                                                                @RequestParam(value = "title", required = false) String title) {
         log.info("分页查询公开题单, page: {}, size: {}, title: {}", page, size, title);
         return Result.success(problemSetService.listPublicProblemSet(page, size, title));
+    }
+
+    @Operation(summary = "查询我的所有题单")
+    @GetMapping("/private")
+    public Result<List<ProblemSet>> listPrivateProblemSet() {
+        return Result.success(problemSetService.listPrivateProblemSet());
     }
 }

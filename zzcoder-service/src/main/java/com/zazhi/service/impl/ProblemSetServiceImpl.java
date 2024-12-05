@@ -13,6 +13,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author zazhi
  * @date 2024/12/5
@@ -61,5 +63,14 @@ public class ProblemSetServiceImpl implements ProblemSetService {
         Page<ProblemSet> problemSets = problemSetMapper.listPublicProblemSet(title);
         return new PageResult<>(problemSets.getTotal(), problemSets.getResult());
     }
+
+    /**
+     * 查询我的所有题单
+     * @return
+     */
+    public List<ProblemSet> listPrivateProblemSet() {
+        return problemSetMapper.listPrivateProblemSet(ThreadLocalUtil.getCurrentId());
+    }
+
 
 }
