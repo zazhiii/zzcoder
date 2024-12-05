@@ -68,5 +68,13 @@ public class ProblemSetController {
         problemSetService.addProblemToProblemSet(problemSetId, problemId);
         return Result.success();
     }
-    
+
+    @Operation(summary = "从题单删除题目")
+    @DeleteMapping("/delete-problem")
+    public Result deleteProblemFromProblemSet(@RequestParam("problemSetId") Integer problemSetId,
+                                              @RequestParam("problemId") Integer problemId) {
+        log.info("从题单删除题目, problemSetId: {}, problemId: {}", problemSetId, problemId);
+        problemSetService.deleteProblemFromProblemSet(problemSetId, problemId);
+        return Result.success();
+    }
 }

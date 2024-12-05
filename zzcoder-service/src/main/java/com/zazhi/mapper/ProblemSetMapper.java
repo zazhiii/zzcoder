@@ -3,10 +3,7 @@ package com.zazhi.mapper;
 import com.github.pagehelper.Page;
 import com.zazhi.dto.ProblemSetDTO;
 import com.zazhi.entity.ProblemSet;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -46,4 +43,12 @@ public interface ProblemSetMapper {
      */
     @Insert("insert into problem_problem_set(problem_set_id, problem_id) values(#{problemSetId}, #{problemId})")
     void addProblemToProblemSet(Integer problemSetId, Integer problemId);
+
+    /**
+     * 从题单删除题目
+     * @param problemSetId
+     * @param problemId
+     */
+    @Delete("delete from problem_problem_set where problem_set_id = #{problemSetId} and problem_id = #{problemId}")
+    void deleteProblemFromProblemSet(Integer problemSetId, Integer problemId);
 }

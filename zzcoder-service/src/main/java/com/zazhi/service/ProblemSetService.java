@@ -41,4 +41,11 @@ public interface ProblemSetService {
      * @param problemId
      */
     void addProblemToProblemSet(Integer problemSetId, Integer problemId);
+
+    /**
+     * 从题单删除题目
+     * @param problemSetId
+     * @param problemId
+     */
+    void deleteProblemFromProblemSet(Integer problemSetId, Integer problemId);
 }

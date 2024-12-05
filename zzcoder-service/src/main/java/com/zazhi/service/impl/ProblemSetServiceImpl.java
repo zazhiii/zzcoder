@@ -81,5 +81,14 @@ public class ProblemSetServiceImpl implements ProblemSetService {
        problemSetMapper.addProblemToProblemSet(problemSetId, problemId);
     }
 
+    /**
+     * 从题单删除题目
+     * @param problemSetId
+     * @param problemId
+     */
+    public void deleteProblemFromProblemSet(Integer problemSetId, Integer problemId) {
+       problemSetMapper.deleteProblemFromProblemSet(problemSetId, problemId);
+    }
+
 
 }
