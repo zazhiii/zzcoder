@@ -59,4 +59,14 @@ public class ProblemSetController {
     public Result<List<ProblemSet>> listPrivateProblemSet() {
         return Result.success(problemSetService.listPrivateProblemSet());
     }
+    
+    @Operation(summary = "添加题目到题单")
+    @PostMapping("/add-problem")
+    public Result addProblemToProblemSet(@RequestParam("problemSetId") Integer problemSetId,
+                                         @RequestParam("problemId") Integer problemId) {
+        log.info("添加题目到题单, problemSetId: {}, problemId: {}", problemSetId, problemId);
+        problemSetService.addProblemToProblemSet(problemSetId, problemId);
+        return Result.success();
+    }
+    
 }

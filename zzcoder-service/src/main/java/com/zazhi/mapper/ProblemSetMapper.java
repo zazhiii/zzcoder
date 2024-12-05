@@ -38,4 +38,12 @@ public interface ProblemSetMapper {
      */
     @Select("select * from problem_set where create_user = #{currentId}")
     List<ProblemSet> listPrivateProblemSet(Long currentId);
+
+    /**
+     * 添加题目到题单
+     * @param problemSetId
+     * @param problemId
+     */
+    @Insert("insert into problem_problem_set(problem_set_id, problem_id) values(#{problemSetId}, #{problemId})")
+    void addProblemToProblemSet(Integer problemSetId, Integer problemId);
 }

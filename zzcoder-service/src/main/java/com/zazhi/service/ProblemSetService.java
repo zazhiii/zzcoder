@@ -34,4 +34,11 @@ public interface ProblemSetService {
      * @return
      */
     List<ProblemSet> listPrivateProblemSet();
+
+    /**
+     * 添加题目到题单
+     * @param problemSetId
+     * @param problemId
+     */
+    void addProblemToProblemSet(Integer problemSetId, Integer problemId);
 }

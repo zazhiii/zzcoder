@@ -72,5 +72,14 @@ public class ProblemSetServiceImpl implements ProblemSetService {
         return problemSetMapper.listPrivateProblemSet(ThreadLocalUtil.getCurrentId());
     }
 
+    /**
+     * 添加题目到题单
+     * @param problemSetId
+     * @param problemId
+     */
+    public void addProblemToProblemSet(Integer problemSetId, Integer problemId) {
+       problemSetMapper.addProblemToProblemSet(problemSetId, problemId);
+    }
+
 
 }
