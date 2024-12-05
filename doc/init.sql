@@ -1,9 +1,30 @@
+-- 题目-题单关联表
+drop table if exists problem_problem_set;
+create table problem_problem_set
+(
+    id          int auto_increment primary key comment '主键，自增长',
+    problem_set_id int not null comment '题单ID',
+    problem_id     int not null comment '题目ID',
+    create_time timestamp default CURRENT_TIMESTAMP null comment '创建时间',
+    update_time timestamp default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '更新时间'
+) comment '题目-题单关联表';
 
-
+-- 题单表
+drop table if exists problem_set;
+create table problem_set
+(
+    id          int auto_increment primary key comment '主键，自增长',
+    title       varchar(255)                        not null comment '题单标题',
+    description text                                null comment '题单描述',
+    status      tinyint default 0                   not null comment '状态（0私有，1公开）',
+    create_user bigint                              null comment '创建人（用户ID）',
+    update_user bigint                              null comment '修改人（用户ID）',
+    create_time timestamp default CURRENT_TIMESTAMP null comment '创建时间',
+    update_time timestamp default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '更新时间'
+) comment '题单表';
 
 -- 题目表
-if exists table problem then
-    drop table problem;
+drop table if exists problem;
 create table problem
 (
     id                 int auto_increment UNIQUE                       comment '主键id',
