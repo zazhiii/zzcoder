@@ -1,6 +1,8 @@
 package com.zazhi.controller;
 
 import com.zazhi.dto.ProblemSetDTO;
+import com.zazhi.entity.ProblemSet;
+import com.zazhi.result.PageResult;
 import com.zazhi.result.Result;
 import com.zazhi.service.ProblemSetService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,5 +41,14 @@ public class ProblemSetController {
         log.info("修改题单信息, {}", problemSetDTO);
         problemSetService.updateProblemSet(problemSetDTO);
         return Result.success();
+    }
+
+    @Operation(summary = "分页查询公开题单")
+    @GetMapping("/public")
+    public Result<PageResult<ProblemSet>> listPublicProblemSet(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                               @RequestParam(value = "size", defaultValue = "10") Integer size,
+                                                               @RequestParam(value = "title", required = false) String title) {
+        log.info("分页查询公开题单, page: {}, size: {}, title: {}", page, size, title);
+        return Result.success(problemSetService.listPublicProblemSet(page, size, title));
     }
 }

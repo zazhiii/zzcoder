@@ -23,4 +23,13 @@
         where id = #{id}
     </update>
 
+    <select id="listPublicProblemSet" parameterType="string" resultType="com.zazhi.entity.ProblemSet">
+        select * from problem_set
+        <where>
+            status = 1
+            <if test="title != null">
+                and title like concat('%', #{title}, '%')
+            </if>
+        </where>
+    </select>
 </mapper>

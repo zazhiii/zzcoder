@@ -1,9 +1,11 @@
 package com.zazhi.mapper;
 
+import com.github.pagehelper.Page;
 import com.zazhi.dto.ProblemSetDTO;
 import com.zazhi.entity.ProblemSet;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 @Mapper
@@ -20,4 +22,11 @@ public interface ProblemSetMapper {
      * @param problemSet
      */
     void updateProblemSet(ProblemSet problemSet);
+
+    /**
+     * 分页查询公开题单
+     * @param title
+     * @return
+     */
+    Page<ProblemSet> listPublicProblemSet(String title);
 }

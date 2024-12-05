@@ -1,9 +1,12 @@
 package com.zazhi.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.zazhi.dto.ProblemSetDTO;
 import com.zazhi.entity.Problem;
 import com.zazhi.entity.ProblemSet;
 import com.zazhi.mapper.ProblemSetMapper;
+import com.zazhi.result.PageResult;
 import com.zazhi.service.ProblemSetService;
 import com.zazhi.utils.ThreadLocalUtil;
 import org.springframework.beans.BeanUtils;
@@ -45,4 +48,18 @@ public class ProblemSetServiceImpl implements ProblemSetService {
         problemSet.setUpdateUser(userId);
         problemSetMapper.updateProblemSet(problemSet);
     }
+
+    /**
+     * 分页查询公开题单
+     * @param page
+     * @param size
+     * @param title
+     * @return
+     */
+    public PageResult<ProblemSet> listPublicProblemSet(Integer page, Integer size, String title) {
+        PageHelper.startPage(page, size);
+        Page<ProblemSet> problemSets = problemSetMapper.listPublicProblemSet(title);
+        return new PageResult<>(problemSets.getTotal(), problemSets.getResult());
+    }
+
 }
