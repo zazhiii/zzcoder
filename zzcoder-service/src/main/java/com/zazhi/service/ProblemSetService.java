@@ -8,4 +8,10 @@ public interface ProblemSetService {
      * @param problemSetDTO
      */
     void addProblemSet(ProblemSetDTO problemSetDTO);
+
+    /**
+     * 修改题单信息
+     * @param problemSetDTO
+     */
+    void updateProblemSet(ProblemSetDTO problemSetDTO);
 }

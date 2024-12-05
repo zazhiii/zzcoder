@@ -33,4 +33,16 @@ public class ProblemSetServiceImpl implements ProblemSetService {
         problemSet.setUpdateUser(userId);
         problemSetMapper.addProblemSet(problemSet);
     }
+
+    /**
+     * 修改题单信息
+     * @param problemSetDTO
+     */
+    public void updateProblemSet(ProblemSetDTO problemSetDTO) {
+        ProblemSet problemSet = new ProblemSet();
+        BeanUtils.copyProperties(problemSetDTO, problemSet);
+        Long userId = ThreadLocalUtil.getCurrentId();
+        problemSet.setUpdateUser(userId);
+        problemSetMapper.updateProblemSet(problemSet);
+    }
 }
