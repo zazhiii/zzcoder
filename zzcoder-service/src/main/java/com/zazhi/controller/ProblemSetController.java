@@ -85,4 +85,12 @@ public class ProblemSetController {
         log.info("题单详细信息, id: {}", id);
         return Result.success(problemSetService.getProblemSet(id));
     }
+
+    @Operation(summary = "删除题单")
+    @DeleteMapping("/{id}")
+    public Result deleteProblemSet(@PathVariable("id") Integer id) {
+        log.info("删除题单, id: {}", id);
+        problemSetService.deleteProblemSet(id);
+        return Result.success();
+    }
 }

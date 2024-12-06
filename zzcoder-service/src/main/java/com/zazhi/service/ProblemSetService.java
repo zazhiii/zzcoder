@@ -56,4 +56,10 @@ public interface ProblemSetService {
      * @return
      */
     ProblemSetVO getProblemSet(Integer id);
+
+    /**
+     * 删除题单
+     * @param id
+     */
+    void deleteProblemSet(Integer id);
 }

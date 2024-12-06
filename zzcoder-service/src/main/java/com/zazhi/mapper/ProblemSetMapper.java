@@ -59,4 +59,19 @@ public interface ProblemSetMapper {
      * @return
      */
     ProblemSetVO getProblemSet(Integer id);
+
+
+    /**
+     * 查询题单题目数量
+     * @param problemSetId
+     */
+    @Select("select count(*) from problem_problem_set where problem_set_id = #{problemSetId}")
+    Integer getProblemCount(Integer problemSetId);
+
+    /**
+     * 删除题单
+     * @param problemSetId
+     */
+    @Delete("delete from problem_set where id = #{problemSetId}")
+    void deleteProblemSet(Integer problemSetId);
 }

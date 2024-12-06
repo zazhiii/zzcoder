@@ -3,7 +3,6 @@ package com.zazhi.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zazhi.dto.ProblemSetDTO;
-import com.zazhi.entity.Problem;
 import com.zazhi.entity.ProblemSet;
 import com.zazhi.mapper.ProblemSetMapper;
 import com.zazhi.result.PageResult;
@@ -100,5 +99,17 @@ public class ProblemSetServiceImpl implements ProblemSetService {
         return problemSetMapper.getProblemSet(id);
     }
 
-
+    /**
+     * 删除题单
+     *
+     * @param problemSetId
+     */
+    public void deleteProblemSet(Integer problemSetId) {
+        // 题单中有题目则不能删除
+        Integer problemCount = problemSetMapper.getProblemCount(problemSetId);
+        if (problemCount > 0) {
+            throw new RuntimeException("题单中有题目, 不能删除");
+        }
+        problemSetMapper.deleteProblemSet(problemSetId);
+    }
 }
