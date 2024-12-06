@@ -32,4 +32,43 @@
             </if>
         </where>
     </select>
+
+    <resultMap id="getProblemSetMap" type="com.zazhi.vo.ProblemSetVO">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="description" property="description"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <collection property="problems" ofType="com.zazhi.vo.ProblemVO">
+            <id column="pid" property="id"/>
+            <result column="problem_id" property="problemId"/>
+            <result column="problem_title" property="title"/>
+            <result column="difficulty" property="difficulty"/>
+            <collection property="tags" ofType="com.zazhi.entity.ProblemTag">
+                <id column="tid" property="id"/>
+                <result column="tag_name" property="name"/>
+            </collection>
+        </collection>
+    </resultMap>
+    <select id="getProblemSet" parameterType="java.lang.Integer" resultType="com.zazhi.vo.ProblemSetVO" resultMap="getProblemSetMap">
+        SELECT
+            ps.id id,
+            ps.title title,
+            ps.description description,
+            ps.create_user create_user,
+            ps.create_time create_time,
+            p.id pid,
+            p.problem_id problem_id,
+            p.title problem_title,
+            p.difficulty difficulty,
+            t.id tid,
+            t.name tag_name
+        FROM
+            problem_set ps
+        LEFT JOIN problem_problem_set pps ON ps.id = pps.problem_set_id
+        LEFT JOIN problem p ON pps.problem_id = p.id
+        LEFT JOIN problem_tag pt ON p.id = pt.pid
+        LEFT JOIN tag t ON pt.tid = t.id
+        WHERE ps.id = #{id}
+    </select>
 </mapper>

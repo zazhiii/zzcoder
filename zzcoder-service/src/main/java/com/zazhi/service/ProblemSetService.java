@@ -3,6 +3,7 @@ package com.zazhi.service;
 import com.zazhi.dto.ProblemSetDTO;
 import com.zazhi.entity.ProblemSet;
 import com.zazhi.result.PageResult;
+import com.zazhi.vo.ProblemSetVO;
 
 import java.util.List;
 
@@ -48,4 +49,11 @@ public interface ProblemSetService {
      * @param problemId
      */
     void deleteProblemFromProblemSet(Integer problemSetId, Integer problemId);
+
+    /**
+     * 题单详细信息
+     * @param id
+     * @return
+     */
+    ProblemSetVO getProblemSet(Integer id);
 }

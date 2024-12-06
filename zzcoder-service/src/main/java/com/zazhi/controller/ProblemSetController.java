@@ -5,6 +5,7 @@ import com.zazhi.entity.ProblemSet;
 import com.zazhi.result.PageResult;
 import com.zazhi.result.Result;
 import com.zazhi.service.ProblemSetService;
+import com.zazhi.vo.ProblemSetVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -76,5 +77,12 @@ public class ProblemSetController {
         log.info("从题单删除题目, problemSetId: {}, problemId: {}", problemSetId, problemId);
         problemSetService.deleteProblemFromProblemSet(problemSetId, problemId);
         return Result.success();
+    }
+
+    @Operation(summary = "题单详细信息")
+    @GetMapping("/{id}")
+    public Result<ProblemSetVO> getProblemSet(@PathVariable("id") Integer id) {
+        log.info("题单详细信息, id: {}", id);
+        return Result.success(problemSetService.getProblemSet(id));
     }
 }

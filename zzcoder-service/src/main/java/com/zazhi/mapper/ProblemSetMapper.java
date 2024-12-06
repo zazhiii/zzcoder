@@ -3,6 +3,7 @@ package com.zazhi.mapper;
 import com.github.pagehelper.Page;
 import com.zazhi.dto.ProblemSetDTO;
 import com.zazhi.entity.ProblemSet;
+import com.zazhi.vo.ProblemSetVO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -51,4 +52,11 @@ public interface ProblemSetMapper {
      */
     @Delete("delete from problem_problem_set where problem_set_id = #{problemSetId} and problem_id = #{problemId}")
     void deleteProblemFromProblemSet(Integer problemSetId, Integer problemId);
+
+    /**
+     * 题单详细信息
+     * @param id
+     * @return
+     */
+    ProblemSetVO getProblemSet(Integer id);
 }

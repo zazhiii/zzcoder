@@ -9,6 +9,7 @@ import com.zazhi.mapper.ProblemSetMapper;
 import com.zazhi.result.PageResult;
 import com.zazhi.service.ProblemSetService;
 import com.zazhi.utils.ThreadLocalUtil;
+import com.zazhi.vo.ProblemSetVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -88,6 +89,15 @@ public class ProblemSetServiceImpl implements ProblemSetService {
      */
     public void deleteProblemFromProblemSet(Integer problemSetId, Integer problemId) {
        problemSetMapper.deleteProblemFromProblemSet(problemSetId, problemId);
+    }
+
+    /**
+     * 题单详细信息
+     * @param id
+     * @return
+     */
+    public ProblemSetVO getProblemSet(Integer id) {
+        return problemSetMapper.getProblemSet(id);
     }
 
 
