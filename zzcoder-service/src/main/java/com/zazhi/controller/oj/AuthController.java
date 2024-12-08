@@ -1,4 +1,4 @@
-package com.zazhi.controller;
+package com.zazhi.controller.oj;
 
 import com.zazhi.result.Result;
 import com.zazhi.service.AuthService;

@@ -1,8 +1,7 @@
-package com.zazhi.controller;
+package com.zazhi.controller.oj;
 
 import com.zazhi.dto.JudgeDTO;
 import com.zazhi.dto.SubmissionQueryDTO;
-import com.zazhi.entity.Submission;
 import com.zazhi.result.PageResult;
 import com.zazhi.result.Result;
 import com.zazhi.service.JudgeService;

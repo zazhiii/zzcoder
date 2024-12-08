@@ -1,4 +1,4 @@
-package com.zazhi.controller;
+package com.zazhi.controller.oj;
 
 import com.zazhi.dto.ProblemSetDTO;
 import com.zazhi.entity.ProblemSet;

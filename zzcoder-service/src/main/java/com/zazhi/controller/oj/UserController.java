@@ -1,4 +1,4 @@
-package com.zazhi.controller;
+package com.zazhi.controller.oj;
 
 import com.zazhi.dto.UpdateEmailDTO;
 import com.zazhi.dto.UserInfoDTO;

@@ -18,7 +18,7 @@ import java.util.List;
  * @date 2024/11/9
  * @description: 管理员权限管理相关接口
  */
-@RestController("adminAuthController")
+@RestController("AdminAuthController")
 @RequestMapping("/api/admin")
 @Validated
 @Slf4j
