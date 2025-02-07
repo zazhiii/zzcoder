@@ -110,6 +110,7 @@ public class ProblemSetServiceImpl implements ProblemSetService {
         if (problemCount > 0) {
             throw new RuntimeException("题单中有题目, 不能删除");
         }
+        // TODO 只能删除自己的题单
         problemSetMapper.deleteProblemSet(problemSetId);
     }
 }

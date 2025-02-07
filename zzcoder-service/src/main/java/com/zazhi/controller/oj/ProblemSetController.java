@@ -9,6 +9,7 @@ import com.zazhi.vo.ProblemSetVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,7 @@ public class ProblemSetController {
 
     @Operation(summary = "添加题单")
     @PostMapping()
+    @RequiresAuthentication
     public Result addProblemSet(@RequestBody ProblemSetDTO problemSetDTO) {
         log.info("添加题单, {}", problemSetDTO);
         problemSetService.addProblemSet(problemSetDTO);
@@ -40,6 +42,7 @@ public class ProblemSetController {
 
     @Operation(summary = "修改题单信息")
     @PutMapping()
+    @RequiresAuthentication
     public Result updateProblemSet(@RequestBody ProblemSetDTO problemSetDTO) {
         log.info("修改题单信息, {}", problemSetDTO);
         problemSetService.updateProblemSet(problemSetDTO);
@@ -57,12 +60,14 @@ public class ProblemSetController {
 
     @Operation(summary = "查询我的所有题单")
     @GetMapping("/private")
+    @RequiresAuthentication
     public Result<List<ProblemSet>> listPrivateProblemSet() {
         return Result.success(problemSetService.listPrivateProblemSet());
     }
     
     @Operation(summary = "添加题目到题单")
     @PostMapping("/add-problem")
+    @RequiresAuthentication
     public Result addProblemToProblemSet(@RequestParam("problemSetId") Integer problemSetId,
                                          @RequestParam("problemId") Integer problemId) {
         log.info("添加题目到题单, problemSetId: {}, problemId: {}", problemSetId, problemId);
@@ -72,6 +77,7 @@ public class ProblemSetController {
 
     @Operation(summary = "从题单删除题目")
     @DeleteMapping("/delete-problem")
+    @RequiresAuthentication
     public Result deleteProblemFromProblemSet(@RequestParam("problemSetId") Integer problemSetId,
                                               @RequestParam("problemId") Integer problemId) {
         log.info("从题单删除题目, problemSetId: {}, problemId: {}", problemSetId, problemId);
@@ -88,6 +94,7 @@ public class ProblemSetController {
 
     @Operation(summary = "删除题单")
     @DeleteMapping("/{id}")
+    @RequiresAuthentication
     public Result deleteProblemSet(@PathVariable("id") Integer id) {
         log.info("删除题单, id: {}", id);
         problemSetService.deleteProblemSet(id);

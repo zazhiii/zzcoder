@@ -1,5 +1,6 @@
 package com.zazhi.mapper;
 
+import com.zazhi.entity.Permission;
 import com.zazhi.entity.Role;
 import com.zazhi.entity.User;
 import org.apache.ibatis.annotations.Insert;
@@ -8,6 +9,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
+import java.util.Set;
 
 @Mapper
 public interface UserMapper {
@@ -73,14 +75,12 @@ public interface UserMapper {
      * @return
      */
     @Select("select r.* from user_role ur left join role r on ur.role_id = r.id where ur.user_id = #{userId}")
-    List<Role> findRolesByUserId(Long userId);
-
-
+    List<Role> getUserRolesById(Long userId);
 
     /**
      * 通过角色查询权限
      * @param roles
      * @return
      */
-    List<String> findPermissionsByRoles(List<Role> roles);
+    List<Permission> findPermissionsByRoles(List<Role> roles);
 }

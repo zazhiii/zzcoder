@@ -10,6 +10,7 @@ import com.zazhi.vo.SubmissionPageVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,7 @@ public class JudgeController {
 
     @PostMapping("/submit")
     @Operation(summary = "提交代码")
+    @RequiresAuthentication
     public Result<Long> submitCode(@RequestBody @Validated JudgeDTO JudgeDTO) {
         return Result.success(judgeService.submitCode(JudgeDTO));
     }

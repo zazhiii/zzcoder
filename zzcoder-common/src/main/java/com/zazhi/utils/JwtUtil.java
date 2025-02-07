@@ -27,4 +27,14 @@ public class JwtUtil {
                 .asMap();
     }
 
+    // 验证 token 是否有效
+    public static boolean verifyToken(String token) {
+        try {
+            parseToken(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 }

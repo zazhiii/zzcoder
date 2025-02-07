@@ -33,16 +33,16 @@ spring:
           starttls:
             enable: true
 zz:
-#  jwt:
-#    # 设置jwt签名加密时使用的秘钥
-#    admin-secret-key: zazhi
-#    # 设置jwt过期时间
-#    admin-ttl: 7200000
-#    # 设置前端传递过来的令牌名称
-#    admin-token-name: token
-#    user-secret-key: zazhi
-#    user-ttl: 7200000
-#    user-token-name: authentication
+  #  jwt:
+  #    # 设置jwt签名加密时使用的秘钥
+  #    admin-secret-key: zazhi
+  #    # 设置jwt过期时间
+  #    admin-ttl: 7200000
+  #    # 设置前端传递过来的令牌名称
+  #    admin-token-name: token
+  #    user-secret-key: zazhi
+  #    user-ttl: 7200000
+  #    user-token-name: authentication
   alioss:
     endpoint: ${zz.alioss.endpoint}
     access-key-id: ${zz.alioss.access-key-id}

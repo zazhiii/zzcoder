@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import com.zazhi.entity.ProblemTag;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +37,9 @@ public class TagController {
     }
 
     @PostMapping
-    @Operation(summary = "新增标签")// TODO 权限验证
+    @Operation(summary = "新增标签")
+    @RequiresAuthentication
+    @RequiresPermissions("problem-tag:add")
     public Result add(String name){
         log.info("添加标签：{}", name);
         tagService.insert(name);

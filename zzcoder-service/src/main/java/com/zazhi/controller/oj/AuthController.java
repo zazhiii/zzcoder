@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Email;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api")
-@Validated
+//@Validated
 @Slf4j
 @Tag(name = "注册、登录、更改密码、权限相关接口")
 public class AuthController {
@@ -92,6 +93,7 @@ public class AuthController {
 
     @GetMapping("/logout")
     @Operation(summary = "登出")
+    @RequiresAuthentication
     public Result logout(@RequestHeader("Authorization") String token){
         log.info("登出：{}", token);
 
