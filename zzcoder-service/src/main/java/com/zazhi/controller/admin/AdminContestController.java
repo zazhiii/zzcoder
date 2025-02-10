@@ -4,16 +4,16 @@ import com.zazhi.dto.ContestDTO;
 import com.zazhi.entity.Contest;
 import com.zazhi.result.Result;
 import com.zazhi.service.ContestService;
+import com.zazhi.vo.ContestVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author zazhi
@@ -37,6 +37,27 @@ public class AdminContestController {
         log.info("添加比赛：{}", contestDTO);
 
         contestService.createContest(contestDTO);
+        return Result.success();
+    }
+
+    @GetMapping("/list")
+    @Operation(summary = "获取比赛列表")
+    @RequiresAuthentication
+    @RequiresPermissions("contest:list")
+    public Result<List<Contest>> getContest() {
+        log.info("获取比赛列表");
+
+        return Result.success(contestService.getContestList());
+    }
+
+    @PutMapping()
+    @Operation(summary = "修改比赛")
+    @RequiresAuthentication
+    @RequiresPermissions("contest:update")
+    public Result updateContest(@RequestBody ContestDTO contestDTO) {
+        log.info("修改比赛：{}", contestDTO);
+
+        contestService.updateContest(contestDTO);
         return Result.success();
     }
 }

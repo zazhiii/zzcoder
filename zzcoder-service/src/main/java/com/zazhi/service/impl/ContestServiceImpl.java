@@ -9,6 +9,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 /**
  * @author zazhi
@@ -32,5 +34,23 @@ public class ContestServiceImpl implements ContestService {
         Long userId = ThreadLocalUtil.getCurrentId();
         contest.setCreateUser(userId); // 创建人
         contestMapper.insert(contest);
+    }
+
+    /**
+     * 获取比赛列表
+     * @return 比赛列表
+     */
+    public List<Contest> getContestList() {
+        return contestMapper.getContestList();
+    }
+
+    /**
+     * 修改比赛
+     * @param contestDTO 比赛信息
+     */
+    public void updateContest(ContestDTO contestDTO) {
+        Contest contest = new Contest();
+        BeanUtils.copyProperties(contestDTO, contest);
+        contestMapper.updateContest(contestDTO);
     }
 }
