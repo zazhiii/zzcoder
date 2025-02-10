@@ -21,7 +21,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/tag")
-@Validated
+//@Validated
 @Slf4j
 @Tag(name = "题目标签相关接口")
 public class TagController {

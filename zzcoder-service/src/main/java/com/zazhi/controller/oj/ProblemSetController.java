@@ -23,7 +23,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/problem-set")
-@Validated
+//@Validated
 @Slf4j
 @Tag(name = "题单相关接口")
 public class ProblemSetController {
@@ -34,7 +34,7 @@ public class ProblemSetController {
     @Operation(summary = "添加题单")
     @PostMapping()
     @RequiresAuthentication
-    public Result addProblemSet(@RequestBody ProblemSetDTO problemSetDTO) {
+    public Result addProblemSet(@Validated @RequestBody ProblemSetDTO problemSetDTO) {
         log.info("添加题单, {}", problemSetDTO);
         problemSetService.addProblemSet(problemSetDTO);
         return Result.success();
@@ -43,7 +43,7 @@ public class ProblemSetController {
     @Operation(summary = "修改题单信息")
     @PutMapping()
     @RequiresAuthentication
-    public Result updateProblemSet(@RequestBody ProblemSetDTO problemSetDTO) {
+    public Result updateProblemSet(@Validated @RequestBody ProblemSetDTO problemSetDTO) {
         log.info("修改题单信息, {}", problemSetDTO);
         problemSetService.updateProblemSet(problemSetDTO);
         return Result.success();

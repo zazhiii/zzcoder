@@ -132,3 +132,63 @@ CREATE TABLE test_case (
     create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
 );
+
+-- 竞赛表
+CREATE TABLE contest (
+    id           BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '竞赛ID',
+    title        VARCHAR(255) NOT NULL COMMENT '竞赛标题',
+    description  TEXT COMMENT '竞赛描述',
+    start_time   DATETIME NOT NULL COMMENT '开始时间',
+    end_time     DATETIME NOT NULL COMMENT '结束时间',
+    status       TINYINT DEFAULT 0 COMMENT '竞赛状态（0未开始，1进行中，2已结束）',
+    visible         TINYINT DEFAULT 0 COMMENT '竞赛权限（0公开，1私有，2密码保护）',
+    type         TINYINT DEFAULT 0 COMMENT '竞赛类型（acm, ioi, oi...）',
+    password     VARCHAR(255) COMMENT '竞赛密码（仅当 type=2 时使用）',
+    create_user  BIGINT NOT NULL COMMENT '创建人（用户ID）',
+    create_time  TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time  TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+) COMMENT '竞赛表';
+
+CREATE TABLE contest_problem (
+    id          BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键',
+    display_id  VARCHAR(255) NOT NULL COMMENT '题目展示ID: A B C ...',
+    contest_id  BIGINT NOT NULL COMMENT '竞赛ID',
+    problem_id  BIGINT NOT NULL COMMENT '题目ID',
+    create_time  TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time  TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+) COMMENT '竞赛题目关联表';
+
+CREATE TABLE contest_user (
+    id          BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键',
+    contest_id  BIGINT NOT NULL COMMENT '竞赛ID',
+    user_id     BIGINT NOT NULL COMMENT '用户ID',
+    role        TINYINT DEFAULT 0 COMMENT '用户角色（0普通选手，1管理员）',
+    score       INT DEFAULT 0 COMMENT '当前得分',
+    submit_count INT DEFAULT 0 COMMENT '提交次数',
+    FOREIGN KEY (contest_id) REFERENCES contest(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
+) COMMENT '竞赛用户关联表';
+
+CREATE TABLE contest_submission (
+    id          BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键',
+    contest_id  BIGINT NOT NULL COMMENT '竞赛ID',
+    user_id     BIGINT NOT NULL COMMENT '用户ID',
+    problem_id  BIGINT NOT NULL COMMENT '题目ID',
+    code        TEXT NOT NULL COMMENT '提交的代码',
+    language    VARCHAR(50) NOT NULL COMMENT '编程语言',
+    submit_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '开赛后提交时间',
+    status      TINYINT DEFAULT 0 COMMENT '评测状态（0待评测，1通过，2错误等）',
+    score       INT DEFAULT 0 COMMENT '提交得分',
+) COMMENT '竞赛提交表';
+
+
+
+
+
+
+
+
+
+
+
+
