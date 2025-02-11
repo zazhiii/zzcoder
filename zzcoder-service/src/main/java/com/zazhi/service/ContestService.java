@@ -60,4 +60,11 @@ public interface ContestService {
      * @param contestId
      */
     void registeContest(Long contestId);
+
+    /**
+     * 添加题目到比赛
+     * @param contestId 比赛id
+     * @param problemId 题目id
+     */
+    void addProblemToContest(Long contestId, Integer problemId, String displayId);
 }

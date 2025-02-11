@@ -68,8 +68,17 @@ public interface ContestMapper {
 
     /**
      * 获取报名人数
-     * @param contestId
+     * @param contestId 比赛id
      */
     @Select("select count(*) from contest_user where contest_id = #{contestId}")
     int getRegisterCount(Long contestId);
+
+    /**
+     * 添加题目到比赛
+     * @param contestId 比赛id
+     * @param problemId 题目id
+     * @param displayId 题目显示id
+     */
+    @Insert("insert into contest_problem(contest_id, problem_id, display_id) values(#{contestId}, #{problemId}, #{displayId})")
+    void addProblemToContest(Long contestId, Integer problemId, String displayId);
 }

@@ -2,8 +2,10 @@ package com.zazhi.service.impl;
 
 import com.zazhi.dto.ContestDTO;
 import com.zazhi.entity.Contest;
+import com.zazhi.entity.Problem;
 import com.zazhi.entity.User;
 import com.zazhi.mapper.ContestMapper;
+import com.zazhi.mapper.ProblemMapper;
 import com.zazhi.mapper.UserMapper;
 import com.zazhi.service.ContestService;
 import com.zazhi.utils.ThreadLocalUtil;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -29,6 +32,9 @@ public class ContestServiceImpl implements ContestService {
 
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    ProblemMapper problemMapper;
 
     /**
      * 添加比赛
@@ -121,5 +127,27 @@ public class ContestServiceImpl implements ContestService {
             throw new RuntimeException("比赛不存在");
         }
         contestMapper.registeContest(contestId, ThreadLocalUtil.getCurrentId());
+    }
+
+    /**
+     * 添加题目到比赛
+     * @param contestId 比赛id
+     * @param problemId 题目id
+     * @param displayId
+     */
+    public void addProblemToContest(Long contestId, Integer problemId, String displayId) {
+        Contest contest = contestMapper.getContestById(contestId);
+        if(contest == null){
+            throw new RuntimeException("比赛不存在");
+        }
+        Problem problem = problemMapper.getById(problemId);// 判断题目是否存在
+        if(problem == null){
+            throw new RuntimeException("题目不存在");
+        }
+        // 比赛已经开始或结束，不能添加题目
+        if(contest.getStartTime().isBefore(LocalDateTime.now())){
+            throw new RuntimeException("比赛已经开始或结束，不能添加题目");
+        }
+        contestMapper.addProblemToContest(contestId, problemId, displayId);
     }
 }

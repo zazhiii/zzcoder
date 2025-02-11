@@ -70,4 +70,16 @@ public class AdminContestController {
         contestService.deleteContest(id);
         return Result.success();
     }
+
+    @PostMapping("/add-problem-to-contest")
+    @Operation(summary = "添加题目到比赛")
+    @RequiresAuthentication
+    @RequiresPermissions("contest:add-problem-to-contest")
+    public Result addProblemToContest(Long contestId, Integer problemId, String displayId) {
+        log.info("添加题目到比赛：{}", contestId);
+
+        contestService.addProblemToContest(contestId, problemId, displayId);
+        return Result.success();
+    }
+
 }
