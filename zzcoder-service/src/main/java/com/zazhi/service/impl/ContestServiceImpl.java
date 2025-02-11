@@ -158,6 +158,13 @@ public class ContestServiceImpl implements ContestService {
      * @return
      */
     public List<ContestProblemVO> getContestProblems(Long contestId) {
+        Contest contest = contestMapper.getContestById(contestId);
+        if(contest == null){
+            throw new RuntimeException("比赛不存在");
+        }
+        if(contest.getStartTime().isBefore(LocalDateTime.now())){
+            throw new RuntimeException("比赛未开始，不能查看题目");
+        }
         return contestMapper.getContestProblems(contestId);
     }
 }
