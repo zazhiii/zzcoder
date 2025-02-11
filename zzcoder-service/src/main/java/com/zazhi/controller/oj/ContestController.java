@@ -3,6 +3,7 @@ package com.zazhi.controller.oj;
 import com.zazhi.entity.Contest;
 import com.zazhi.result.Result;
 import com.zazhi.service.ContestService;
+import com.zazhi.vo.ContestVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -27,12 +28,20 @@ public class ContestController {
     @Autowired
     ContestService contestService;
 
-    @GetMapping
+    @GetMapping("/list")
     @Operation(summary = "获取比赛列表")
     public Result<List<Contest>> getContest() {
         log.info("获取比赛列表");
 
         return Result.success(contestService.getContestList());
+    }
+
+    @GetMapping()
+    @Operation(summary = "获取比赛详细信息")
+    public Result<ContestVO> getContestDetail(Long id) {
+        log.info("获取比赛详细信息");
+
+        return Result.success(contestService.getContestDetail(id));
     }
 
 }

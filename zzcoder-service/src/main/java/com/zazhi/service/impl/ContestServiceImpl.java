@@ -2,13 +2,17 @@ package com.zazhi.service.impl;
 
 import com.zazhi.dto.ContestDTO;
 import com.zazhi.entity.Contest;
+import com.zazhi.entity.User;
 import com.zazhi.mapper.ContestMapper;
+import com.zazhi.mapper.UserMapper;
 import com.zazhi.service.ContestService;
 import com.zazhi.utils.ThreadLocalUtil;
+import com.zazhi.vo.ContestVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.List;
 
 
@@ -22,6 +26,9 @@ public class ContestServiceImpl implements ContestService {
 
     @Autowired
     ContestMapper contestMapper;
+
+    @Autowired
+    UserMapper userMapper;
 
     /**
      * 添加比赛
@@ -61,5 +68,44 @@ public class ContestServiceImpl implements ContestService {
      */
     public void deleteContest(Long id) {
         contestMapper.deleteContest(id);
+    }
+
+    /**
+     * 获取比赛详细信息
+     * @param id 比赛id
+     * @return 比赛详细信息
+     */
+    public ContestVO getContestDetail(Long id) {
+        Contest contest = contestMapper.getContestById(id);
+        if (contest == null) {
+            throw new RuntimeException("比赛不存在"); // TODO: 抽取到常量类
+        }
+        ContestVO contestVO = new ContestVO();
+        BeanUtils.copyProperties(contest, contestVO);
+        // 设置创建人名称
+        User user = userMapper.findById(contest.getCreateUser());
+        contestVO.setCreateUserName(user.getUsername());
+        // 设置比赛时长
+        Duration duration = Duration.between(contest.getStartTime(), contest.getEndTime());
+        contestVO.setDuration((int)duration.toMinutes());
+        // TODO: 注册人数
+        return contestVO;
+    }
+
+    /**
+     * 获取所有比赛
+     * @return
+     */
+    public List<Contest> getAllContests() {
+        return contestMapper.getAllContests();
+    }
+
+    /**
+     * 更新比赛状态
+     * @param id 比赛id
+     * @param status 比赛状态
+     */
+    public void updateContestStatus(Long id, int status) {
+        contestMapper.updateContestStatus(id, status);
     }
 }

@@ -2,10 +2,7 @@ package com.zazhi.mapper;
 
 import com.zazhi.dto.ContestDTO;
 import com.zazhi.entity.Contest;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -38,4 +35,27 @@ public interface ContestMapper {
      */
     @Delete("delete from contest where id = #{id}")
     void deleteContest(Long id);
+
+    /**
+     * 获取比赛详细信息
+     * @param id 比赛id
+     * @return 比赛详细信息
+     */
+    @Select("select * from contest where id = #{id}")
+    Contest getContestById(Long id);
+
+    /**
+     * 获取所有比赛
+     * @return
+     */
+    @Select("select * from contest")
+    List<Contest> getAllContests();
+
+    /**
+     * 更新比赛状态
+     * @param id 比赛id
+     * @param status 比赛状态
+     */
+    @Update("update contest set status = #{status} where id = #{id}")
+    void updateContestStatus(Long id, int status);
 }

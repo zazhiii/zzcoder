@@ -32,6 +32,14 @@ spring:
           auth: true
           starttls:
             enable: true
+  devtools:
+    restart:
+      enabled: true  #设置开启热部署
+      additional-paths: src/main/java #重启目录
+      exclude: WEB-INF/**
+  freemarker:
+    cache: false    #页面不加载缓存，修改即时生效
+
 zz:
   #  jwt:
   #    # 设置jwt签名加密时使用的秘钥

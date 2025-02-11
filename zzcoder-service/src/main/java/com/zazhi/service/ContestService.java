@@ -3,6 +3,7 @@ package com.zazhi.service;
 
 import com.zazhi.dto.ContestDTO;
 import com.zazhi.entity.Contest;
+import com.zazhi.vo.ContestVO;
 
 import java.util.List;
 
@@ -32,4 +33,24 @@ public interface ContestService {
      * @param id 比赛id
      */
     void deleteContest(Long id);
+
+    /**
+     * 获取比赛详细信息
+     * @param id 比赛id
+     * @return 比赛详细信息
+     */
+    ContestVO getContestDetail(Long id);
+
+    /**
+     * 获取所有比赛
+     * @return
+     */
+    List<Contest> getAllContests();
+
+    /**
+     * 更新比赛状态
+     * @param id 比赛id
+     * @param status 比赛状态
+     */
+    void updateContestStatus(Long id, int status);
 }
