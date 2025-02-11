@@ -1,5 +1,6 @@
 package com.zazhi.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +16,9 @@ public class Contest {
     private Long id; // 比赛ID
     private String title; // 比赛标题
     private String description; // 比赛描述
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startTime; // 比赛开始时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endTime; // 比赛结束时间
     private Integer status; // 比赛状态
     private Integer visible; // 公开状态 0公开 1私有（密码）
