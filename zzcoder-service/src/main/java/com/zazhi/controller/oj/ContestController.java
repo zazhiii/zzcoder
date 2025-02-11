@@ -3,6 +3,7 @@ package com.zazhi.controller.oj;
 import com.zazhi.entity.Contest;
 import com.zazhi.result.Result;
 import com.zazhi.service.ContestService;
+import com.zazhi.vo.ContestProblemVO;
 import com.zazhi.vo.ContestVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -54,6 +55,15 @@ public class ContestController {
 
         contestService.registeContest(contestId);
         return Result.success();
+    }
+
+    // 查询比赛中的题目
+    @GetMapping("/problem")
+    @Operation(summary = "获取比赛题目")
+    public Result<List<ContestProblemVO>> getContestProblems(Long contestId) {
+        log.info("获取比赛题目");
+
+        return Result.success(contestService.getContestProblems(contestId));
     }
 
 }

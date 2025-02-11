@@ -16,4 +16,17 @@
         </set>
         where id = #{id}
     </update>
+
+    <select id="getContestProblems" parameterType="java.lang.Long" resultType="com.zazhi.vo.ContestProblemVO">
+        select
+            p.id as problemId,
+            p.title as title,
+            cp.display_id as displayId
+        from
+            contest_problem cp
+        left join
+            problem p on cp.problem_id = p.id
+        where
+            cp.contest_id = #{contestId}
+    </select>
 </mapper>

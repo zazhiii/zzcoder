@@ -3,6 +3,7 @@ package com.zazhi.service;
 
 import com.zazhi.dto.ContestDTO;
 import com.zazhi.entity.Contest;
+import com.zazhi.vo.ContestProblemVO;
 import com.zazhi.vo.ContestVO;
 
 import java.util.List;
@@ -67,4 +68,11 @@ public interface ContestService {
      * @param problemId 题目id
      */
     void addProblemToContest(Long contestId, Integer problemId, String displayId);
+
+    /**
+     * 获取比赛题目
+     * @param contestId 比赛id
+     * @return 比赛题目
+     */
+    List<ContestProblemVO> getContestProblems(Long contestId);
 }

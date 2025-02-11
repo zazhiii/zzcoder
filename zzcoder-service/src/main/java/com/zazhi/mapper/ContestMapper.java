@@ -2,6 +2,7 @@ package com.zazhi.mapper;
 
 import com.zazhi.dto.ContestDTO;
 import com.zazhi.entity.Contest;
+import com.zazhi.vo.ContestProblemVO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -81,4 +82,11 @@ public interface ContestMapper {
      */
     @Insert("insert into contest_problem(contest_id, problem_id, display_id) values(#{contestId}, #{problemId}, #{displayId})")
     void addProblemToContest(Long contestId, Integer problemId, String displayId);
+
+    /**
+     * 获取比赛中的题目
+     * @param contestId
+     * @return
+     */
+    List<ContestProblemVO> getContestProblems(Long contestId);
 }

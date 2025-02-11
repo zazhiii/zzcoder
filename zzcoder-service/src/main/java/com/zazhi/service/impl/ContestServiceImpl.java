@@ -9,6 +9,7 @@ import com.zazhi.mapper.ProblemMapper;
 import com.zazhi.mapper.UserMapper;
 import com.zazhi.service.ContestService;
 import com.zazhi.utils.ThreadLocalUtil;
+import com.zazhi.vo.ContestProblemVO;
 import com.zazhi.vo.ContestVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,5 +150,14 @@ public class ContestServiceImpl implements ContestService {
             throw new RuntimeException("比赛已经开始或结束，不能添加题目");
         }
         contestMapper.addProblemToContest(contestId, problemId, displayId);
+    }
+
+    /**
+     * 获取比赛中的题目
+     * @param contestId
+     * @return
+     */
+    public List<ContestProblemVO> getContestProblems(Long contestId) {
+        return contestMapper.getContestProblems(contestId);
     }
 }
