@@ -16,7 +16,7 @@ public interface ContestService {
 
 
     /**
-     * 获取比赛列表
+     * 获取我创建的比赛列表
      * @return 比赛列表
      */
     List<Contest> getContestList();
@@ -26,4 +26,10 @@ public interface ContestService {
      * @param contestDTO 比赛信息
      */
     void updateContest(ContestDTO contestDTO);
+
+    /**
+     * 删除比赛
+     * @param id 比赛id
+     */
+    void deleteContest(Long id);
 }

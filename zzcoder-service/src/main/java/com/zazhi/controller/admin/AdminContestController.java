@@ -4,7 +4,6 @@ import com.zazhi.dto.ContestDTO;
 import com.zazhi.entity.Contest;
 import com.zazhi.result.Result;
 import com.zazhi.service.ContestService;
-import com.zazhi.vo.ContestVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -41,11 +40,11 @@ public class AdminContestController {
     }
 
     @GetMapping("/list")
-    @Operation(summary = "获取比赛列表")
+    @Operation(summary = "获取我创建的比赛列表")
     @RequiresAuthentication
     @RequiresPermissions("contest:list")
     public Result<List<Contest>> getContest() {
-        log.info("获取比赛列表");
+        log.info("获取我创建的比赛列表");
 
         return Result.success(contestService.getContestList());
     }
@@ -58,6 +57,17 @@ public class AdminContestController {
         log.info("修改比赛：{}", contestDTO);
 
         contestService.updateContest(contestDTO);
+        return Result.success();
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "删除比赛")
+    @RequiresAuthentication
+    @RequiresPermissions("contest:delete")
+    public Result deleteContest(@PathVariable Long id) {
+        log.info("删除比赛：{}", id);
+
+        contestService.deleteContest(id);
         return Result.success();
     }
 }

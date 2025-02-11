@@ -41,7 +41,8 @@ public class ContestServiceImpl implements ContestService {
      * @return 比赛列表
      */
     public List<Contest> getContestList() {
-        return contestMapper.getContestList();
+        Long userId = ThreadLocalUtil.getCurrentId();
+        return contestMapper.getContestList(userId);
     }
 
     /**
@@ -52,5 +53,13 @@ public class ContestServiceImpl implements ContestService {
         Contest contest = new Contest();
         BeanUtils.copyProperties(contestDTO, contest);
         contestMapper.updateContest(contestDTO);
+    }
+
+    /**
+     * 删除比赛
+     * @param id 比赛id
+     */
+    public void deleteContest(Long id) {
+        contestMapper.deleteContest(id);
     }
 }
