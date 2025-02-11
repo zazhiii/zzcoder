@@ -60,7 +60,7 @@ public interface ContestService {
      * 报名比赛
      * @param contestId
      */
-    void registeContest(Long contestId);
+    void registerContest(Long contestId);
 
     /**
      * 添加题目到比赛

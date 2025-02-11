@@ -47,13 +47,13 @@ public class ContestController {
         return Result.success(contestService.getContestDetail(id));
     }
 
-    @PostMapping("/registe")
+    @PostMapping("/register")
     @Operation(summary = "报名比赛")
     @RequiresAuthentication
-    public Result registeContest(Long contestId) {
+    public Result registerContest(Long contestId) {
         log.info("报名比赛");
 
-        contestService.registeContest(contestId);
+        contestService.registerContest(contestId);
         return Result.success();
     }
 

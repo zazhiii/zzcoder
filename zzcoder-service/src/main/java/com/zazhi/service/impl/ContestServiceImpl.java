@@ -122,12 +122,12 @@ public class ContestServiceImpl implements ContestService {
      * 报名比赛
      * @param contestId
      */
-    public void registeContest(Long contestId) {
+    public void registerContest(Long contestId) {
         Contest contest = contestMapper.getContestById(contestId);
         if(contest == null){
             throw new RuntimeException("比赛不存在");
         }
-        contestMapper.registeContest(contestId, ThreadLocalUtil.getCurrentId());
+        contestMapper.registerContest(contestId, ThreadLocalUtil.getCurrentId());
     }
 
     /**

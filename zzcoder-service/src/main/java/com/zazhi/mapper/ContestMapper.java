@@ -65,7 +65,7 @@ public interface ContestMapper {
      * @param contestId
      */
     @Insert("insert into contest_user(contest_id, user_id) values(#{contestId}, #{userId})")
-    void registeContest(Long contestId, Long userId);
+    void registerContest(Long contestId, Long userId);
 
     /**
      * 获取报名人数
