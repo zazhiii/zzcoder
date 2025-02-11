@@ -72,11 +72,11 @@ public class ContestServiceImpl implements ContestService {
 
     /**
      * 获取比赛详细信息
-     * @param id 比赛id
+     * @param ContestId 比赛id
      * @return 比赛详细信息
      */
-    public ContestVO getContestDetail(Long id) {
-        Contest contest = contestMapper.getContestById(id);
+    public ContestVO getContestDetail(Long ContestId) {
+        Contest contest = contestMapper.getContestById(ContestId);
         if (contest == null) {
             throw new RuntimeException("比赛不存在"); // TODO: 抽取到常量类
         }
@@ -88,7 +88,9 @@ public class ContestServiceImpl implements ContestService {
         // 设置比赛时长
         Duration duration = Duration.between(contest.getStartTime(), contest.getEndTime());
         contestVO.setDuration((int)duration.toMinutes());
-        // TODO: 注册人数
+        // 设置报名人数
+        int count = contestMapper.getRegisterCount(ContestId);
+        contestVO.setRegisterCount(count);
         return contestVO;
     }
 
@@ -107,5 +109,13 @@ public class ContestServiceImpl implements ContestService {
      */
     public void updateContestStatus(Long id, int status) {
         contestMapper.updateContestStatus(id, status);
+    }
+
+    /**
+     * 报名比赛
+     * @param contestId
+     */
+    public void registeContest(Long contestId) {
+       contestMapper.registeContest(contestId, ThreadLocalUtil.getCurrentId());
     }
 }

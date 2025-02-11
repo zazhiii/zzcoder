@@ -7,8 +7,10 @@ import com.zazhi.vo.ContestVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,6 +44,16 @@ public class ContestController {
         log.info("获取比赛详细信息");
 
         return Result.success(contestService.getContestDetail(id));
+    }
+
+    @PostMapping("/registe")
+    @Operation(summary = "报名比赛")
+    @RequiresAuthentication
+    public Result registeContest(Long contestId) {
+        log.info("报名比赛");
+
+        contestService.registeContest(contestId);
+        return Result.success();
     }
 
 }

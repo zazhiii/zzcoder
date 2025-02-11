@@ -53,4 +53,11 @@ public interface ContestService {
      * @param status 比赛状态
      */
     void updateContestStatus(Long id, int status);
+
+
+    /**
+     * 报名比赛
+     * @param contestId
+     */
+    void registeContest(Long contestId);
 }

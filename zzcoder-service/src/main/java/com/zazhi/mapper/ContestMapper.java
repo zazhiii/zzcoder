@@ -58,4 +58,18 @@ public interface ContestMapper {
      */
     @Update("update contest set status = #{status} where id = #{id}")
     void updateContestStatus(Long id, int status);
+
+    /**
+     * 报名比赛
+     * @param contestId
+     */
+    @Insert("insert into contest_user(contest_id, user_id) values(#{contestId}, #{userId})")
+    void registeContest(Long contestId, Long userId);
+
+    /**
+     * 获取报名人数
+     * @param contestId
+     */
+    @Select("select count(*) from contest_user where contest_id = #{contestId}")
+    int getRegisterCount(Long contestId);
 }
