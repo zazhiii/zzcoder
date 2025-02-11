@@ -20,7 +20,7 @@ import java.util.List;
  * @description: 管理员比赛相关接口
  */
 @RestController
-@RequestMapping("/api/contest")
+@RequestMapping("/api/admin/contest")
 @Slf4j
 @Tag(name = "比赛管理")
 public class AdminContestController {

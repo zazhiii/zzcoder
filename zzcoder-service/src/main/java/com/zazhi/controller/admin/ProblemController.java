@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
  * @description: 题目相关接口
  */
 @RestController("AdminProblemController")
-@RequestMapping("/api/problem")
+@RequestMapping("/api/admin/problem")
 //@Validated
 @Slf4j
 @Tag(name = "题目管理")

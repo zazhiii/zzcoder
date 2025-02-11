@@ -21,7 +21,7 @@ import java.util.List;
  * @description: 管理员权限管理相关接口
  */
 @RestController("AdminAuthController")
-@RequestMapping("/api/admin")
+@RequestMapping("/api/admin/auth")
 // @Validated
 // fix: @Validated「加在类上」会导致带有加了shiro鉴权认证注解的接口所在的类无法被knife4j扫描到。加在方法上不会有这个问题。
 @Slf4j
