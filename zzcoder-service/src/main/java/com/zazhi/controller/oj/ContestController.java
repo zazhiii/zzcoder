@@ -33,7 +33,7 @@ public class ContestController {
     public Result<List<Contest>> getContest() {
         log.info("获取比赛列表");
 
-        return Result.success(contestService.getContestList());
+        return Result.success(contestService.getAllContests());
     }
 
     @GetMapping("/{id}")

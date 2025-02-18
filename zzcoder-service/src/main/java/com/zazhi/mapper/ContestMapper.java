@@ -18,7 +18,7 @@ public interface ContestMapper {
     void insert(Contest contest);
 
     /**
-     * 获取比赛列表
+     * 获取当前用户创建的比赛列表
      * @return 比赛列表
      */
     @Select("select * from contest where create_user = #{userId}")

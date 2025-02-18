@@ -1,3 +1,27 @@
+-- auto-generated definition
+create table user
+(
+    id           bigint auto_increment primary key,
+    wx_unionid   varchar(32)   null comment '微信unionid',
+    wx_openid    varchar(32)   null comment '微信openid',
+    username     varchar(32)   not null comment '用户名',
+    password     varchar(128)  not null comment '登录密码',
+    email        varchar(32)   not null comment '邮箱',
+    phone_number varchar(11)   null comment '手机号码',
+    avatar_url   varchar(128)  null comment '头像图片地址',
+    cf_username  varchar(32)   null comment 'Codeforces的用户名',
+    status       int default 0 null comment '账号状态, 0可用, 1不可用',
+    create_time  datetime      not null comment '创建时间',
+    update_time  datetime      not null comment '修改时间',
+    constraint email unique (email),
+    constraint phone_number unique (phone_number),
+    constraint username unique (username),
+    constraint wx_openid unique (wx_openid),
+    constraint wx_unionid unique (wx_unionid)
+)   comment '用户表';
+
+
+
 -- 题目-题单关联表
 drop table if exists problem_problem_set;
 create table problem_problem_set
@@ -165,8 +189,6 @@ CREATE TABLE contest_user (
     role        TINYINT DEFAULT 0 COMMENT '用户角色（0普通选手，1管理员）',
     score       INT DEFAULT 0 COMMENT '当前得分',
     submit_count INT DEFAULT 0 COMMENT '提交次数',
-    FOREIGN KEY (contest_id) REFERENCES contest(id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 ) COMMENT '竞赛用户关联表';
 
 CREATE TABLE contest_submission (

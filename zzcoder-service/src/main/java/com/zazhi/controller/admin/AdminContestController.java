@@ -4,15 +4,19 @@ import com.zazhi.dto.ContestDTO;
 import com.zazhi.entity.Contest;
 import com.zazhi.result.Result;
 import com.zazhi.service.ContestService;
+import com.zazhi.websocket.ContestChannel;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.websocket.Session;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zazhi
@@ -81,5 +85,16 @@ public class AdminContestController {
         contestService.addProblemToContest(contestId, problemId, displayId);
         return Result.success();
     }
+
+
+
+//    // 广播消息
+//    @PostMapping("/broadcast")
+//    @Operation(summary = "广播消息")
+//    @RequiresAuthentication
+////    @RequiresPermissions("contest:broadcast")
+//    public Result broadcast(Integer contestId, String message) {
+//        return Result.success();
+//    }
 
 }

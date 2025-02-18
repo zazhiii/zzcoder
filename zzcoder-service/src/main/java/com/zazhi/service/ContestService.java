@@ -5,8 +5,9 @@ import com.zazhi.dto.ContestDTO;
 import com.zazhi.entity.Contest;
 import com.zazhi.vo.ContestProblemVO;
 import com.zazhi.vo.ContestVO;
-
+import jakarta.websocket.Session;
 import java.util.List;
+import java.util.Map;
 
 public interface ContestService {
 
@@ -18,7 +19,7 @@ public interface ContestService {
 
 
     /**
-     * 获取我创建的比赛列表
+     * 获取当前用户创建的比赛列表
      * @return 比赛列表
      */
     List<Contest> getContestList();
@@ -75,4 +76,5 @@ public interface ContestService {
      * @return 比赛题目
      */
     List<ContestProblemVO> getContestProblems(Long contestId);
+
 }

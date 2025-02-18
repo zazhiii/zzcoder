@@ -11,13 +11,17 @@ import com.zazhi.service.ContestService;
 import com.zazhi.utils.ThreadLocalUtil;
 import com.zazhi.vo.ContestProblemVO;
 import com.zazhi.vo.ContestVO;
+import com.zazhi.websocket.ContestChannel;
+import jakarta.websocket.Session;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -51,7 +55,7 @@ public class ContestServiceImpl implements ContestService {
     }
 
     /**
-     * 获取比赛列表
+     * 获取当前用户创建的比赛列表
      * @return 比赛列表
      */
     public List<Contest> getContestList() {
@@ -162,7 +166,7 @@ public class ContestServiceImpl implements ContestService {
         if(contest == null){
             throw new RuntimeException("比赛不存在");
         }
-        if(contest.getStartTime().isBefore(LocalDateTime.now())){
+        if(contest.getStartTime().isAfter(LocalDateTime.now())){
             throw new RuntimeException("比赛未开始，不能查看题目");
         }
         return contestMapper.getContestProblems(contestId);
