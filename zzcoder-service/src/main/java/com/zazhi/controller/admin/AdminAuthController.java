@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,13 +19,13 @@ import java.util.List;
  * @date 2024/11/9
  * @description: 管理员权限管理相关接口
  */
-@RestController("AdminAuthController")
+@RestController
 @RequestMapping("/api/admin/auth")
 // @Validated
 // fix: @Validated「加在类上」会导致带有加了shiro鉴权认证注解的接口所在的类无法被knife4j扫描到。加在方法上不会有这个问题。
 @Slf4j
 @Tag(name = "权限管理")
-public class AuthController {
+public class AdminAuthController {
 
     @Autowired
     AuthService authService;

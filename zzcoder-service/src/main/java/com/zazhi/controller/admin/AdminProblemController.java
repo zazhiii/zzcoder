@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -18,12 +17,12 @@ import org.springframework.web.bind.annotation.*;
  * @date 2024/12/8
  * @description: 题目相关接口
  */
-@RestController("AdminProblemController")
+@RestController
 @RequestMapping("/api/admin/problem")
 //@Validated
 @Slf4j
 @Tag(name = "题目管理")
-public class ProblemController {
+public class AdminProblemController {
 
     @Autowired
     ProblemService problemService;
