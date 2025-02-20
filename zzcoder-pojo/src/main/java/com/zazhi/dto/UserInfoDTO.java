@@ -24,16 +24,7 @@ public class UserInfoDTO {
 
     private String email;
 
-//    private String phoneNumber;
-
     private String avatarUrl;
 
     private String cfUsername;
-
-    private Integer status;
-
-    private List<String> roles;
-
-    private List<String> permissions;
-
 }
