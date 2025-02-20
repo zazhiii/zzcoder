@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.zazhi.constant.PermissionConstants.PROBLEM_TAG_ADD;
+
 /**
  * @author zazhi
  * @date 2024/11/7
@@ -39,7 +41,7 @@ public class TagController {
     @PostMapping
     @Operation(summary = "新增标签")
     @RequiresAuthentication
-    @RequiresPermissions("problem-tag:add")
+    @RequiresPermissions(PROBLEM_TAG_ADD)
     public Result add(String name){
         log.info("添加标签：{}", name);
         tagService.insert(name);

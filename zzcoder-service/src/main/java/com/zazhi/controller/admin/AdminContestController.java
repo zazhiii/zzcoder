@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.zazhi.constant.PermissionConstants.*;
+
 /**
  * @author zazhi
  * @date 2025/2/10
@@ -35,7 +37,7 @@ public class AdminContestController {
     @PostMapping()
     @Operation(summary = "添加比赛")
     @RequiresAuthentication
-    @RequiresPermissions("contest:create")
+    @RequiresPermissions(CONTEST_CREATE)
     public Result createContest(@RequestBody ContestDTO contestDTO) {
         log.info("添加比赛：{}", contestDTO);
 
@@ -46,7 +48,7 @@ public class AdminContestController {
     @GetMapping("/list")
     @Operation(summary = "获取我创建的比赛列表")
     @RequiresAuthentication
-    @RequiresPermissions("contest:list")
+    @RequiresPermissions(CONTEST_LIST)
     public Result<List<Contest>> getContest() {
         log.info("获取我创建的比赛列表");
 
@@ -56,7 +58,7 @@ public class AdminContestController {
     @PutMapping()
     @Operation(summary = "修改比赛")
     @RequiresAuthentication
-    @RequiresPermissions("contest:update")
+    @RequiresPermissions(CONTEST_UPDATE)
     public Result updateContest(@RequestBody ContestDTO contestDTO) {
         log.info("修改比赛：{}", contestDTO);
 
@@ -67,7 +69,7 @@ public class AdminContestController {
     @DeleteMapping("/{id}")
     @Operation(summary = "删除比赛")
     @RequiresAuthentication
-    @RequiresPermissions("contest:delete")
+    @RequiresPermissions(CONTEST_DELETE)
     public Result deleteContest(@PathVariable Long id) {
         log.info("删除比赛：{}", id);
 
@@ -78,7 +80,7 @@ public class AdminContestController {
     @PostMapping("/add-problem-to-contest")
     @Operation(summary = "添加题目到比赛")
     @RequiresAuthentication
-    @RequiresPermissions("contest:add-problem-to-contest")
+    @RequiresPermissions(CONTEST_ADD_PROBLEM_TO_CONTEST)
     public Result addProblemToContest(Long contestId, Integer problemId, String displayId) {
         log.info("添加题目到比赛：{}", contestId);
 

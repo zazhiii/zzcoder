@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.zazhi.constant.PermissionConstants.*;
+
 /**
  * @author zazhi
  * @date 2024/11/9
@@ -33,7 +35,7 @@ public class AdminAuthController {
     @PostMapping("/role")
     @Operation(summary = "添加角色")
     @RequiresAuthentication
-    @RequiresPermissions("role:add")
+    @RequiresPermissions(ROLE_ADD)
     public Result addRole(String roleName, String description) {
         log.info("添加角色：{}, {}", roleName, description);
         authService.addRole(roleName, description);
@@ -43,7 +45,7 @@ public class AdminAuthController {
     @PutMapping("/role")
     @Operation(summary = "修改角色")
     @RequiresAuthentication
-    @RequiresPermissions("role:update")
+    @RequiresPermissions(ROLE_UPDATE)
     public Result updateRole(@RequestBody Role role) {
         log.info("修改角色：{}", role);
         authService.updateRole(role);
@@ -53,7 +55,7 @@ public class AdminAuthController {
     @DeleteMapping("/role")
     @Operation(summary = "删除角色")
     @RequiresAuthentication
-    @RequiresPermissions("role:delete")
+    @RequiresPermissions(ROLE_DELETE)
     public Result deleteRole(Integer id) {
         log.info("删除角色：{}", id);
         authService.deleteRole(id);
@@ -63,7 +65,7 @@ public class AdminAuthController {
     @GetMapping("/role")
     @Operation(summary = "获取所有角色")
     @RequiresAuthentication
-    @RequiresPermissions("role:list")
+    @RequiresPermissions(ROLE_LIST)
     public Result<List<Role>> getRoles() {
         log.info("获取所有角色");
         return Result.success(authService.getRoles());
@@ -73,7 +75,7 @@ public class AdminAuthController {
     @GetMapping("/permission")
     @Operation(summary = "获取所有权限")
     @RequiresAuthentication
-    @RequiresPermissions("permission:list")
+    @RequiresPermissions(PERMISSION_LIST)
     public Result<List<Permission>> getPermissions() {
         log.info("获取所有权限");
         return Result.success(authService.getPermissions());
@@ -82,7 +84,7 @@ public class AdminAuthController {
     @PostMapping("/add-permission-to-role")
     @Operation(summary = "添加权限到角色")
     @RequiresAuthentication
-    @RequiresPermissions("role:add-permission")
+    @RequiresPermissions(ROLE_ADD_PERMISSION)
     public Result addPermissionToRole(Integer roleId, Integer permissionId) {
         log.info("添加权限到角色：{}, {}", roleId, permissionId);
         authService.addPermissionToRole(roleId, permissionId);
@@ -92,7 +94,7 @@ public class AdminAuthController {
     @PostMapping("/add-role-to-user")
     @Operation(summary = "添加角色到用户")
     @RequiresAuthentication
-    @RequiresPermissions("user:add-role")
+    @RequiresPermissions(USER_ADD_ROLE)
     public Result addRoleToUser(Integer roleId, Integer userId) {
         log.info("添加角色到用户：{}, {}", roleId, userId);
         authService.addRoleToUser(roleId, userId);
