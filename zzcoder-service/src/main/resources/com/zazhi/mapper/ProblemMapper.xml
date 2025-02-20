@@ -173,7 +173,7 @@
         FROM problem p
         LEFT JOIN problem_tag pt ON p.id = pt.pid
         LEFT JOIN tag t ON pt.tid = t.id
-        LEFT JOIN test_case tc ON p.id = tc.problem_id
+        LEFT JOIN test_case tc ON (p.id = tc.problem_id AND tc.is_sample = 1)
         WHERE p.id = #{id}
     </select>
 
