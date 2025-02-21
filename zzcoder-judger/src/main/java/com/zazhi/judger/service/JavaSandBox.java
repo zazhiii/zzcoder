@@ -143,7 +143,7 @@ public class JavaSandBox {
             // 创建命令
             ExecCreateCmdResponse execResponse = dockerUtil.createCmd(containerId, cmd);
             // 执行命令
-            dockerUtil.excuteCmd(execResponse, stdout, stderr);
+            dockerUtil.executeCmd(execResponse, stdout, stderr);
             // 获取输出结果
             // String stdoutResult = stdout.toString(StandardCharsets.UTF_8).trim();
             String stderrResult = stderr.toString(StandardCharsets.UTF_8).trim();

@@ -1,93 +1,62 @@
-package com.zazhi.judger.common.utils;
+package com.zazhi.judger.docker;
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.ExecCreateCmdResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
-import com.github.dockerjava.api.model.Bind;
-import com.github.dockerjava.api.model.HostConfig;
-import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.core.command.ExecStartResultCallback;
 import com.zazhi.judger.common.exception.SystemException;
 import com.zazhi.judger.common.exception.TimeLimitExceededException;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayOutputStream;
 import java.util.concurrent.*;
 
-/**
- * @author zazhi
- * @date 2024/12/4
- * @description: Docker工具类
- */
-@Component
+@Data
 @Slf4j
-public class DockerUtil {
+public class DockerContainer {
 
-    @Autowired
+    // Docker 客户端
     private DockerClient dockerClient;
 
-    /**
-     * 创建容器
-     *
-     * @param tmpDir        代码所在的绝对路径
-     * @param memoryLimit   代码允许允许的最大内存
-     * @param image         镜像
-     * @param containerName 容器名称
-     * @return 容器ID
-     */
-    public String createContainer(String tmpDir, int memoryLimit, String image, String containerName) {
-        CreateContainerResponse container = dockerClient.createContainerCmd(image)
-                .withHostConfig(
-                        HostConfig.newHostConfig()
-                                .withBinds(new Bind(tmpDir, new Volume("/app"))) // 挂载路径
-                                .withMemory(memoryLimit * 1024 * 1024L) // 设置最大内存限制
-                                .withMemorySwap(memoryLimit * 1024 * 1024L) // 禁止交换分区 (swap)
-                )
-                .withName(containerName)
-                .withWorkingDir("/app") // 设置工作目录
-                .exec();
-        log.info("创建容器：{}", container);
-        return container.getId();
+    // 假设 Docker 容器有一些状态，实际可以根据需要扩展
+    private boolean isBusy = false;
+
+    // Docker 容器 ID
+    private String containerId;
+
+    private String containerName;
+
+    // Docker 容器工作目录
+    private String workingDir;
+
+
+    public DockerContainer(DockerClient dockerClient, String containerId, String containerName, String workingDir) {
+        this.dockerClient = dockerClient;
+        this.containerId = containerId;
+        this.containerName = containerName;
+        this.workingDir = workingDir;
     }
 
     /**
      * 启动容器
-     *
-     * @param containerId
      */
-    public void startContainer(String containerId) {
+    public void start() {
         dockerClient.startContainerCmd(containerId).exec();
     }
 
-    /**
-     * 停止容器
-     *
-     * @param containerId
-     */
-    public void stopContainer(String containerId) {
+    // 停止容器
+    public void stop() {
         dockerClient.stopContainerCmd(containerId).exec();
-    }
-
-    /**
-     * 删除容器
-     *
-     * @param containerId
-     */
-    public void removeContainer(String containerId) {
-        dockerClient.removeContainerCmd(containerId).exec();
     }
 
     /**
      * 创建执行命令
      *
-     * @param containerId 容器ID
      * @param cmd         命令
      * @return 执行命令的响应
      */
-    public ExecCreateCmdResponse createCmd(String containerId, String... cmd) {
+    public ExecCreateCmdResponse createCmd(String... cmd) {
         return dockerClient.execCreateCmd(containerId)
                 .withAttachStdout(true)
                 .withAttachStderr(true)
@@ -146,10 +115,9 @@ public class DockerUtil {
     /**
      * 查看容器信息
      *
-     * @param containerId
      * @return
      */
-    public InspectContainerResponse inspectContainer(String containerId) {
+    public InspectContainerResponse inspectContainer() {
         return dockerClient.inspectContainerCmd(containerId).exec();
     }
 }
