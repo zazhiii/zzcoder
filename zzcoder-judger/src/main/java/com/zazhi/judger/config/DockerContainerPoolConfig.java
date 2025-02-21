@@ -1,7 +1,6 @@
 package com.zazhi.judger.config;
 
 import com.github.dockerjava.api.DockerClient;
-import com.zazhi.judger.common.utils.DockerUtil;
 import com.zazhi.judger.docker.DockerContainerPool;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

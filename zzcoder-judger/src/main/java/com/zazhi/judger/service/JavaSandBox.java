@@ -8,10 +8,11 @@ import com.zazhi.judger.common.pojo.ExecutionStats;
 import com.zazhi.judger.common.pojo.JudgeResult;
 import com.zazhi.judger.common.pojo.JudgeTask;
 import com.zazhi.judger.common.pojo.TestCase;
-import com.zazhi.judger.common.utils.DockerUtil;
+import com.zazhi.judger.common.utils.MessageQueueUtil;
+import com.zazhi.judger.docker.DockerContainer;
+import com.zazhi.judger.docker.DockerContainerPool;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,11 +28,14 @@ import java.util.List;
  * @description: Java沙箱
  */
 @Service
+@Slf4j
 public class JavaSandBox {
 
-    private static final Logger log = LoggerFactory.getLogger(JavaSandBox.class);
     @Autowired
-    private DockerUtil dockerUtil;
+    private MessageQueueUtil messageQueueUtil;
+
+    @Autowired
+    private DockerContainerPool dockerContainerPool;
 
     /**
      * ========================================================
@@ -39,41 +43,42 @@ public class JavaSandBox {
      * ========================================================
      *
      * @param task   任务
-     * @param result 结果
-     * @return
      */
-    public JudgeResult processTask(JudgeTask task, JudgeResult result) {
-        String containerId = null;
-        result.setTimeUsed(0);
-        result.setMemoryUsed(0);
+    public void processTask(JudgeTask task) {
+        log.info("开始处理评测任务: {}", task);
+
+        // 0. 创建评测结果对象
+        JudgeResult result = new JudgeResult();
+        result.setTaskId(task.getTaskId());
+        result.setStatus("Judging"); // TODO 抽取常量
+        messageQueueUtil.sendJudgeResult(result); // 更新状态
+
+        DockerContainer container = null;
         try {
-            // 创建临时目录用于存放用户提交的代码和文件
-            String tempDir = "/tmp/judgeTask_" + task.getTaskId();
-            File tempDirectory = new File(tempDir);
-            tempDirectory.mkdir();
+            // 获取一个空闲的容器
+            container = dockerContainerPool.acquireContainer();
+            // 工作目录
+            String workingDir = container.getWorkingDir();
+            File workingDirectory = new File(workingDir);
+            // 宿主机的工作目录绝对路径
+            String workingDirectoryAbsolutePath = workingDirectory.getAbsolutePath();
             // 将用户的代码保存到文件中
-            File codeFile = new File(tempDir, "Main.java"); // TODO 抽取常量
+            File codeFile = new File(workingDirectoryAbsolutePath, "Main.java"); // TODO 抽取常量
             FileUtils.writeStringToFile(codeFile, task.getCode(), "UTF-8");
-            // 宿主机的临时目录绝对路径
-            String tmpDirAbsPath = tempDirectory.getAbsolutePath();
-            // 创建 Docker 容器, 并挂载目录, 设置内存限制
-            containerId = dockerUtil.createContainer(tmpDirAbsPath, task.getMemoryLimit(), "java_judger", "java_judger_" + task.getTaskId());// TODO 抽取常量
-            // 启动容器
-            dockerUtil.startContainer(containerId);
             // 编译用户的代码
-            compileCode(containerId, "/bin/sh", "-c", "javac Main.java");
+            compileCode(container, "/bin/sh", "-c", "javac Main.java"); // TODO 抽取常量
             // 获取测试用例
             List<TestCase> testCases = task.getTestCases();
             for (TestCase testCase : testCases) {
                 log.info("测试用例: {}", testCase);
                 // 将测试用例保存到文件中
-                File inputFile = new File(tempDir, "input.txt");
-                File expectedOutput = new File(tempDir, "expected_output.txt");
+                File inputFile = new File(workingDirectoryAbsolutePath, "input.txt");
+                File expectedOutput = new File(workingDirectoryAbsolutePath, "expected_output.txt");
                 FileUtils.writeStringToFile(inputFile, testCase.getInput(), "UTF-8");
                 FileUtils.writeStringToFile(expectedOutput, testCase.getExpectedOutput(), "UTF-8");
                 // 根据编程语言和任务配置创建 Docker 容器并运行代码
                 String[] cmd = {"/usr/bin/time", "-v", "-o", "/app/time_output.txt", "/bin/sh", "-c", "java Main < /app/input.txt > /app/output.txt"};
-                boolean oomKilled = runCode(task.getTimeLimit(), containerId, cmd);
+                boolean oomKilled = runCode(task.getTimeLimit(), container, cmd);
                 // 判断是否超内存
                 if (oomKilled) {
                     throw new MemoryLimitExceededException();
@@ -81,7 +86,7 @@ public class JavaSandBox {
                 // 从time_output.txt解析运行情况
                 String timeOutput = null;
                 try {
-                    timeOutput = FileUtils.readFileToString(new File(tmpDirAbsPath + "/time_output.txt"), "UTF-8");
+                    timeOutput = FileUtils.readFileToString(new File(workingDirectoryAbsolutePath + "/time_output.txt"), "UTF-8");
                 } catch (IOException e) {
                     throw new SystemException("读取时间输出文件失败", e);
                 }
@@ -96,7 +101,7 @@ public class JavaSandBox {
                 }
 
                 // 判断输出是否正确(output.txt 和 expected_output.txt)
-                File output = new File(tmpDirAbsPath + "/output.txt");
+                File output = new File(workingDirectoryAbsolutePath + "/output.txt");
                 String outputContent = FileUtils.readFileToString(output, "UTF-8");
                 String expectedOutputContent = FileUtils.readFileToString(expectedOutput, "UTF-8");
                 if (!outputContent.trim().equals(expectedOutputContent.trim())) {
@@ -104,7 +109,7 @@ public class JavaSandBox {
                     throw new WrongAnswerException("Wrong Answer on test case: "); //TODO 第几个测试用例
                 }
             }
-            result.setResult("AC");
+            result.setResult("AC"); // TODO 抽取常量
         } catch (SystemException | IOException e) {
             result.setResult("SE");
             result.setErrorMessage(e.getMessage());
@@ -127,23 +132,31 @@ public class JavaSandBox {
             result.setResult("SE");
             result.setErrorMessage("未知错误");
         } finally {
-            dockerUtil.stopContainer(containerId);
-            dockerUtil.removeContainer(containerId);
-            FileUtils.deleteQuietly(new File("/tmp/judgeTask_" + task.getTaskId()));
-            result.setStatus("finished");
+            result.setStatus("Completed");
+            messageQueueUtil.sendJudgeResult(result); // 更新状态
+            log.info("评测结果: {}", result);
+
+            // 释放容器
+            if(container != null) {
+                dockerContainerPool.releaseContainer(container);
+            }
         }
-        return result;
     }
 
-    public void compileCode(String containerId, String... cmd) {
+    /**
+     * 编译代码
+     * @param dockerContainer 容器
+     * @param cmd 编译命令
+     */
+    public void compileCode(DockerContainer dockerContainer, String... cmd) {
         // 捕获标准输出和错误输出
         ByteArrayOutputStream stdout = new ByteArrayOutputStream();
         ByteArrayOutputStream stderr = new ByteArrayOutputStream();
         try {
             // 创建命令
-            ExecCreateCmdResponse execResponse = dockerUtil.createCmd(containerId, cmd);
+            ExecCreateCmdResponse createCmdResponse = dockerContainer.createCmd(cmd);
             // 执行命令
-            dockerUtil.executeCmd(execResponse, stdout, stderr);
+            dockerContainer.executeCmd(createCmdResponse, stdout, stderr);
             // 获取输出结果
             // String stdoutResult = stdout.toString(StandardCharsets.UTF_8).trim();
             String stderrResult = stderr.toString(StandardCharsets.UTF_8).trim();
@@ -153,26 +166,31 @@ public class JavaSandBox {
                 log.error("Compilation errors: {}", stderrResult);
                 throw new CompilationException("编译失败:" + stderrResult);
             }
-        } catch (InterruptedException | DockerException e) { // 这里算Judge系统错误
+        } catch (InterruptedException | DockerException e) { // 这里算 Judge 系统错误
             throw new SystemException("Compilation process failed", e);
         }
     }
 
     /**
-     * 在指定容器中运行代码
+     * 在容器中运行代码
+     *
+     * @param timeLimit 时间限制
+     * @param dockerContainer 容器
+     * @param cmd 命令
+     * @return
      */
-    public boolean runCode(int timeLimit, String containerId, String... cmd) {
+    public boolean runCode(int timeLimit, DockerContainer dockerContainer, String... cmd) {
         // 获取容器信息
-        InspectContainerResponse inspectContainerResponse = dockerUtil.inspectContainer(containerId);
+        InspectContainerResponse inspectContainerResponse = dockerContainer.inspectContainer();
         // 创建命令
-        ExecCreateCmdResponse createCmdResponse = dockerUtil.createCmd(containerId, cmd);
+        ExecCreateCmdResponse createCmdResponse = dockerContainer.createCmd(cmd);
         // 捕获输出
         ByteArrayOutputStream stdOut = new ByteArrayOutputStream();
         ByteArrayOutputStream stdErr = new ByteArrayOutputStream();
         // 执行命令
-        dockerUtil.execCmdWithTimeout(createCmdResponse, timeLimit, stdOut, stdErr);
+        dockerContainer.execCmdWithTimeout(createCmdResponse, timeLimit, stdOut, stdErr);
 
-        // 输出结果 解析时间和内存 使用 /usr/bin/time -v 命令(需要安装time, 信息默认输出到stderr)
+        // 输出结果 解析时间和内存 使用 /usr/bin/time -v 命令(需要安装time, 信息默认输出到stderr, 也可以重定向到文件)
         String executionOutput = stdOut.toString(StandardCharsets.UTF_8);
         String errorOutput = stdErr.toString(StandardCharsets.UTF_8);
 

@@ -49,30 +49,11 @@ public class JudgeTask {
     // 任务的重试次数
     private Integer retryCount;
 
-    // 附加的其他文件
-    private List<File> additionalFiles;
-
-    // 隔离配置参数，如内存和 CPU 限制
-    private IsolateConfig isolateConfig;
-
     // 判题完成后回调 URL
     private String callbackUrl;
 
     // 批量测试用例
     private List<TestCase> testCases;
 
-    // 内嵌的辅助类
-    public static class File {
-        private String fileName;
-        private byte[] fileData;
 
-        // Getters and Setters
-    }
-
-    public static class IsolateConfig {
-        private Integer cpuLimit;
-        private Integer memoryLimit;
-
-        // Getters and Setters
-    }
 }

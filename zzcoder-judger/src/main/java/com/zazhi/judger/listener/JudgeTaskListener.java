@@ -20,27 +20,14 @@ public class JudgeTaskListener {
     JavaSandBox javaSandBox;
 
     @Autowired
-    MessageQueueUtil messageQueueUtil;
-
-    @Autowired
     ExecutorService threadPool;
 
     @RabbitListener(queues = "judge_task_queue")
     public void receiveJudgeTask(JudgeTask task) {
+
         threadPool.execute(() -> {
-            log.info("开始处理评测任务: {}", task);
-            // 0. 创建评测结果对象
-            JudgeResult judgeResult = new JudgeResult();
-            judgeResult.setTaskId(task.getTaskId());
-            // 1. 设置评测状态为评测中，发送评测结果
-            judgeResult.setStatus("Judging");
-            messageQueueUtil.sendJudgeResult(judgeResult);
-            // 2. 调用评测服务进行评测
-            javaSandBox.processTask(task, judgeResult);
-            // 3. 设置评测状态为评测完成，发送评测结果
-            judgeResult.setStatus("Completed");
-            messageQueueUtil.sendJudgeResult(judgeResult);
-            log.info("评测结果: {}", judgeResult);
+            javaSandBox.processTask(task);
         });
+
     }
 }

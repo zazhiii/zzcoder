@@ -115,9 +115,18 @@ public class DockerContainer {
     /**
      * 查看容器信息
      *
-     * @return
+     * @return 容器信息
      */
     public InspectContainerResponse inspectContainer() {
         return dockerClient.inspectContainerCmd(containerId).exec();
+    }
+
+    /**
+     * 判断容器是否在运行
+     *
+     * @return 是否在运行
+     */
+    public boolean isRunning() {
+        return Boolean.TRUE.equals(inspectContainer().getState().getRunning());
     }
 }

@@ -5,7 +5,6 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Volume;
-import com.zazhi.judger.common.utils.DockerUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -18,7 +17,6 @@ public class DockerContainerPool {
     // 容器池，使用阻塞队列管理容器的空闲状态
     private final BlockingQueue<DockerContainer> containerPool;
 
-
     public BlockingQueue<DockerContainer> getAllContainerPool() {
         return containerPool;
     }
@@ -28,7 +26,7 @@ public class DockerContainerPool {
         containerPool = new ArrayBlockingQueue<>(poolSize);
 
         // 初始化容器池，创建多个 Docker 容器
-        for (int i = 0; i < poolSize; i++) {
+        for (int i = 1; i <= poolSize; i++) {
             String containerName = "container_" + String.format("%02d", i);
             // 创建工作目录用于存放用户提交的代码和文件
             String workingDir = "/zzcoder/judge_containers/" + containerName;
@@ -36,15 +34,13 @@ public class DockerContainerPool {
             workingDirectory.mkdir();
             // 宿主机的临时目录绝对路径
             String workingDirAbsPath = workingDirectory.getAbsolutePath();
-//            String containerId = dockerUtil.createContainer(workingDirAbsPath, 256, "java_judger", containerName);
-
             String image = "java_judger";
             int memoryLimit = 256;
 
             CreateContainerResponse createRes = dockerClient.createContainerCmd(image)
                     .withHostConfig(
                             HostConfig.newHostConfig()
-                                    .withBinds(new Bind(workingDir, new Volume("/app"))) // 挂载路径
+                                    .withBinds(new Bind(workingDirAbsPath, new Volume("/app"))) // 挂载路径注意要挂载绝对路径，否则会有点问题
                                     .withMemory(memoryLimit * 1024 * 1024L) // 设置最大内存限制
                                     .withMemorySwap(memoryLimit * 1024 * 1024L) // 禁止交换分区 (swap)
                     )
@@ -61,14 +57,16 @@ public class DockerContainerPool {
 
     // 从池中获取一个空闲的容器
     public DockerContainer acquireContainer() throws InterruptedException {
-        DockerContainer dockerContainer = containerPool.take();// 如果没有空闲容器，会阻塞直到有容器可用
-        dockerContainer.start(); // 启动容器
+        // 如果没有空闲容器，会阻塞直到有容器可用
+        DockerContainer dockerContainer = containerPool.take();
+        if(!dockerContainer.isRunning()){
+            dockerContainer.start();
+        }
         return dockerContainer;
     }
 
     // 将容器放回池中
     public void releaseContainer(DockerContainer container) {
-        container.stop();
         containerPool.add(container);
     }
 }

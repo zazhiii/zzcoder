@@ -11,9 +11,9 @@ public class ThreadPoolConfig {
     @Bean
     public ExecutorService executorService() {
         // 核心线程数
-        int corePoolSize = 5;
+        int corePoolSize = 16;
         // 最大线程数
-        int maximumPoolSize = 17;
+        int maximumPoolSize = 32;
         // 线程最大空闲时间
         long keepAliveTime = 60L; // 60秒
         // 创建线程的工厂
