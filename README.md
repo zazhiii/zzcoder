@@ -24,7 +24,7 @@ zzcoder 是一个在线判题（OJ）平台，支持编程题目的提交、自�
 | 缓存       | Redis              |
 | 判题沙箱   | Docker             |
 | 数据库     | MySQL   |
-| 前端（可选）| Vue.js|
+| 前端| Vue.js|
 
 ## 📂 模块说明
 
@@ -65,6 +65,3 @@ zzcoder 是一个在线判题（OJ）平台，支持编程题目的提交、自�
 - ⚙️ Redis 缓存比赛题目及用户 token，提高性能并支持服务端控制 token 实效
 - 🧪 提供题目标签、收藏、评论、点赞等交互功能
 
-## 📄 License
-
-MIT License © [zazhiii](https://github.com/zazhiii)
