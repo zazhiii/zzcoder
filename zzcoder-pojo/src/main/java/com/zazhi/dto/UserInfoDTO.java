@@ -1,5 +1,6 @@
 package com.zazhi.dto;
 
+import com.zazhi.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,4 +28,8 @@ public class UserInfoDTO {
     private String avatarUrl;
 
     private String cfUsername;
+
+    private List<String> roles;
+
+    private List<String> permissions;
 }

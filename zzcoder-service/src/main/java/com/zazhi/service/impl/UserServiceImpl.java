@@ -50,6 +50,13 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.findById(userId);
         UserInfoDTO userInfoDTO = new UserInfoDTO();
         BeanUtils.copyProperties(user, userInfoDTO);
+
+        // 获取用户角色和权限
+        List<Role> roles = userMapper.getUserRolesById(userId);
+        List<Permission> permissions = userMapper.findPermissionsByRoles(roles);
+        userInfoDTO.setRoles(roles.stream().map(Role::getName).toList());
+        userInfoDTO.setPermissions(permissions.stream().map(Permission::getName).toList());
+
         return userInfoDTO;
     }
 
@@ -103,5 +110,16 @@ public class UserServiceImpl implements UserService {
      */
     public List<Permission> getUserPermissionsByRoles(List<Role> roles) {
         return userMapper.findPermissionsByRoles(roles);
+    }
+
+    /**
+     * 根据用户名查询用户
+     *
+     * @param username
+     * @return
+     */
+    @Override
+    public User getUserByName(String username) {
+        return userMapper.getByName(username);
     }
 }

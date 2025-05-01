@@ -2,8 +2,8 @@ zz:
   rabbitmq:
     host: localhost
     port: 5672
-    virtual-host: /zzcoder
-    username: zzcoder
+    virtual-host: zzcoder
+    username: zazhi
     password: 123456
   # mysql
   datasource:
@@ -36,3 +36,11 @@ zz:
     access-key-id: LTAI5tDzEcVJ43Ja7bLWBMyH
     access-key-secret: 9j7zMZfZ7uPJBkpY2yd5D1tyiTREiB
     bucket-name: big-eventzazhiii
+
+logging:
+  level:
+    com:
+      zazhi:
+        mapper: debug
+        service: debug
+        controller: debug

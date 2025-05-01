@@ -95,7 +95,7 @@ public class AdminAuthController {
     @Operation(summary = "添加角色到用户")
     @RequiresAuthentication
     @RequiresPermissions(USER_ADD_ROLE)
-    public Result addRoleToUser(Integer roleId, Integer userId) {
+    public Result addRoleToUser(Integer roleId, Long userId) {
         log.info("添加角色到用户：{}, {}", roleId, userId);
         authService.addRoleToUser(roleId, userId);
         return Result.success();

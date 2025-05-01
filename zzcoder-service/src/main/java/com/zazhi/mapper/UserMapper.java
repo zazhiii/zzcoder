@@ -3,10 +3,7 @@ package com.zazhi.mapper;
 import com.zazhi.entity.Permission;
 import com.zazhi.entity.Role;
 import com.zazhi.entity.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 import java.util.Set;
@@ -33,8 +30,9 @@ public interface UserMapper {
      * 插入新用户
      * @param user
      */
-    @Insert("insert into user(username, password, email, create_time, update_time) " +
-            "values(#{username}, #{password}, #{email}, now(), now())")
+    @Insert("insert into user(username, password, email) " +
+            "values(#{username}, #{password}, #{email})")
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(User user);
 
     /**
@@ -83,4 +81,7 @@ public interface UserMapper {
      * @return
      */
     List<Permission> findPermissionsByRoles(List<Role> roles);
+
+    @Select("select * from user where username = #{username}")
+    User getByName(String username);
 }

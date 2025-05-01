@@ -20,14 +20,18 @@
         </where>
     </update>
 
-    <select id="findPermissionsByRoles">
+    <select id="findPermissionsByRoles" parameterType="java.util.List" resultType="com.zazhi.entity.Permission">
         select p.*
         from permission p
         join role_permission rp on p.id = rp.permission_id
-        where rp.role_id in
-        <foreach collection="roles" item="role" open="(" separator="," close=")">
-            #{role.id}
-        </foreach>
+        <where>
+            <if test="roles != null and roles.size() > 0">
+               AND rp.role_id IN
+               <foreach collection="roles" item="role" open="(" separator="," close=")">
+               #{role.id}
+               </foreach>
+            </if>
+        </where>
     </select>
 
 </mapper>

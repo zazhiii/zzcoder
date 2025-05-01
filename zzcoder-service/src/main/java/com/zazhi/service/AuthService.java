@@ -109,7 +109,7 @@ public interface AuthService {
      * @param roleId
      * @param userId
      */
-    void addRoleToUser(Integer roleId, Integer userId);
+    void addRoleToUser(Integer roleId, Long userId);
 
     /**
      * 获取所有权限

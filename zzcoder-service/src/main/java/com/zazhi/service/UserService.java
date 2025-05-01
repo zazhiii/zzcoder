@@ -49,4 +49,11 @@ public interface UserService {
      * @return
      */
     List<Permission> getUserPermissionsByRoles(List<Role> roles);
+
+    /**
+     * 根据用户名查询用户
+     * @param username
+     * @return
+     */
+    User getUserByName(String username);
 }

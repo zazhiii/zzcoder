@@ -173,10 +173,10 @@ public class AuthServiceImpl implements AuthService {
 
         // 判断邮箱和验证码是否正确
         if(user == null){
-            throw new UserNotFoundException();
+            throw new RuntimeException("用户不存在");
         }
         if(!verificationCodeService.verifyCode(email, code)){
-            throw new VerificationCodeException();
+            throw new RuntimeException("验证码错误");
         }
 
         // 生成token
@@ -216,7 +216,15 @@ public class AuthServiceImpl implements AuthService {
      * @param roleName
      */
     public void addRole(String roleName, String description) {
-        authMapper.addRole(roleName, description);
+        Role role = authMapper.getRoleByName(roleName);
+        if(role != null){
+            throw new RuntimeException("角色已存在");
+        }
+        role = Role.builder()
+                .name(roleName)
+                .description(description)
+                .build();
+        authMapper.addRole(role);
     }
 
     /**
@@ -236,7 +244,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
-     * 获取用户的角色
+     * 获取所有角色
      * @return
      */
     public List<Role> getRoles() {
@@ -257,7 +265,7 @@ public class AuthServiceImpl implements AuthService {
      * @param roleId
      * @param userId
      */
-    public void addRoleToUser(Integer roleId, Integer userId) {
+    public void addRoleToUser(Integer roleId, Long userId) {
        authMapper.addRoleToUser(roleId, userId);
     }
 
@@ -266,6 +274,6 @@ public class AuthServiceImpl implements AuthService {
      * @return
      */
     public List<Permission> getPermissions() {
-        return authMapper.getPermissions();
+        return authMapper.getAllPermissions();
     }
 }

@@ -43,10 +43,10 @@ public class JwtFilter extends AuthenticatingFilter {
 
         if (StringUtils.hasLength(jwtToken)) { // 若当前请求存在 Token，则执行登录操作
             try {
-                log.info("请求路径 {} 开始认证, token: {}", httpRequest.getRequestURI(), jwtToken);
+                log.debug("请求路径 {} 开始认证, token: {}", httpRequest.getRequestURI(), jwtToken);
 //                getSubject(request, response).login(new JwtToken(jwtToken));
                 executeLogin(request, response);
-                log.info("{} 认证成功", httpRequest.getRequestURI());
+                log.debug("{} 认证成功", httpRequest.getRequestURI());
                 return true;
             } catch (Exception e) {
                 log.error("{} 认证失败", httpRequest.getRequestURI());
@@ -82,6 +82,5 @@ public class JwtFilter extends AuthenticatingFilter {
     @Override
     public void afterCompletion(ServletRequest request, ServletResponse response, Exception exception) throws Exception {
         ThreadLocalUtil.remove();
-        log.info("结束请求");
     }
 }

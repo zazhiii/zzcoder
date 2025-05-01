@@ -16,10 +16,6 @@ public class User implements Serializable {
 
     private Long id;
 
-    private String wxUnionid;
-
-    private String wxOpenid;
-
     private String username;
 
     private String password;
