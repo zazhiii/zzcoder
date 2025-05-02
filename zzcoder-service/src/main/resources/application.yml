@@ -3,29 +3,29 @@ spring:
     active: dev
 
   rabbitmq:
-    host: ${zz.rabbitmq.host} #IP
-    port: ${zz.rabbitmq.port} # 端口
-    virtual-host: ${zz.rabbitmq.virtual-host} # 虚拟主机
-    username: ${zz.rabbitmq.username} # 用户名
-    password: ${zz.rabbitmq.password} # 密码
+    host: ${rabbitmq.host} #IP
+    port: ${rabbitmq.port} # 端口
+    virtual-host: ${rabbitmq.virtual-host} # 虚拟主机
+    username: ${rabbitmq.username} # 用户名
+    password: ${rabbitmq.password} # 密码
   # mysql
   datasource:
-    driver-class-name: ${zz.datasource.driver-class-name} #com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${zz.datasource.host}:${zz.datasource.port}/${zz.datasource.database}
-    username: ${zz.datasource.username}
-    password: ${zz.datasource.password}
+    driver-class-name: ${datasource.driver-class-name} #com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${datasource.host}:${datasource.port}/${datasource.database}
+    username: ${datasource.username}
+    password: ${datasource.password}
   # redis
   data:
     redis:
-      host: ${zz.redis.host}
-      port: ${zz.redis.port}
-      password: ${zz.redis.password}
+      host: ${redis.host}
+      port: ${redis.port}
+      password: ${redis.password}
   # mail
   mail:
-    host: ${zz.mail.host}
-    port: ${zz.mail.port}
-    username: ${zz.mail.username}
-    password: ${zz.mail.password}
+    host: ${mail.host}
+    port: ${mail.port}
+    username: ${mail.username}
+    password: ${mail.password}
     properties:
       mail:
         smtp:
@@ -40,28 +40,17 @@ spring:
   freemarker:
     cache: false    #页面不加载缓存，修改即时生效
 
-zz:
-  #  jwt:
-  #    # 设置jwt签名加密时使用的秘钥
-  #    admin-secret-key: zazhi
-  #    # 设置jwt过期时间
-  #    admin-ttl: 7200000
-  #    # 设置前端传递过来的令牌名称
-  #    admin-token-name: token
-  #    user-secret-key: zazhi
-  #    user-ttl: 7200000
-  #    user-token-name: authentication
-  alioss:
-    endpoint: ${zz.alioss.endpoint}
-    access-key-id: ${zz.alioss.access-key-id}
-    access-key-secret: ${zz.alioss.access-key-secret}
-    bucket-name: ${zz.alioss.bucket-name}
+zzcoder:
+  admin:
+    role-name: super-idol
+    user-name: super-idol
+    password: 123456
+    email: 2065707071@qq.com
 
 # mybatis
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
-
 
 # springdoc-openapi项目配置
 springdoc:
@@ -78,7 +67,6 @@ springdoc:
     - group: 'admin'
       paths-to-match: '/**'
       packages-to-scan: com.zazhi.controller.admin
-# knife4j的增强配置，不需要增强可以不配
 knife4j:
   enable: true
   setting:

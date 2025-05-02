@@ -6,8 +6,9 @@ import com.zazhi.entity.Role;
 import com.zazhi.entity.User;
 import com.zazhi.mapper.AuthMapper;
 import com.zazhi.mapper.UserMapper;
+import com.zazhi.properties.AdminProperties;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -17,28 +18,39 @@ import java.util.List;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class AdminInitializer implements ApplicationRunner {
 
-    @Autowired
-    private AuthMapper authMapper;
+    private final AuthMapper authMapper;
 
-    @Autowired
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
+
+    private final AdminProperties adminProp;
 
     @Override
     @Transactional
     public void run(ApplicationArguments args){
-        Role role = authMapper.getRoleByName("super-idol"); // TODO 外部化配置
-        User user = userMapper.getByName("super-idol");
+        String adminRoleName = adminProp.getRoleName();
+        String adminUsername = adminProp.getUsername();
+        String adminPassword = adminProp.getPassword();
+        String adminEmail = adminProp.getEmail();
+
+        Role role = authMapper.getRoleByName(adminRoleName);
+        User user = userMapper.getByName(adminUsername);
 
         if(role != null && user != null){
-            log.info("超级管理员账号已存在, 无需初始化");
+            log.info("""
+                            超级管理员账号已存在
+                            账号：{}
+                            密码：{}""",
+                    adminUsername,
+                    adminPassword);
             return;
         }
 
         if(role == null){
             role = Role.builder()
-                    .name("super-idol")
+                    .name(adminRoleName)
                     .description("超级管理员")
                     .build();
             authMapper.addRole(role);
@@ -46,9 +58,9 @@ public class AdminInitializer implements ApplicationRunner {
 
         if(user == null){
             user = User.builder()
-                    .username("super-idol")
-                    .password(MD5.create().digestHex("super-idol"))
-                    .email("xxxxxxxxx@qq.com")
+                    .username(adminUsername)
+                    .password(MD5.create().digestHex(adminPassword))
+                    .email(adminEmail)
                     .build();
             userMapper.insert(user);
         }
@@ -66,6 +78,11 @@ public class AdminInitializer implements ApplicationRunner {
         if(!authMapper.userHasRole(user.getId(), adminRoleId)){
             authMapper.addRoleToUser(role.getId(), user.getId());
         }
-        log.info("超级管理员账号初始化成功");
+        log.info("""
+                            超级管理员账号初始化成功
+                            账号：{}
+                            密码：{}""",
+                adminUsername,
+                adminPassword);
     }
 }
