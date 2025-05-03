@@ -14,33 +14,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration  
 public class MessageConverterConfig {
 
-
-//    @Bean
-//    public DirectExchange judgeExchange() {
-//        return new DirectExchange("judge_exchange");
-//    }
-//
-//    @Bean
-//    public Queue judgeTaskQueue() {
-//        return new Queue("judge_task_queue");
-//    }
-//
-//    @Bean
-//    public Queue judgeResultQueue() {
-//        return new Queue("judge_result_queue");
-//    }
-//
-//    @Bean
-//    public Binding bindJudgeTaskQueue(DirectExchange judgeExchange, Queue judgeTaskQueue) {
-//        return BindingBuilder.bind(judgeTaskQueue).to(judgeExchange).with("judge_task_routing_key");
-//    }
-//
-//    @Bean
-//    public Binding bindJudgeResultQueue(DirectExchange judgeExchange, Queue judgeResultQueue) {
-//        return BindingBuilder.bind(judgeResultQueue).to(judgeExchange).with("judge_result_routing_key");
-//    }
-
-
     @Bean  
     public MessageConverter messageConverter(){  
         // 1.定义消息转换器  

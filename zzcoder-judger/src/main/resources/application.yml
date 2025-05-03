@@ -19,3 +19,10 @@ spring:
 docker:
   host: tcp://localhost:2375
   api-version: 1.41
+
+judger:
+  image-name: judger
+  container-count: 17 # 容器数量
+  container-name-prefix: judger_container_
+  container-memory: 256 # MB
+  container-work-dir: /var/tmp/zzcoder/containers/

@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ExecutionStats {
-    private Integer executionTime; // 执行时间 (毫秒)
-    private Integer memoryUsage;   // 内存使用 (字节)
+    private Integer timeUsed; // 执行时间 (毫秒)
+    private Integer memoryUsed;   // 内存使用 (字节)
 }
