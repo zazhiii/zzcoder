@@ -25,7 +25,6 @@ public class SubmissionPageVO {
     private String title;// 题目标题
     private String language;// 语言
     private String status;// 状态 (PENDING JUDGING COMPLETED)
-    private String result;// 结果 (ACCEPTED WRONG_ANSWER TIME_LIMIT_EXCEEDED MEMORY_LIMIT_EXCEEDED RUNTIME_ERROR COMPILE_ERROR)
     private Integer timeUsed;// 时间
     private Integer memoryUsed;// 内存
 }

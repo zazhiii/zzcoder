@@ -55,5 +55,5 @@ public class JudgeTask {
     // 批量测试用例
     private List<TestCase> testCases;
 
-
+    private Boolean fullJudge; // 是否全量评测
 }

@@ -12,6 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.ByteArrayOutputStream;
 import java.util.concurrent.*;
 
+import static com.zazhi.judger.common.constant.JudgeStatusInfo.SE_INFO;
+import static com.zazhi.judger.common.constant.JudgeStatusInfo.TLE_INFO;
+
 @Data
 @Slf4j
 public class DockerContainer {
@@ -53,7 +56,7 @@ public class DockerContainer {
     /**
      * 创建执行命令
      *
-     * @param cmd         命令
+     * @param cmd 命令
      * @return 执行命令的响应
      */
     public ExecCreateCmdResponse createCmd(String... cmd) {
@@ -84,32 +87,46 @@ public class DockerContainer {
      * @param execResponse 创建命令的结果
      * @param timeout      超时时间 (毫秒)
      */
-    public void execCmdWithTimeout(ExecCreateCmdResponse execResponse, int timeout, ByteArrayOutputStream stdout, ByteArrayOutputStream stderr) {
-        // 使用 ExecutorService 实现超时功能
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<?> future = executor.submit(() -> {
-            try {
-                dockerClient.execStartCmd(execResponse.getId())
-                        .exec(new ExecStartResultCallback(stdout, stderr))
-                        .awaitCompletion();
-            } catch (Exception e) {
-                throw new SystemException("Execution failed", e);
-            }
-        });
-        // 设置超时时间
+    public void execCmdWithTimeout(
+            ExecCreateCmdResponse execResponse,
+            int timeout,
+            ByteArrayOutputStream stdout,
+            ByteArrayOutputStream stderr){
+
         try {
-            future.get(timeout, TimeUnit.MILLISECONDS);
-            log.info("Command completed within timeout.");
-        } catch (TimeoutException e) { // 超时会抛出TimeoutException
-            future.cancel(true); // 超时中断任务
-            log.error("Command timed out!");
-            throw new TimeLimitExceededException();
-        } catch (Exception e) {
-            log.error("Command execution failed: {}", e.getMessage());
-            throw new SystemException("Command execution failed", e);
-        } finally {
-            executor.shutdownNow();
+            boolean awaited = dockerClient.execStartCmd(execResponse.getId())
+                    .exec(new ExecStartResultCallback(stdout, stderr))
+                    .awaitCompletion(timeout, TimeUnit.MILLISECONDS);
+
+            if(!awaited) {
+                throw new TimeLimitExceededException(TLE_INFO);
+            }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
+
+//        // 使用 ExecutorService 实现超时功能
+//        ExecutorService executor = Executors.newSingleThreadExecutor();
+//
+//        Future<?> future = executor.submit(() -> {
+//            try {
+//
+//            } catch (Exception e) {
+//                throw new SystemException(SE_INFO + e.getMessage());
+//            }
+//        });
+//        try {
+//        // 设置超时时间
+//            future.get(timeout, TimeUnit.MILLISECONDS);
+//        } catch (TimeoutException e) { // 超时会抛出TimeoutException
+//            future.cancel(true); // 超时中断任务
+//            throw new TimeLimitExceededException(TLE_INFO);
+//        } catch (Exception e) {
+//            log.error("Command execution failed: {}", e.getMessage());
+//            throw new SystemException(SE_INFO + e.getMessage());
+//        } finally {
+//            executor.shutdownNow();
+//        }
     }
 
     /**

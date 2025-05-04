@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * @author zazhi
@@ -25,7 +26,9 @@ public class Submission {
     private String code; // 代码
     private String language;// 语言
     private String status;// 状态 (PENDING JUDGING COMPLETED)
-    private String result;// 结果 (ACCEPTED WRONG_ANSWER TIME_LIMIT_EXCEEDED MEMORY_LIMIT_EXCEEDED RUNTIME_ERROR COMPILE_ERROR)
+//    private String result;// 结果 (ACCEPTED WRONG_ANSWER TIME_LIMIT_EXCEEDED MEMORY_LIMIT_EXCEEDED RUNTIME_ERROR COMPILE_ERROR)
+    private List<TestCaseResult> testCaseResults; // 测试用例结果
+    private Boolean fullJudge; // 是否全量评测
     private String errorMessage;// 错误信息
     private Integer timeUsed;// 时间
     private Integer memoryUsed;// 内存

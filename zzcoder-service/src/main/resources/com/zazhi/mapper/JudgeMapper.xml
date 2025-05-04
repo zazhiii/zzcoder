@@ -37,9 +37,9 @@
             <if test="status != null and status != ''">
                 status = #{status},
             </if>
-            <if test="result != null and result != ''">
-                result = #{result},
-            </if>
+<!--            <if test="result != null and result != ''">-->
+<!--                result = #{result},-->
+<!--            </if>-->
             <if test="timeUsed != null and timeUsed != 0">
                 time_used = #{timeUsed},
             </if>

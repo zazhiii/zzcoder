@@ -1,6 +1,6 @@
-package com.zazhi.judger.common.pojo;
+package com.zazhi.entity;
 
-import com.zazhi.judger.common.enums.JudgeStatus;
+import com.zazhi.enums.JudgeStatus;
 import lombok.Data;
 
 @Data

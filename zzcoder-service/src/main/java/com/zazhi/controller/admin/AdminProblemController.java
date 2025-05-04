@@ -21,7 +21,6 @@ import static com.zazhi.constant.PermissionConstants.*;
  */
 @RestController
 @RequestMapping("/api/admin/problem")
-//@Validated
 @Slf4j
 @Tag(name = "题目管理")
 public class AdminProblemController {
@@ -50,15 +49,15 @@ public class AdminProblemController {
     }
 
 //    @DeleteMapping()
-//    @Operation(summary = "删除题目") // TODO 权限管理
-//    // TODO 删除题目和标签、测试用例、提交记录、...的关联
+//    @Operation(summary = "删除题目")
+//    删除题目和标签、测试用例、提交记录、...的关联
 //    public Result delete(Integer id){
 //        log.info("删除题目：{}", id);
 //        problemService.deleteProblemWithTags(id);
 //        return Result.success();
 //    }
 
-    @PostMapping("/add-tag-to-problem")
+    @PutMapping("/add-tag-to-problem")
     @Operation(summary = "为题目添加标签")
     @RequiresAuthentication
     @RequiresPermissions(PROBLEM_ADD_TAG)
