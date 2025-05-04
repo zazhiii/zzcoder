@@ -3,6 +3,7 @@ package com.zazhi.judger.service;
 import com.github.dockerjava.api.command.ExecCreateCmdResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.exception.DockerException;
+import com.zazhi.judger.common.enums.JudgeStatus;
 import com.zazhi.judger.common.exception.*;
 import com.zazhi.judger.common.pojo.*;
 import com.zazhi.judger.common.utils.MessageQueueUtil;
@@ -16,12 +17,12 @@ import org.springframework.stereotype.Service;
 import javax.sound.sampled.AudioFormat;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
-import static com.zazhi.judger.common.constant.JudgeStatus.*;
 import static com.zazhi.judger.common.constant.JudgeStatusInfo.*;
-
 
 /**
  * @author zazhi
@@ -45,172 +46,276 @@ public class JavaSandBox {
      *
      * @param task 任务
      */
+//    public void processTask(JudgeTask task) {
+//        log.info("开始处理评测任务, 任务ID: {}", task.getTaskId());
+//
+//        // 0. 创建评测结果对象
+//        JudgeResult result = new JudgeResult();
+//        result.setTaskId(task.getTaskId());
+//        result.setStatus(JudgeStatus.JUDGING.getName());
+//        messageQueueUtil.sendJudgeResult(result); // 更新状态
+//
+//        DockerContainer container = null;
+//        try {
+//            // 获取一个空闲的容器
+//            container = dockerContainerPool.acquireContainer();
+//            // 工作目录
+//            String workingDir = container.getWorkingDir();
+//            File workingDirectory = new File(workingDir);
+//            // 宿主机的工作目录绝对路径
+//            String workPath = workingDirectory.getAbsolutePath();
+//            // 将用户的代码保存到文件中
+//            File codeFile = new File(workPath, "Main.java"); // TODO 抽取常量
+//            FileUtils.writeStringToFile(codeFile, task.getCode(), StandardCharsets.UTF_8);
+//
+//            compileCode(container, "/bin/sh", "-c", "javac Main.java"); // TODO 抽取常量
+//
+//            // ==============后续可以抽取
+//
+//            List<TestCase> testCases = task.getTestCases();
+//
+//            for (TestCase testCase : testCases) {
+//
+//                log.info("测试用例: {}", testCase);
+//                // 将测试用例保存到文件中
+//                File inputFile = new File(workPath, "input.txt");
+//                File expectedOutput = new File(workPath, "expected_output.txt");
+//                FileUtils.writeStringToFile(inputFile, testCase.getInput(), "UTF-8");
+//                FileUtils.writeStringToFile(expectedOutput, testCase.getExpectedOutput(), "UTF-8");
+//                // 根据编程语言和任务配置创建 Docker 容器并运行代码
+//                String[] cmd = {"/usr/bin/time", "-v", "-o", "/app/time_output.txt", "/bin/sh", "-c", "java Main < /app/input.txt > /app/output.txt"};
+//
+//                runCode(task.getTimeLimit(), container, cmd);
+//
+//                // 从time_output.txt解析运行情况
+//                String timeOutput = FileUtils.readFileToString(new File(workPath + "/time_output.txt"), "UTF-8");
+//                ExecutionStats executionStats = parseTimeOutput(timeOutput);
+//
+//                // 是否超内存
+//                if(executionStats.getMemoryUsed() > task.getMemoryLimit()){
+//                    throw new MemoryLimitExceededException(MLE_INFO);
+//                }
+//
+//                // 更新评测结果 (时间和内存的最大值)
+//                if (executionStats.getTimeUsed() > result.getTimeUsed()) {
+//                    result.setTimeUsed(executionStats.getTimeUsed());
+//                }
+//                if (executionStats.getMemoryUsed() > result.getMemoryUsed()) {
+//                    result.setMemoryUsed(executionStats.getMemoryUsed());
+//                }
+//
+//                // 判断输出是否正确(output.txt 和 expected_output.txt)
+//                File output = new File(workPath + "/output.txt");
+//                String outputContent = FileUtils.readFileToString(output, "UTF-8");
+//                String expectedOutputContent = FileUtils.readFileToString(expectedOutput, "UTF-8");
+//                if (!outputContent.trim().equals(expectedOutputContent.trim())) {
+//                    throw new WrongAnswerException(WA_INFO);
+//                }
+//            }
+//            result.setStatus(JudgeStatus.ACCEPTED.getName());
+//        } catch (RuntimeErrorException e) {
+//            result.setStatus(JudgeStatus.RUNTIME_ERROR.getName());
+//            result.setErrorMessage(e.getDetails());
+//        } catch (CompilationException e) {
+//            result.setStatus(JudgeStatus.COMPILE_ERROR.getName());
+//            result.setErrorMessage(e.getMessage());
+//        } catch (TimeLimitExceededException e) {
+//            result.setStatus(JudgeStatus.TIME_LIMIT_EXCEEDED.getName());
+//            result.setErrorMessage(e.getDetails());
+//        } catch (MemoryLimitExceededException e) {
+//            result.setStatus(JudgeStatus.MEMORY_LIMIT_EXCEEDED.getName());
+//            result.setErrorMessage(e.getDetails());
+//        } catch (WrongAnswerException e) {
+//            result.setStatus(JudgeStatus.WRONG_ANSWER.getName());
+//            result.setErrorMessage(e.getMessage());
+//        } catch (Exception e) {
+//            result.setStatus(JudgeStatus.SYSTEM_ERROR.getName());
+//            result.setErrorMessage(e.getMessage());
+//        } finally {
+//            messageQueueUtil.sendJudgeResult(result); // 更新状态
+//            log.info("评测结果: {}", result);
+//            // 释放容器
+//            if (container != null) {
+//                dockerContainerPool.releaseContainer(container);
+//            }
+//        }
+//    }
+
     public void processTask(JudgeTask task) {
         log.info("开始处理评测任务, 任务ID: {}", task.getTaskId());
 
         // 0. 创建评测结果对象
         JudgeResult result = new JudgeResult();
         result.setTaskId(task.getTaskId());
-        result.setStatus(JUDGING);
+        result.setStatus(JudgeStatus.JUDGING.getName());
         messageQueueUtil.sendJudgeResult(result); // 更新状态
 
-        DockerContainer container = null;
         try {
-            // 获取一个空闲的容器
-            container = dockerContainerPool.acquireContainer();
-            // 工作目录
-            String workingDir = container.getWorkingDir();
-            File workingDirectory = new File(workingDir);
-            // 宿主机的工作目录绝对路径
-            String workingDirectoryAbsolutePath = workingDirectory.getAbsolutePath();
-            // 将用户的代码保存到文件中
-            File codeFile = new File(workingDirectoryAbsolutePath, "Main.java"); // TODO 抽取常量
-            FileUtils.writeStringToFile(codeFile, task.getCode(), StandardCharsets.UTF_8);
+            DockerContainer container = dockerContainerPool.acquireContainer();
+
+            saveCode(task.getCode(), container.getWorkingDir());
 
             compileCode(container, "/bin/sh", "-c", "javac Main.java"); // TODO 抽取常量
 
-
-
-            List<TestCase> testCases = task.getTestCases();
-
-            for (TestCase testCase : testCases) {
-                log.info("测试用例: {}", testCase);
-                // 将测试用例保存到文件中
-                File inputFile = new File(workingDirectoryAbsolutePath, "input.txt");
-                File expectedOutput = new File(workingDirectoryAbsolutePath, "expected_output.txt");
-                FileUtils.writeStringToFile(inputFile, testCase.getInput(), "UTF-8");
-                FileUtils.writeStringToFile(expectedOutput, testCase.getExpectedOutput(), "UTF-8");
-                // 根据编程语言和任务配置创建 Docker 容器并运行代码
-                String[] cmd = {"/usr/bin/time", "-v", "-o", "/app/time_output.txt", "/bin/sh", "-c", "java Main < /app/input.txt > /app/output.txt"};
-
-                runCode(task.getTimeLimit(), container, cmd);
-
-                // 从time_output.txt解析运行情况
-                String timeOutput = FileUtils.readFileToString(new File(workingDirectoryAbsolutePath + "/time_output.txt"), "UTF-8");
-                ExecutionStats executionStats = parseTimeOutput(timeOutput);
-
-                // 是否超内存
-                if(executionStats.getMemoryUsed() > task.getMemoryLimit()){
-                    throw new MemoryLimitExceededException(MLE_INFO);
-                }
-
-                // 更新评测结果 (时间和内存的最大值)
-                if (executionStats.getTimeUsed() > result.getTimeUsed()) {
-                    result.setTimeUsed(executionStats.getTimeUsed());
-                }
-                if (executionStats.getMemoryUsed() > result.getMemoryUsed()) {
-                    result.setMemoryUsed(executionStats.getMemoryUsed());
-                }
-
-                // 判断输出是否正确(output.txt 和 expected_output.txt)
-                File output = new File(workingDirectoryAbsolutePath + "/output.txt");
-                String outputContent = FileUtils.readFileToString(output, "UTF-8");
-                String expectedOutputContent = FileUtils.readFileToString(expectedOutput, "UTF-8");
-                if (!outputContent.trim().equals(expectedOutputContent.trim())) {
-                    throw new WrongAnswerException(WA_INFO);
-                }
+            if(Boolean.TRUE.equals(task.getFullJudge())){
+                shortCircuitJudge(task, task.getTestCases(), result, container);
+            }else{
+                fullJudge(task, task.getTestCases(), result, container);
             }
-            result.setStatus(ACCEPTED);
-        } catch (RuntimeErrorException e) {
-            result.setStatus(RUNTIME_ERROR);
-            result.setErrorMessage(e.getDetails());
+            dockerContainerPool.releaseContainer(container);
         } catch (CompilationException e) {
-            result.setStatus(COMPILE_ERROR);
+            result.setStatus(JudgeStatus.COMPILE_ERROR.getName());
             result.setErrorMessage(e.getMessage());
-        } catch (TimeLimitExceededException e) {
-            result.setStatus(TIME_LIMIT_EXCEEDED);
-            result.setErrorMessage(e.getDetails());
-        } catch (MemoryLimitExceededException e) {
-            result.setStatus(MEMORY_LIMIT_EXCEEDED);
-            result.setErrorMessage(e.getDetails());
-        } catch (WrongAnswerException e) {
-            result.setStatus(WRONG_ANSWER);
-            result.setErrorMessage(e.getMessage());
-        } catch (Exception e) {
-            result.setStatus(SYSTEM_ERROR);
+        } catch (IOException | InterruptedException e){
+            result.setStatus(JudgeStatus.SYSTEM_ERROR.getName());
             result.setErrorMessage(e.getMessage());
         } finally {
             messageQueueUtil.sendJudgeResult(result); // 更新状态
             log.info("评测结果: {}", result);
-            // 释放容器
-            if (container != null) {
-                dockerContainerPool.releaseContainer(container);
-            }
         }
     }
 
-    public void shortCircuitJudge(List<TestCase> testCases){
-        try {
-            for(TestCase testCase : testCases){
+    /**
+     * 将用户的代码保存到文件中
+     * @param code 用户的代码
+     * @param workPath 工作目录
+     * @throws IOException
+     */
+    public void saveCode(String code, String workPath) throws IOException {
+        // 将用户的代码保存到文件中
+        File codeFile = new File(workPath, "Main.java"); // TODO 抽取常量
+        FileUtils.writeStringToFile(codeFile, code, StandardCharsets.UTF_8);
+    }
 
+    /**
+     *  短路模式测评, 单个测试用例失败后直接返回
+     * @param task
+     * @param testCases
+     * @param result
+     * @param container
+     */
+    public void shortCircuitJudge(JudgeTask task, List<TestCase> testCases, JudgeResult result, DockerContainer container) {
+        int testCaseIndex = 1;
+        for (TestCase testCase : testCases) {
+
+            TestCaseResult testCaseResult = runSingleTestCase(task.getTimeLimit(), task.getMemoryLimit(), testCase, testCaseIndex, container.getWorkingDir(), container);
+
+            // 若一个 testcase 没有 AC 则设置最终状态返回
+            if (!testCaseResult.getStatus().equals(JudgeStatus.ACCEPTED)){
+                result.setStatus(testCaseResult.getStatus().getName());
+                result.setErrorMessage(testCaseResult.getErrorMessage());
+                return ;
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            // 更新评测结果 (时间和内存的最大值)
+            if (testCaseResult.getTimeUsed() > result.getTimeUsed()) {
+                result.setTimeUsed(testCaseResult.getTimeUsed());
+            }
+            if (testCaseResult.getMemoryUsed() > result.getMemoryUsed()) {
+                result.setMemoryUsed(testCaseResult.getMemoryUsed());
+            }
+            testCaseIndex++;
+        }
+        result.setStatus(JudgeStatus.ACCEPTED.getName());
+    }
+
+    /**
+     * 全量评测, 运行所有测试用例
+     * @param task
+     * @param testCases
+     * @param result
+     * @param container
+     */
+    public void fullJudge(JudgeTask task, List<TestCase> testCases, JudgeResult result, DockerContainer container) {
+        int testCaseIndex = 1;
+        List<TestCaseResult> testCaseResults = new ArrayList<>();
+        boolean AC = true;
+        for (TestCase testCase : testCases) {
+            TestCaseResult testCaseResult = runSingleTestCase(task.getTimeLimit(), task.getMemoryLimit(), testCase, testCaseIndex, container.getWorkingDir(), container);
+
+            // 若一个 testcase 没有 AC 则设置最终状态 但是继续运行其他测试用例
+            if (!testCaseResult.getStatus().equals(JudgeStatus.ACCEPTED)){
+                result.setStatus(testCaseResult.getStatus().getName());
+                result.setErrorMessage(testCaseResult.getErrorMessage());
+                AC = false;
+            }
+
+            if (testCaseResult.getTimeUsed() > result.getTimeUsed()) {
+                result.setTimeUsed(testCaseResult.getTimeUsed());
+            }
+            if (testCaseResult.getMemoryUsed() > result.getMemoryUsed()) {
+                result.setMemoryUsed(testCaseResult.getMemoryUsed());
+            }
+            testCaseIndex++;
+            testCaseResults.add(testCaseResult);
+        }
+        result.setTestCaseResults(testCaseResults);
+        if(AC) {
+            result.setStatus(JudgeStatus.ACCEPTED.getName());
         }
     }
 
-    public void fullJudge(List<TestCase> testCases){
-        for(TestCase testCase : testCases){
-            try{
+    /**
+     * 运行单个测试用例
+     * @param timeLimit
+     * @param memoryLimit
+     * @param testCase
+     * @param index
+     * @param workPath
+     * @param container
+     * @return
+     */
+    public TestCaseResult runSingleTestCase(Integer timeLimit, Integer memoryLimit, TestCase testCase, Integer index, String workPath, DockerContainer container){
+        TestCaseResult testCaseResult = new TestCaseResult();
 
-            }catch (Exception e){
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    public void runSingleTestCase(JudgeTask task, TestCase testCase, Integer index, String workPath, DockerContainer container) {
-        TestCaseResult result = new TestCaseResult();
-        result.setIndex(index);
+        testCaseResult.setIndex(index);
         // 将测试用例保存到文件中
         File inputFile = new File(workPath, "input.txt");
         File expectedOutput = new File(workPath, "expected_output.txt");
         try {
-            FileUtils.writeStringToFile(inputFile, testCase.getInput(), "UTF-8");
-            FileUtils.writeStringToFile(expectedOutput, testCase.getExpectedOutput(), "UTF-8");
+            FileUtils.writeStringToFile(inputFile, testCase.getInput(), StandardCharsets.UTF_8);
+            FileUtils.writeStringToFile(expectedOutput, testCase.getExpectedOutput(), StandardCharsets.UTF_8);
             // 根据编程语言和任务配置创建 Docker 容器并运行代码
             String[] cmd = {"/usr/bin/time", "-v", "-o", "/app/time_output.txt", "/bin/sh", "-c", "java Main < /app/input.txt > /app/output.txt"};
 
-            runCode(task.getTimeLimit(), container, cmd);
+            runCode(timeLimit, container, cmd);
 
             // 从time_output.txt解析运行情况
             String timeOutput = FileUtils.readFileToString(new File(workPath + "/time_output.txt"), "UTF-8");
             ExecutionStats executionStats = parseTimeOutput(timeOutput);
 
-            if(executionStats.getMemoryUsed() > task.getMemoryLimit()){
+            if (executionStats.getMemoryUsed() > memoryLimit) {
                 throw new MemoryLimitExceededException(MLE_INFO);
             }
 
-            result.setTimeUsed(executionStats.getTimeUsed());
-            result.setMemoryUsed(executionStats.getMemoryUsed());
+            testCaseResult.setTimeUsed(executionStats.getTimeUsed());
+            testCaseResult.setMemoryUsed(executionStats.getMemoryUsed());
 
             // 判断输出是否正确(output.txt 和 expected_output.txt)
             File output = new File(workPath + "/output.txt");
-            String outputContent = FileUtils.readFileToString(output, "UTF-8");
-            String expectedOutputContent = FileUtils.readFileToString(expectedOutput, "UTF-8");
+            String outputContent = FileUtils.readFileToString(output, StandardCharsets.UTF_8);
+            String expectedOutputContent = FileUtils.readFileToString(expectedOutput, StandardCharsets.UTF_8);
             if (!outputContent.trim().equals(expectedOutputContent.trim())) {
                 throw new WrongAnswerException(WA_INFO);
             }
-            result.setStatus(ACCEPTED);
+            // 没有异常则设置为正确
+            testCaseResult.setStatus(JudgeStatus.ACCEPTED);
         } catch (RuntimeErrorException e) {
-            result.setStatus(RUNTIME_ERROR);
-            result.setErrorMessage(e.getMessage());
-        } catch (CompilationException e) {
-            result.setStatus(COMPILE_ERROR);
-            result.setErrorMessage(e.getMessage());
+            testCaseResult.setStatus(JudgeStatus.RUNTIME_ERROR);
+            testCaseResult.setErrorMessage(e.getDetails());
         } catch (TimeLimitExceededException e) {
-            result.setStatus(TIME_LIMIT_EXCEEDED);
-            result.setErrorMessage(e.getDetails());
+            testCaseResult.setStatus(JudgeStatus.TIME_LIMIT_EXCEEDED);
+            testCaseResult.setErrorMessage(e.getDetails());
         } catch (MemoryLimitExceededException e) {
-            result.setStatus(MEMORY_LIMIT_EXCEEDED);
-            result.setErrorMessage(e.getDetails());
+            testCaseResult.setStatus(JudgeStatus.MEMORY_LIMIT_EXCEEDED);
+            testCaseResult.setErrorMessage(e.getDetails());
         } catch (WrongAnswerException e) {
-            result.setStatus(WRONG_ANSWER);
-            result.setErrorMessage(e.getMessage());
+            testCaseResult.setStatus(JudgeStatus.WRONG_ANSWER);
+            testCaseResult.setErrorMessage(e.getMessage());
         } catch (Exception e) {
-            result.setStatus(SYSTEM_ERROR);
-            result.setErrorMessage(e.getMessage());
+            testCaseResult.setStatus(JudgeStatus.SYSTEM_ERROR);
+            testCaseResult.setErrorMessage(e.getMessage());
         }
+        return testCaseResult;
     }
 
     /**
@@ -247,9 +352,7 @@ public class JavaSandBox {
      * @param cmd             命令
      * @return
      */
-    public void runCode(int timeLimit, DockerContainer dockerContainer, String... cmd) {
-        // 获取容器信息
-        InspectContainerResponse inspectResp = dockerContainer.inspectContainer();
+    public void runCode(int timeLimit, DockerContainer dockerContainer, String... cmd){
         // 创建命令
         ExecCreateCmdResponse createCmdResp = dockerContainer.createCmd(cmd);
         // 捕获输出
@@ -259,14 +362,14 @@ public class JavaSandBox {
         dockerContainer.execCmdWithTimeout(createCmdResp, timeLimit, stdOut, stdErr);
 
         // 输出结果 解析时间和内存 使用 /usr/bin/time -v 命令(需要安装time, 信息默认输出到stderr, 也可以重定向到文件)
-        String executionOutput = stdOut.toString(StandardCharsets.UTF_8);
+//        String executionOutput = stdOut.toString(StandardCharsets.UTF_8);
         String errorOutput = stdErr.toString(StandardCharsets.UTF_8);
 
         if (!errorOutput.isEmpty()) {
             throw new RuntimeErrorException(RE_INFO + errorOutput);
         }
         // 是否超内存
-        if(Boolean.TRUE.equals(inspectResp.getState().getOOMKilled())){
+        if(Boolean.TRUE.equals(dockerContainer.inspectContainer().getState().getOOMKilled())){
             throw new MemoryLimitExceededException(MLE_INFO);
         }
     }
@@ -281,12 +384,12 @@ public class JavaSandBox {
         ExecutionStats executionStats = new ExecutionStats();
         String[] lines = timeOutput.split("\n");
         int executionTime = 0;
-        int memoryUsage = 0;
+        double memoryUsage = 0;
         for (String line : lines) {
             if (line.contains("Elapsed (wall clock) time")) {
                 executionTime = (int) (Double.parseDouble(line.split(": ")[1].split(":")[1]) * 1000);
             } else if (line.contains("Maximum resident set size")) {
-                memoryUsage = Integer.parseInt(line.split(": ")[1]);
+                memoryUsage = Double.parseDouble(line.split(": ")[1]) / 1024; // 转换为 MB
             }
         }
         return new ExecutionStats(executionTime, memoryUsage);

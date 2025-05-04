@@ -37,10 +37,6 @@ public class DockerContainerPoolConfig {
             String workDirPath = judgerProp.getContainerWorkDir() + containerName;
             File workDir = new File(workDirPath);
             workDir.mkdir();
-//            if(!workDir.mkdir()){
-//                log.error("创建工作目录失败: {}", workDirPath);
-//                continue;
-//            }
             // 宿主机的临时目录绝对路径
             String workAbsPath = workDir.getAbsolutePath();
             String image = judgerProp.getImageName();

@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ExecutionStats {
     private Integer timeUsed; // 执行时间 (毫秒)
-    private Integer memoryUsed;   // 内存使用 (字节)
+    private Double memoryUsed;   // 内存使用 (MB)
 }

@@ -22,7 +22,7 @@ docker:
 
 judger:
   image-name: judger
-  container-count: 17 # 容器数量
+  container-count: 1 # 容器数量
   container-name-prefix: judger_container_
   container-memory: 256 # MB
   container-work-dir: /var/tmp/zzcoder/containers/
