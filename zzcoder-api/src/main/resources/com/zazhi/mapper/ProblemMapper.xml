@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zazhi.mapper.ProblemMapper">
+
+    <!-- 插入题目 -->
+    <insert id="insert" parameterType="com.zazhi.pojo.entity.Problem">
+        INSERT INTO `problem` (
+        `problem_id`,
+        `title`,
+        `time_limit`,
+        `memory_limit`,
+        `stack_limit`,
+        `description`,
+        `input_description`,
+        `output_description`,
+        `source`,
+        `difficulty`,
+        `hint`,
+        `status`,
+        `create_user`,
+        `update_user`
+        ) VALUES (
+        #{problemId},
+        #{title},
+        #{timeLimit},
+        #{memoryLimit},
+        #{stackLimit},
+        #{description},
+        #{inputDescription},
+        #{outputDescription},
+        #{source},
+        #{difficulty},
+        #{hint},
+        #{status},
+        #{createUser},
+        #{updateUser}
+        )
+    </insert>
+
+    <resultMap id="pageMap" type="com.zazhi.pojo.vo.ProblemVO">
+        <id column="id" property="id"/>
+        <result column="problem_id" property="problemId"/>
+        <result column="title" property="title"/>
+        <result column="difficulty" property="difficulty"/>
+        <collection property="tags" ofType="com.zazhi.pojo.entity.ProblemTag">
+            <id column="tid" property="id"/>
+            <result column="name" property="name"/>
+        </collection>
+    </resultMap>
+    <select id="page" parameterType="com.zazhi.pojo.dto.ProblemQueryDTO" resultMap="pageMap">
+        select
+        p.id,
+        p.problem_id,
+        p.title,
+        p.difficulty,
+        pt.tid,
+        t.name
+        from problem p
+        LEFT JOIN problem_tag pt ON p.id = pt.pid
+        LEFT JOIN tag t ON pt.tid = t.id
+        <where>
+            <if test="keyword != null and keyword.trim() != ''">
+                AND (
+                title LIKE CONCAT('%', #{keyword}, '%')
+                OR
+                problem_id LIKE CONCAT('%', #{keyword}, '%')
+                )
+            </if>
+            <if test="tagId != null and tagId.size() > 0">
+                AND p.id IN
+                (
+                SELECT pid FROM problem_tag
+                WHERE tid IN
+                <foreach item="tid" collection="tagId" open="(" separator="," close=")">
+                    #{tid}
+                </foreach>
+                )
+            </if>
+            <if test="difficulty != null">
+                AND difficulty = #{difficulty}
+            </if>
+            <if test="source != null and source.trim() != ''">
+                AND source = #{source}
+            </if>
+        </where>
+    </select>
+
+    <update id="update" parameterType="com.zazhi.pojo.entity.Problem">
+        UPDATE problem
+        <set>
+            <if test="problemId != null">
+                problem_id = #{problemId},
+            </if>
+            <if test="title != null">
+                title = #{title},
+            </if>
+            <if test="timeLimit != null">
+                time_limit = #{timeLimit},
+            </if>
+            <if test="memoryLimit != null">
+                memory_limit = #{memoryLimit},
+            </if>
+            <if test="stackLimit != null">
+                stack_limit = #{stackLimit},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="inputDescription != null">
+                input_description = #{inputDescription},
+            </if>
+            <if test="outputDescription != null">
+                output_description = #{outputDescription},
+            </if>
+            <if test="source != null">
+                source = #{source},
+            </if>
+            <if test="difficulty != null">
+                difficulty = #{difficulty},
+            </if>
+            <if test="hint != null">
+                hint = #{hint},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="updateUser != null">
+                update_user = #{updateUser},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <resultMap id="getProblemInfoByIdMap" type="com.zazhi.pojo.vo.ProblemInfoVO">
+        <id column="id" property="id"/>
+        <result column="problem_id" property="problemId"/>
+        <result column="title" property="title"/>
+        <result column="time_limit" property="timeLimit"/>
+        <result column="memory_limit" property="memoryLimit"/>
+        <result column="stack_limit" property="stackLimit"/>
+        <result column="description" property="description"/>
+        <result column="input_description" property="inputDescription"/>
+        <result column="output_description" property="outputDescription"/>
+        <result column="source" property="source"/>
+        <result column="difficulty" property="difficulty"/>
+        <result column="hint" property="hint"/>
+        <result column="status" property="status"/>
+        <result column="create_user" property="createUser"/>
+        <collection property="tags" ofType="com.zazhi.pojo.entity.ProblemTag">
+            <id column="tid" property="id"/>
+            <result column="name" property="name"/>
+        </collection>
+        <collection property="examples" ofType="com.zazhi.pojo.entity.TestCase">
+            <id column="test_case_id" property="id"/>
+            <result column="input" property="input"/>
+            <result column="expected_output" property="expectedOutput"/>
+        </collection>
+    </resultMap>
+    <select id="getProblemInfoById" resultMap="getProblemInfoByIdMap">
+        SELECT
+        <!-- 题目基本信息 -->
+        p.*,
+        <!-- 标签 -->
+        pt.tid AS tid,
+        t.name AS name,
+        <!-- 样例测试数据 -->
+        tc.id AS test_case_id,
+        tc.input AS input,
+        tc.expected_output AS expected_output
+
+        FROM problem p
+        LEFT JOIN problem_tag pt ON p.id = pt.pid
+        LEFT JOIN tag t ON pt.tid = t.id
+        LEFT JOIN test_case tc ON (p.id = tc.problem_id AND tc.is_sample = 1)
+        WHERE p.id = #{id}
+    </select>
+
+</mapper>

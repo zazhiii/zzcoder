@@ -16,9 +16,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>zzcoder-service</module>
-        <module>zzcoder-common</module>
-        <module>zzcoder-pojo</module>
+        <module>zzcoder-api</module>
     </modules>
 
     <properties>

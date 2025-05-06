@@ -56,8 +56,6 @@ CREATE TABLE `role_permission` (
     PRIMARY KEY (`role_id`, `permission_id`)
 ) COMMENT='角色-权限关联表';
 
-
-
 -- ===============
 -- === 题目模块 ===
 -- ===============
@@ -86,16 +84,27 @@ create table problem
     PRIMARY KEY (`id`)
 ) comment '题目表';
 
--- 题目-题单关联表
-drop table if exists problem_problem_set;
-create table problem_problem_set
-(
-    id int auto_increment primary key comment '主键，自增长',
-    problem_set_id int not null comment '题单ID',
-    problem_id     int not null comment '题目ID',
-    create_time timestamp default CURRENT_TIMESTAMP null comment '创建时间',
-    update_time timestamp default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '更新时间'
-) comment '题目-题单关联表';
+-- 题目标签表
+CREATE TABLE `tag` (
+	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
+	`name` VARCHAR(32) UNIQUE COMMENT '标签名字',
+    `create_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	`update_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+) COMMENT='题目标签表';
+
+-- 题目标签关联表
+CREATE TABLE `problem_tag` (
+	`id` INTEGER NOT NULL AUTO_INCREMENT UNIQUE,
+	`pid` INTEGER NOT NULL COMMENT '题目id',
+	`tid` INTEGER NOT NULL COMMENT '标签id',
+    `create_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	`update_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+	PRIMARY KEY(`id`)
+) COMMENT='题目标签表';
+
+-- ===============
+-- === 题目模块 ===
+-- ===============
 
 -- 题单表
 drop table if exists problem_set;
@@ -111,24 +120,16 @@ create table problem_set
     update_time timestamp default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '更新时间'
 ) comment '题单表';
 
--- 题目标签表
-CREATE TABLE `tag` (
-	`id` INTEGER NOT NULL AUTO_INCREMENT UNIQUE,
-	`name` VARCHAR(32) UNIQUE COMMENT '标签名字',
-`create_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-	`update_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-	PRIMARY KEY(`id`)
-) COMMENT='题目标签表';
-
--- 题目标签关联表
-CREATE TABLE `problem_tag` (
-	`id` INTEGER NOT NULL AUTO_INCREMENT UNIQUE,
-	`pid` INTEGER NOT NULL COMMENT '题目id',
-	`tid` INTEGER NOT NULL COMMENT '标签id',
-`create_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-	`update_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-	PRIMARY KEY(`id`)
-) COMMENT='题目标签表';
+-- 题目-题单关联表
+drop table if exists problem_problem_set;
+create table problem_problem_set
+(
+    id int auto_increment primary key comment '主键，自增长',
+    problem_set_id int not null comment '题单ID',
+    problem_id     int not null comment '题目ID',
+    create_time timestamp default CURRENT_TIMESTAMP null comment '创建时间',
+    update_time timestamp default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '更新时间'
+) comment '题目-题单关联表';
 
 -- ===============
 -- === 判题模块 ===
@@ -174,6 +175,7 @@ CREATE TABLE contest (
     description  TEXT COMMENT '竞赛描述',
     start_time   TIMESTAMP NOT NULL COMMENT '开始时间',
     end_time     TIMESTAMP NOT NULL COMMENT '结束时间',
+    duration     INT NOT NULL COMMENT '持续时间（分钟）',
     status       TINYINT DEFAULT 0 COMMENT '竞赛状态（0未开始，1进行中，2已结束）',
     visible      TINYINT DEFAULT 0 COMMENT '竞赛权限（0公开，1私有，2密码保护）',
     type         TINYINT DEFAULT 0 COMMENT '竞赛类型（acm, ioi, oi...）',
@@ -185,12 +187,10 @@ CREATE TABLE contest (
 
 -- 竞赛-题目关联表
 CREATE TABLE contest_problem (
-    id          BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键',
+    id          INT AUTO_INCREMENT PRIMARY KEY COMMENT '主键',
     display_id  VARCHAR(255) NOT NULL COMMENT '题目展示ID: A B C ...',
     contest_id  BIGINT NOT NULL COMMENT '竞赛ID',
     problem_id  BIGINT NOT NULL COMMENT '题目ID',
-    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
 ) COMMENT '竞赛题目关联表';
 
 -- 竞赛-参加用户关联表
@@ -198,7 +198,6 @@ CREATE TABLE contest_user (
     id          BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键',
     contest_id  BIGINT NOT NULL COMMENT '竞赛ID',
     user_id     BIGINT NOT NULL COMMENT '用户ID',
-    role        TINYINT DEFAULT 0 COMMENT '用户角色（0普通选手，1管理员）',
     score       INT DEFAULT 0 COMMENT '当前得分',
     submit_count INT DEFAULT 0 COMMENT '提交次数',
 ) COMMENT '竞赛参加用户关联表';
