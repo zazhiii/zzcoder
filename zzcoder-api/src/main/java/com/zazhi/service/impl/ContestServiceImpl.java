@@ -1,5 +1,7 @@
 package com.zazhi.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.zazhi.common.enums.ContestStatus;
 import com.zazhi.common.enums.JudgeStatus;
 import com.zazhi.pojo.dto.ContestDTO;
@@ -9,6 +11,8 @@ import com.zazhi.pojo.entity.User;
 import com.zazhi.mapper.ContestMapper;
 import com.zazhi.mapper.ProblemMapper;
 import com.zazhi.mapper.UserMapper;
+import com.zazhi.pojo.result.PageResult;
+import com.zazhi.pojo.vo.ContestPageVO;
 import com.zazhi.service.ContestService;
 import com.zazhi.common.utils.ThreadLocalUtil;
 import com.zazhi.pojo.vo.ContestProblemVO;
@@ -20,7 +24,9 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -50,6 +56,8 @@ public class ContestServiceImpl implements ContestService {
         contest.setStatus(ContestStatus.UPCOMING); // 默认未开始
         Long userId = ThreadLocalUtil.getCurrentId();
         contest.setCreateUser(userId); // 创建人
+        // 结束时间
+        contest.setEndTime(contest.getStartTime().plus(contest.getDuration(), ChronoUnit.MINUTES));
         contestMapper.insert(contest);
     }
 
@@ -96,8 +104,6 @@ public class ContestServiceImpl implements ContestService {
         User user = userMapper.findById(contest.getCreateUser());
         contestVO.setCreateUserName(user.getUsername());
         // 设置比赛时长
-        Duration duration = Duration.between(contest.getStartTime(), contest.getEndTime());
-        contestVO.setDuration((int)duration.toMinutes());
         // 设置报名人数
         int count = contestMapper.getRegisterCount(ContestId);
         contestVO.setRegisterCount(count);
@@ -180,11 +186,20 @@ public class ContestServiceImpl implements ContestService {
     }
 
     /**
-     * 查询公开比赛
+     * 获取公开比赛列表
+     * @param pageNum
+     * @param pageSize
+     * @param keyword
+     * @param contestStatus
+     * @param type
      * @return
      */
     @Override
-    public List<Contest> getPublicContests() {
-        return contestMapper.getPublicContests();
+    public PageResult<ContestPageVO> page(Integer pageNum, Integer pageSize, String keyword, Integer contestStatus, Integer type) {
+        PageHelper.startPage(pageNum, pageSize);
+        Page<ContestPageVO> res = contestMapper.page(keyword, contestStatus, type);
+        return new PageResult<>(res.getTotal(), res.getResult());
     }
+
+
 }

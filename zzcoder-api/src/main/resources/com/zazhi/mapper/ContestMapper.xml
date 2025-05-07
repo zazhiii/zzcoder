@@ -19,14 +19,43 @@
 
     <select id="getContestProblems" parameterType="java.lang.Long" resultType="com.zazhi.pojo.vo.ContestProblemVO">
         select
-            p.id as problemId,
-            p.title as title,
-            cp.display_id as displayId
+        p.id as problemId,
+        p.title as title,
+        cp.display_id as displayId
         from
-            contest_problem cp
+        contest_problem cp
         left join
-            problem p on cp.problem_id = p.id
+        problem p on cp.problem_id = p.id
         where
-            cp.contest_id = #{contestId}
+        cp.contest_id = #{contestId}
+    </select>
+
+    <select id="page" resultType="com.zazhi.pojo.vo.ContestPageVO">
+        SELECT
+            c.id,
+            c.title,
+            c.start_time,
+            c.end_time,
+            c.duration,
+            c.status,
+            c.type,
+            u.username AS createUserName,
+            COUNT(cu.id) AS registerCount
+        FROM contest c
+        LEFT JOIN user u on c.create_user = u.id
+        LEFT JOIN contest_user cu on c.id = cu.contest_id
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND title like concat('%', #{keyword}, '%')
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+            <if test="type != null">
+                AND type = #{type}
+            </if>
+        </where>
+        GROUP BY c.id, c.title, c.start_time, c.end_time, c.duration, c.status, c.type, u.username
+        ORDER BY c.start_time DESC
     </select>
 </mapper>

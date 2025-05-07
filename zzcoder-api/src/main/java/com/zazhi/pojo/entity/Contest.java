@@ -18,10 +18,8 @@ public class Contest {
     private Long id; // 比赛ID
     private String title; // 比赛标题
     private String description; // 比赛描述
-//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Instant startTime; // 比赛开始时间
-//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-//    private LocalDateTime endTime; // 比赛结束时间
+    private Instant endTime; // 比赛结束时间
     private Integer duration; // 比赛时长
     private ContestStatus status; // 比赛状态
     private Integer visible; // 公开状态 0公开 1私有（密码）

@@ -4,6 +4,8 @@ package com.zazhi.service;
 import com.zazhi.common.enums.ContestStatus;
 import com.zazhi.pojo.dto.ContestDTO;
 import com.zazhi.pojo.entity.Contest;
+import com.zazhi.pojo.result.PageResult;
+import com.zazhi.pojo.vo.ContestPageVO;
 import com.zazhi.pojo.vo.ContestProblemVO;
 import com.zazhi.pojo.vo.ContestVO;
 
@@ -84,8 +86,13 @@ public interface ContestService {
     List<Contest> getActiveOrUpcomingContests();
 
     /**
-     * 查询公开比赛
+     * 分页查询公开比赛
+     * @param pageNum
+     * @param pageSize
+     * @param keyword
+     * @param contestStatus
+     * @param type
      * @return
      */
-    List<Contest> getPublicContests();
+    PageResult<ContestPageVO> page(Integer pageNum, Integer pageSize, String keyword, Integer contestStatus, Integer type);
 }

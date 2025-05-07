@@ -13,25 +13,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProblemQueryDTO implements Serializable {
-    
-    // 每页限制数量
-    private Integer limit;
-
-    // 当前页码
-    private Integer currentPage;
-
-    // 关键词，用于搜索
-    private String keyword;
-
-    // 标签ID列表
-    private List<Long> tagId;
-
-    // 题目难度
-    private Integer difficulty;
-
-    // 题目来源
-    private String source;
-
-    // 题目是否可见
-    private Boolean problemVisible;
+    private Integer limit; // 每页限制数量
+    private Integer currentPage; // 当前页码
+    private String keyword; // 关键词，用于搜索
+    private List<Long> tagId; // 标签ID列表
+    private Integer difficulty; // 题目难度
+    private String source; // 题目来源
+    private Boolean problemVisible; // 题目是否可见
 }

@@ -25,5 +25,5 @@ public class ContestPageVO {
     private Integer status; // 比赛状态
     private Integer type; // 比赛类型
     private String createUserName; // 创建者名字
-    private  Integer registerCount; // 报名人数
+    private Integer registerCount; // 报名人数
 }

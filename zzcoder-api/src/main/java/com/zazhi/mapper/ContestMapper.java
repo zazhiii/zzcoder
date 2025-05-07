@@ -1,8 +1,10 @@
 package com.zazhi.mapper;
 
+import com.github.pagehelper.Page;
 import com.zazhi.common.enums.ContestStatus;
 import com.zazhi.pojo.dto.ContestDTO;
 import com.zazhi.pojo.entity.Contest;
+import com.zazhi.pojo.vo.ContestPageVO;
 import com.zazhi.pojo.vo.ContestProblemVO;
 import org.apache.ibatis.annotations.*;
 
@@ -15,8 +17,8 @@ public interface ContestMapper {
      * 添加比赛
      * @param contest 比赛信息
      */
-    @Insert("insert into contest(title, description, start_time, end_time, status.code, visible, type, password, create_user) " +
-            "values(#{title}, #{description}, #{startTime}, #{endTime}, #{status}, #{visible}, #{type}, #{password}, #{createUser})")
+    @Insert("insert into contest(title, description, start_time, end_time, duration, status, visible, type, password, create_user) " +
+            "values(#{title}, #{description}, #{startTime}, #{endTime}, #{duration}, #{status}, #{visible}, #{type}, #{password}, #{createUser})")
     void insert(Contest contest);
 
     /**
@@ -105,4 +107,13 @@ public interface ContestMapper {
      */
     @Select("select * from contest where visible = 0")
     List<Contest> getPublicContests();
+
+    /**
+     * 分页查询比赛
+     * @param keyword
+     * @param status
+     * @param type
+     * @return
+     */
+    Page<ContestPageVO> page(String keyword, Integer status, Integer type);
 }

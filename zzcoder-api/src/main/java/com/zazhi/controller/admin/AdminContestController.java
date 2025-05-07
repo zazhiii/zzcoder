@@ -36,7 +36,6 @@ public class AdminContestController {
     @RequiresPermissions(CONTEST_CREATE)
     public Result createContest(@RequestBody ContestDTO contestDTO) {
         log.info("添加比赛：{}", contestDTO);
-
         contestService.createContest(contestDTO);
         return Result.success();
     }

@@ -169,6 +169,7 @@ CREATE TABLE test_case (
 -- ===============
 
 -- 竞赛表
+DROP TABLE IF EXISTS contest;
 CREATE TABLE contest (
     id           BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '竞赛ID',
     title        VARCHAR(255) NOT NULL COMMENT '竞赛标题',

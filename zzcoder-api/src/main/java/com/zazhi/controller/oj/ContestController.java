@@ -1,7 +1,9 @@
 package com.zazhi.controller.oj;
 
 import com.zazhi.pojo.entity.Contest;
+import com.zazhi.pojo.result.PageResult;
 import com.zazhi.pojo.result.Result;
+import com.zazhi.pojo.vo.ContestPageVO;
 import com.zazhi.service.ContestService;
 import com.zazhi.pojo.vo.ContestProblemVO;
 import com.zazhi.pojo.vo.ContestVO;
@@ -30,10 +32,16 @@ public class ContestController {
 
     @GetMapping("/list")
     @Operation(summary = "获取比赛列表")
-    public Result<List<Contest>> getContest() {
+    public Result<PageResult<ContestPageVO>> getContest(
+            @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "contestStatus", required = false) Integer contestStatus,
+            @RequestParam(value = "type", required = false) Integer type
+    ) {
         log.info("获取比赛列表");
 
-        return Result.success(contestService.getPublicContests());
+        return Result.success(contestService.page(pageNum, pageSize, keyword, contestStatus, type));
     }
 
     @GetMapping("/{id}")
