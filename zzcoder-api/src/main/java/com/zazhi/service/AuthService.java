@@ -10,36 +10,6 @@ import java.util.List;
 public interface AuthService {
 
     /**
-     * 通过邮箱查找用户
-     *
-     * @param email
-     * @return
-     */
-    User findByEmail(String email);
-
-    /**
-     * 通过用户名查询用户
-     * @param username
-     * @return
-     */
-    User findByUsername(String username);
-
-    /**
-     * 通过手机号查询用户
-     * @param phoneNumber
-     * @return
-     */
-    User findByPhoneNumber(String phoneNumber);
-
-    /**
-     * 通过id查询用户
-     *
-     * @param userId
-     * @return
-     */
-    User findUserById(Long userId);
-
-    /**
      * 更新用户的密码
      * @param updatePasswordDTO
      * @param token
@@ -116,4 +86,16 @@ public interface AuthService {
      * @return
      */
     List<Permission> getPermissions();
+
+    /**
+     * 发送邮箱验证码
+     * @param sendCodeDTO
+     */
+    void sendEmailCode(SendCodeDTO sendCodeDTO);
+
+    /**
+     * 登出
+     * @param token
+     */
+    void logout(String token);
 }

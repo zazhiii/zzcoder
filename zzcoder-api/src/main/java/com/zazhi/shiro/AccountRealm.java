@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.zazhi.common.constant.RedisKeyConstants.JWT_TOKEN;
+
 @Slf4j
 @Component
 public class AccountRealm extends AuthorizingRealm {
@@ -79,10 +81,6 @@ public class AccountRealm extends AuthorizingRealm {
         JwtToken token = (JwtToken) authenticationToken;
         String jwtToken = (String) token.getPrincipal();
 
-        // 判断 token 是否过期
-        if (redisUtil.get(jwtToken) == null) {
-            throw new AuthenticationException("token已过期，请重新登录");
-        }
         // 解析 token 是否合法
         Map<String, Object> map;
         try {
@@ -90,6 +88,13 @@ public class AccountRealm extends AuthorizingRealm {
         } catch (Exception e) {
             throw new AuthenticationException("token非法，可能被篡改");
         }
+
+        // 判断 token 是否过期
+        String key = JWT_TOKEN + map.get("id");
+        if (redisUtil.get(key) == null) {
+            throw new AuthenticationException("token已过期，请重新登录");
+        }
+
         // 将用户信息存入 ThreadLocal
         ThreadLocalUtil.set(map);
         log.info(map.toString());

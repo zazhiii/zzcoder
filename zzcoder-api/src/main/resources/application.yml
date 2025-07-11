@@ -42,10 +42,15 @@ spring:
 
 zzcoder:
   admin:
-    role-name: super-idol
-    user-name: super-idol
-    password: 123456
+    role-name: super-admin
+    user-name: sadmin
+    password: 111111
     email: 2065707071@qq.com
+  verify:
+    code:
+      length: 6
+      expire: 5 #验证码过期时间，单位分钟
+      interval: 60 #验证码发送间隔时间，单位秒
 
 # mybatis
 mybatis:

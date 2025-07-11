@@ -1,6 +1,12 @@
 package com.zazhi.service.impl;
 
+import cn.hutool.core.util.RandomUtil;
+import cn.hutool.crypto.digest.DigestUtil;
 import com.zazhi.common.constant.MsgConstant;
+import com.zazhi.common.constant.RedisKeyConstants;
+import com.zazhi.common.enums.EmailCodeBusinessType;
+import com.zazhi.common.utils.*;
+import com.zazhi.config.properties.VerifyCodeProperties;
 import com.zazhi.exception.model.*;
 import com.zazhi.pojo.dto.*;
 import com.zazhi.pojo.entity.Permission;
@@ -8,20 +14,23 @@ import com.zazhi.pojo.entity.Role;
 import com.zazhi.mapper.AuthMapper;
 import com.zazhi.mapper.UserMapper;
 import com.zazhi.service.AuthService;
-import com.zazhi.common.utils.JwtUtil;
-import com.zazhi.common.utils.Md5Util;
 import com.zazhi.pojo.entity.User;
-import com.zazhi.common.utils.RedisUtil;
-import com.zazhi.common.utils.ThreadLocalUtil;
+import jakarta.mail.MessagingException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import static com.zazhi.common.constant.ExceptionMsgConstants.EMAIL_SEND_FAIL;
+import static com.zazhi.common.constant.RedisKeyConstants.JWT_TOKEN;
+import static com.zazhi.common.enums.AuthErrorCode.*;
 
 /**
  * @author zazhi
@@ -30,56 +39,22 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    @Autowired
-    UserMapper userMapper;
+    private final UserMapper userMapper;
 
-    @Autowired
-    AuthMapper authMapper;
+    private final AuthMapper authMapper;
 
-    @Autowired
-    VerificationCodeService verificationCodeService;
+    private final VerificationCodeService verificationCodeService;
 
-    @Autowired
-    RedisUtil redisUtil;
+    private final RedisUtil redisUtil;
 
-    /**
-     * 通过邮箱查找用户
-     * @param email
-     * @return
-     */
-    public User findByEmail(String email) {
-        return userMapper.findByEmail(email);
-    }
+    private final TemplateEngine templateEngine;
 
-    /**
-     * 通过用户名查询用户
-     * @param username
-     * @return
-     */
-    public User findByUsername(String username) {
-        return userMapper.findByUsername(username);
-    }
+    private final MailUtil mailUtil;
 
-    /**
-     * 通过手机号查询用户
-     * @param phoneNumber
-     * @return
-     */
-    public User findByPhoneNumber(String phoneNumber) {
-        return userMapper.findByPhoneNumber(phoneNumber);
-    }
-
-    /**
-     * 通过id查询用户
-     *
-     * @param userId
-     * @return
-     */
-    public User findUserById(Long userId) {
-        return userMapper.findById(userId);
-    }
+    private final VerifyCodeProperties verifyCodeProperties;
 
     /**
      * 更新用户的密码
@@ -92,13 +67,13 @@ public class AuthServiceImpl implements AuthService {
         // 判断原密码是否正确
         Long userId = ThreadLocalUtil.getCurrentId();
         User user = userMapper.findById(userId);
-        if(!Md5Util.getMD5String(oldPassword).equals(user.getPassword())){
+        if(!DigestUtil.md5Hex(oldPassword).equals(user.getPassword())){
             throw new InvalidCredentialsException(MsgConstant.ORIGINAL_PASSWORD_INCORRECT);
         }
         // 删除旧token
         redisUtil.delete(token);
         // 更新密码
-        userMapper.updatePsw(userId, Md5Util.getMD5String(newPassword));
+        userMapper.updatePsw(userId, DigestUtil.md5Hex(newPassword));
     }
 
     /**
@@ -109,18 +84,21 @@ public class AuthServiceImpl implements AuthService {
         //判断邮箱是否注册
         User user = userMapper.findByEmail(registerDTO.getEmail());
         if(user != null){
-            throw new EmailAlreadyRegisteredException();
+            throw new AuthException(EMAIL_EXISTS);
         }
 
         // 判断用户名是否注册
         user = userMapper.findByUsername(registerDTO.getUsername());
         if(user != null){
-            throw new UsernameAlreadyRegisteredException();
+            throw new AuthException(USERNAME_EXISTS);
         }
 
-        //判断验证码是否正确
-        if(!verificationCodeService.verifyCode(registerDTO.getEmail(), registerDTO.getEmailVerificationCode())){
-            throw new VerificationCodeException();
+        // 判断验证码是否正确
+        String key = RedisKeyConstants.format(RedisKeyConstants.EMAIL_CODE,
+                EmailCodeBusinessType.REGISTER.getCode() + ":" + registerDTO.getEmail());
+        String storeCode = redisUtil.get(key);
+        if(storeCode == null || !storeCode.equals(registerDTO.getEmailCode())){
+            throw new AuthException(CAPTCHA_INCORRECT);
         }
 
         user = new User();
@@ -145,9 +123,11 @@ public class AuthServiceImpl implements AuthService {
             user = userMapper.findByPhoneNumber(identification);
         }
 
+        String md5Pwd = DigestUtil.md5Hex(loginDTO.getPassword());
+
         // 用户名或者密码错误
-        if(user == null || !user.getPassword().equals(Md5Util.getMD5String(loginDTO.getPassword()))){
-            throw new InvalidCredentialsException();
+        if(user == null || !user.getPassword().equals(md5Pwd)){
+            throw new AuthException(PASSWORD_INCORRECT);
         }
 
         // 生成token
@@ -156,8 +136,8 @@ public class AuthServiceImpl implements AuthService {
         claims.put("username", user.getUsername());
         String token = JwtUtil.genToken(claims);
 
-        // 登录后 token 存入redis {token: token}的形式
-        redisUtil.set(token, token, 7, TimeUnit.DAYS);
+        String key = JWT_TOKEN + user.getId();
+        redisUtil.set(key, token, 7, TimeUnit.DAYS);
         return token;
     }
 
@@ -168,15 +148,20 @@ public class AuthServiceImpl implements AuthService {
      */
     public String loginByEmail(LoginByEmailDTO loginByEmailDTO) {
         String email = loginByEmailDTO.getEmail();
-        String code = loginByEmailDTO.getEmailVerificationCode();
+        String code = loginByEmailDTO.getEmailCode();
         User user = userMapper.findByEmail(email);
 
         // 判断邮箱和验证码是否正确
         if(user == null){
-            throw new RuntimeException("用户不存在");
+            throw new AuthException(USER_NOT_FOUND);
         }
-        if(!verificationCodeService.verifyCode(email, code)){
-            throw new RuntimeException("验证码错误");
+
+        // 生成token
+        String key = RedisKeyConstants.format(RedisKeyConstants.EMAIL_CODE,
+                EmailCodeBusinessType.LOGIN.getCode()+ ":" + loginByEmailDTO.getEmail());
+        String storeCode = redisUtil.get(key);
+        if(storeCode == null || !storeCode.equals(code)){
+            throw new AuthException(CAPTCHA_INCORRECT);
         }
 
         // 生成token
@@ -184,9 +169,9 @@ public class AuthServiceImpl implements AuthService {
         claims.put("id", user.getId());
         claims.put("username", user.getUsername());
         String token = JwtUtil.genToken(claims);
-        // token 存入redis
-        redisUtil.set(token, token, 7, TimeUnit.DAYS);
 
+        String tokenKey = JWT_TOKEN + user.getId();
+        redisUtil.set(tokenKey, token, 7, TimeUnit.DAYS);
         return token;
     }
 
@@ -196,15 +181,18 @@ public class AuthServiceImpl implements AuthService {
      */
     public void updatePswByEmail(UpdatePasswordByEmailDTO updatePasswordByEmailDTO) {
         String email = updatePasswordByEmailDTO.getEmail();
-        String code = updatePasswordByEmailDTO.getEmailVerificationCode();
+        String code = updatePasswordByEmailDTO.getEmailCode();
         // 判断用户是否存在
         User user = userMapper.findByEmail(email);
         if(user == null){
-            throw new UserNotFoundException();
+            throw new AuthException(USER_NOT_FOUND);
         }
-        // 判断验证码是否正确
-        if(!verificationCodeService.verifyCode(email, code)){
-            throw new VerificationCodeException();
+
+        String key = RedisKeyConstants.format(RedisKeyConstants.EMAIL_CODE,
+                EmailCodeBusinessType.RESET_PASSWORD.getCode()+ ":" + updatePasswordByEmailDTO.getEmail());
+        String storeCode = redisUtil.get(key);
+        if(storeCode == null || !storeCode.equals(code)){
+            throw new AuthException(CAPTCHA_INCORRECT);
         }
 
         String newPassword = updatePasswordByEmailDTO.getNewPassword();
@@ -276,4 +264,51 @@ public class AuthServiceImpl implements AuthService {
     public List<Permission> getPermissions() {
         return authMapper.getAllPermissions();
     }
+
+    /**
+     * 发送邮箱验证码
+     * @param sendCodeDTO
+     */
+    @Override
+    public void sendEmailCode(SendCodeDTO sendCodeDTO) {
+        if(!EmailCodeBusinessType.isValid(sendCodeDTO.getBusinessType())){
+            throw new AuthException(INVALID_BUSINESS);
+        }
+
+        String code = RandomUtil.randomNumbers(verifyCodeProperties.getLength());
+
+        Context context = new Context();
+        context.setVariable("code", code);
+        context.setVariable("appName", "ZZCoder");
+        context.setVariable("expire", verifyCodeProperties.getExpire());
+
+        String templateName = switch (EmailCodeBusinessType.fromCode(sendCodeDTO.getBusinessType())) {
+            case REGISTER -> "email/register-code.html";
+            case LOGIN -> "email/login-code.html";
+            case RESET_PASSWORD -> "email/reset-password-code.html";
+            case CHANGE_EMAIL -> "email/change-email-code.html";
+        };
+
+        String htmlContent = templateEngine.process(templateName, context);
+
+        try {
+            mailUtil.sendHtmlMail(sendCodeDTO.getEmail(), "【ZZCoder】您的验证码", htmlContent);
+        } catch (Exception e) {
+            throw new BizException(EMAIL_SEND_FAIL);
+        }
+
+        String key = RedisKeyConstants.format(RedisKeyConstants.EMAIL_CODE, sendCodeDTO.getBusinessType() + ":" + sendCodeDTO.getEmail());
+        redisUtil.set(key, code, verifyCodeProperties.getExpire(), TimeUnit.MINUTES);
+    }
+
+    /**
+     * 登出
+     * @param token
+     */
+    @Override
+    public void logout(String token) {
+        String tokenKey = JWT_TOKEN + ":" + ThreadLocalUtil.getCurrentId();
+        redisUtil.delete(tokenKey);
+    }
+
 }

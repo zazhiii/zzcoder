@@ -35,18 +35,17 @@ public class AuthController {
     @Autowired
     private RedisUtil redisUtil;
 
-
-    @GetMapping("/send-email-verification-code")
+    @PostMapping("/send-email-code")
     @Operation(summary = "发送邮箱验证码")
-    public Result sendEmailVerificationCode(@RequestParam @Email String email){
-        log.info("开始发送验证码，{}", email);
+    public Result sendEmailCode(@RequestBody @Validated SendCodeDTO sendCodeDTO){
+        log.info("开始发送验证码，{}", sendCodeDTO.getEmail());
 
-        verificationCodeService.sendVerificationCode(email);
-        return Result.success();
+        authService.sendEmailCode(sendCodeDTO);
+        return  Result.success();
     }
 
     @PostMapping("/register")
-    @Operation(summary = "用户注册") // TODO 给新用户分配角色
+    @Operation(summary = "用户注册")
     public Result register(@RequestBody @Validated RegisterDTO registerDTO){
         log.info("开始注册：{}", registerDTO);
 
@@ -97,7 +96,8 @@ public class AuthController {
     public Result logout(@RequestHeader("Authorization") String token){
         log.info("登出：{}", token);
 
-        redisUtil.delete(token);
+//        redisUtil.delete(token);
+        authService.logout(token);
         return Result.success();
     }
 }

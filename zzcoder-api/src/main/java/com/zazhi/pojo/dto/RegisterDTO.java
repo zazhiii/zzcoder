@@ -31,6 +31,5 @@ public class RegisterDTO implements Serializable {
      * 用户收到的邮箱验证码，通常为6位数字或字母
      */
     @NotBlank(message = "验证码不能为空")
-//    @Pattern(regexp = "^[a-zA-Z0-9]{6}$", message = "验证码必须是6位数字或字母")
-    private String emailVerificationCode;
+    private String emailCode;
 }
