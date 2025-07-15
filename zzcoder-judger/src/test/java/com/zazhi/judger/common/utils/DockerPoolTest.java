@@ -1,6 +1,6 @@
 package com.zazhi.judger.common.utils;
 
-import com.zazhi.judger.docker.DockerContainer;
+import com.zazhi.judger.docker.containers.DockerContainer;
 import com.zazhi.judger.docker.DockerContainerPool;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

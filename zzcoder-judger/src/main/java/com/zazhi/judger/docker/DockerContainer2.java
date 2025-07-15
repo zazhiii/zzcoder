@@ -1,23 +1,27 @@
 package com.zazhi.judger.docker;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.ExecCreateCmdResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.github.dockerjava.api.model.Frame;
+import com.github.dockerjava.api.model.StreamType;
 import com.github.dockerjava.core.command.ExecStartResultCallback;
-import com.zazhi.judger.common.exception.SystemException;
 import com.zazhi.judger.common.exception.TimeLimitExceededException;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.concurrent.*;
 
-import static com.zazhi.judger.common.constant.JudgeStatusInfo.SE_INFO;
 import static com.zazhi.judger.common.constant.JudgeStatusInfo.TLE_INFO;
 
 @Data
 @Slf4j
-public class DockerContainer {
+@Deprecated
+public class DockerContainer2 {
 
     // Docker 客户端
     private DockerClient dockerClient;
@@ -34,7 +38,7 @@ public class DockerContainer {
     private String workingDir;
 
 
-    public DockerContainer(DockerClient dockerClient, String containerId, String containerName, String workingDir) {
+    public DockerContainer2(DockerClient dockerClient, String containerId, String containerName, String workingDir) {
         this.dockerClient = dockerClient;
         this.containerId = containerId;
         this.containerName = containerName;
@@ -52,6 +56,37 @@ public class DockerContainer {
     public void stop() {
         dockerClient.stopContainerCmd(containerId).exec();
     }
+
+    /**
+     * 异步执行命令
+     * @param execResponse 创建命令的结果
+     * @param stdout 标准输出流
+     * @param stderr 标准错误输出流
+     * @param stdin 标准输入流
+     * @return
+     */
+    public ResultCallback.Adapter<Frame> execCmdAsync(ExecCreateCmdResponse execResponse,
+                                                      ByteArrayOutputStream stdout,
+                                                      ByteArrayOutputStream stderr,
+                                                      InputStream stdin) {
+        return dockerClient.execStartCmd(execResponse.getId())
+                .withStdIn(stdin)
+                .exec(new ResultCallback.Adapter<Frame>() {
+                    @Override
+                    public void onNext(Frame frame) {
+                        try {
+                            if (frame.getStreamType() == StreamType.STDOUT) {
+                                stdout.write(frame.getPayload());
+                            } else if (frame.getStreamType() == StreamType.STDERR) {
+                                stderr.write(frame.getPayload());
+                            }
+                        } catch (IOException e) {
+                            throw new RuntimeException("Error writing to output streams", e);
+                        }
+                    }
+                });
+    }
+
 
     /**
      * 创建执行命令
@@ -104,29 +139,6 @@ public class DockerContainer {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
-//        // 使用 ExecutorService 实现超时功能
-//        ExecutorService executor = Executors.newSingleThreadExecutor();
-//
-//        Future<?> future = executor.submit(() -> {
-//            try {
-//
-//            } catch (Exception e) {
-//                throw new SystemException(SE_INFO + e.getMessage());
-//            }
-//        });
-//        try {
-//        // 设置超时时间
-//            future.get(timeout, TimeUnit.MILLISECONDS);
-//        } catch (TimeoutException e) { // 超时会抛出TimeoutException
-//            future.cancel(true); // 超时中断任务
-//            throw new TimeLimitExceededException(TLE_INFO);
-//        } catch (Exception e) {
-//            log.error("Command execution failed: {}", e.getMessage());
-//            throw new SystemException(SE_INFO + e.getMessage());
-//        } finally {
-//            executor.shutdownNow();
-//        }
     }
 
     /**

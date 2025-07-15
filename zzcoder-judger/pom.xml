@@ -11,6 +11,7 @@
     <groupId>com.zazhi</groupId>
     <artifactId>zzcoder-judger</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+
     <name>zzcoder-judger</name>
     <description>zzcoder判题端</description>
     <url/>
@@ -28,6 +29,7 @@
     </scm>
     <properties>
         <java.version>17</java.version>
+        <mybatis.version>3.0.3</mybatis.version>
     </properties>
     <dependencies>
         <dependency>
@@ -41,6 +43,11 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
         <!--消息发送-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -51,7 +58,7 @@
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>3.0.3</version>
+            <version>${mybatis.version}</version>
         </dependency>
         <!-- Spring Boot Starter JDBC -->
         <dependency>

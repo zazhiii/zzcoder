@@ -1,11 +1,13 @@
 package com.zazhi.judger.docker;
 
+import com.zazhi.judger.docker.containers.DockerContainer;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 @Slf4j
+@Deprecated
 public class DockerContainerPool {
 
     // 容器池，使用阻塞队列管理容器的空闲状态

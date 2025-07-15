@@ -28,9 +28,8 @@ zzcoder 是一个在线判题（OJ）平台，支持编程题目的提交、自�
 
 ## 📂 模块说明
 
-- `zzcoder-service`：后端接口服务，提供题目、用户、竞赛等 API
+- `zzcoder-api`：后端接口服务，提供题目、用户、竞赛等 API
 - `zzcoder-judge`：判题服务，接收消息队列任务并运行代码
-- `zzcoder-common`：通用工具、常量、统一返回结构等
 
 ## 🚀 快速启动
 

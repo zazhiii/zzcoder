@@ -20,9 +20,13 @@ docker:
   host: tcp://localhost:2375
   api-version: 1.41
 
-judger:
-  image-name: judger
-  container-count: 1 # 容器数量
-  container-name-prefix: judger_container_
-  container-memory: 256 # MB
-  container-work-dir: /var/tmp/zzcoder/containers/
+z-judger:
+  docker:
+    pool:
+      max-pool-size: 10
+      keep-start-time: 30
+      host-working-dir: "/tmp"
+      container-working-dir: "/app"
+      image-name: judger
+      memory-limit-mb: 1024
+

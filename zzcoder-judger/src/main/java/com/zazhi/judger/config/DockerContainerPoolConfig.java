@@ -6,7 +6,7 @@ import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.Volume;
 import com.zazhi.judger.common.properties.JudgerProperties;
-import com.zazhi.judger.docker.DockerContainer;
+import com.zazhi.judger.docker.containers.DockerContainer;
 import com.zazhi.judger.docker.DockerContainerPool;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +23,7 @@ import java.io.File;
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated
 public class DockerContainerPoolConfig {
 
     private final JudgerProperties judgerProp;
@@ -54,8 +55,8 @@ public class DockerContainerPoolConfig {
 
             log.info("创建容器：ID: {}", createRes.getId());
 
-            DockerContainer container = new DockerContainer(dockerClient, createRes.getId(), containerName, workDirPath);
-            pool.releaseContainer(container); // 将容器放入池中
+//            DockerContainer container = new DockerContainer(dockerClient, createRes.getId(), containerName, workDirPath);
+//            pool.releaseContainer(container); // 将容器放入池中
         }
         return pool;
     }
