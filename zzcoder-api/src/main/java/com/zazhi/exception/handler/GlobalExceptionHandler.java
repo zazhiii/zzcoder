@@ -1,11 +1,13 @@
 package com.zazhi.exception.handler;
 
+import com.zazhi.exception.model.AuthException;
 import com.zazhi.pojo.result.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -32,10 +34,15 @@ public class GlobalExceptionHandler{
      */
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(UnauthorizedException.class)
-    public Result handleUnauthorizedException(UnauthorizedException e){
+    public Result<String> handleUnauthorizedException(UnauthorizedException e){
         return Result.error("未授权");
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Result<String> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+        return Result.error("参数验证失败: " + ex.getBindingResult().getFieldError().getDefaultMessage());
+    }
 
     @ExceptionHandler(Exception.class)
     public Result handleException(Exception e){

@@ -1,5 +1,6 @@
 package com.zazhi.initializer;
 
+import cn.hutool.crypto.digest.DigestUtil;
 import cn.hutool.crypto.digest.MD5;
 import com.zazhi.pojo.entity.Permission;
 import com.zazhi.pojo.entity.Role;
@@ -38,14 +39,13 @@ public class AdminInitializer implements ApplicationRunner {
         Role role = authMapper.getRoleByName(adminRoleName);
         User user = userMapper.getByName(adminUsername);
 
-        if(role != null && user != null){
-            log.info("""
-                            超级管理员账号已存在
-                            账号：{}
-                            密码：{}""",
-                    adminUsername,
-                    adminPassword);
-            return;
+        if(user == null){
+            user = User.builder()
+                    .username(adminUsername)
+                    .password(MD5.create().digestHex(adminPassword))
+                    .email(adminEmail)
+                    .build();
+            userMapper.insert(user);
         }
 
         if(role == null){
@@ -56,26 +56,17 @@ public class AdminInitializer implements ApplicationRunner {
             authMapper.addRole(role);
         }
 
-        if(user == null){
-            user = User.builder()
-                    .username(adminUsername)
-                    .password(MD5.create().digestHex(adminPassword))
-                    .email(adminEmail)
-                    .build();
-            userMapper.insert(user);
-        }
-
-        // 添加所有权限添加到角色
+        // 添加所有权限到超级管理员角色
         List<Integer> already = authMapper.getPermissionsByRoleId(role.getId()).stream().map(Permission::getId).toList();
-        Integer adminRoleId = role.getId();
+        Integer RoleId = role.getId();
         authMapper.getAllPermissions().forEach(permission -> {
             if(!already.contains(permission.getId())){
-                authMapper.addPermissionToRole(adminRoleId, permission.getId());
+                authMapper.addPermissionToRole(RoleId, permission.getId());
             }
         });
 
         // 关联角色和用户
-        if(!authMapper.userHasRole(user.getId(), adminRoleId)){
+        if(!authMapper.userHasRole(user.getId(), RoleId)){
             authMapper.addRoleToUser(role.getId(), user.getId());
         }
         log.info("""

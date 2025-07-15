@@ -14,7 +14,7 @@ public interface AuthMapper {
      * 添加角色
      * @param role
      */
-    @Insert("insert into role (name, description) values (#{roleName}, #{description})")
+    @Insert("insert into role (name, description) values (#{name}, #{description})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void addRole(Role role);
 
