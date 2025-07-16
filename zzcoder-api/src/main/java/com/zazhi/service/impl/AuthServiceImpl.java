@@ -15,7 +15,6 @@ import com.zazhi.mapper.AuthMapper;
 import com.zazhi.mapper.UserMapper;
 import com.zazhi.service.AuthService;
 import com.zazhi.pojo.entity.User;
-import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -28,8 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static com.zazhi.common.constant.ExceptionMsgConstants.EMAIL_SEND_FAIL;
-import static com.zazhi.common.constant.RedisKeyConstants.JWT_TOKEN;
+import static com.zazhi.common.constant.ExceptionMsgConstants.*;
+import static com.zazhi.common.constant.RedisKeyConstants.*;
 import static com.zazhi.common.enums.AuthErrorCode.*;
 
 /**
@@ -46,7 +45,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final AuthMapper authMapper;
 
-    private final VerificationCodeService verificationCodeService;
+//    private final VerificationCodeService verificationCodeService;
 
     private final RedisUtil redisUtil;
 
@@ -68,11 +67,9 @@ public class AuthServiceImpl implements AuthService {
         Long userId = ThreadLocalUtil.getCurrentId();
         User user = userMapper.findById(userId);
         if(!DigestUtil.md5Hex(oldPassword).equals(user.getPassword())){
-            throw new InvalidCredentialsException(MsgConstant.ORIGINAL_PASSWORD_INCORRECT);
+            throw new BizException(ORIGINAL_PASSWORD_INCORRECT);
         }
-        // 删除旧token
-        redisUtil.delete(token);
-        // 更新密码
+        redisUtil.delete(JWT_TOKEN + userId);
         userMapper.updatePsw(userId, DigestUtil.md5Hex(newPassword));
     }
 
@@ -94,8 +91,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         // 判断验证码是否正确
-        String key = RedisKeyConstants.format(RedisKeyConstants.EMAIL_CODE,
-                EmailCodeBusinessType.REGISTER.getCode() + ":" + registerDTO.getEmail());
+        String key = REGISTER_EMAIL_CODE + registerDTO.getEmail();
         String storeCode = redisUtil.get(key);
         if(storeCode == null || !storeCode.equals(registerDTO.getEmailCode())){
             throw new AuthException(CAPTCHA_INCORRECT);
@@ -157,8 +153,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         // 生成token
-        String key = RedisKeyConstants.format(RedisKeyConstants.EMAIL_CODE,
-                EmailCodeBusinessType.LOGIN.getCode()+ ":" + loginByEmailDTO.getEmail());
+        String key = LOGIN_EMAIL_CODE + email;
         String storeCode = redisUtil.get(key);
         if(storeCode == null || !storeCode.equals(code)){
             throw new AuthException(CAPTCHA_INCORRECT);
@@ -188,8 +183,7 @@ public class AuthServiceImpl implements AuthService {
             throw new AuthException(USER_NOT_FOUND);
         }
 
-        String key = RedisKeyConstants.format(RedisKeyConstants.EMAIL_CODE,
-                EmailCodeBusinessType.RESET_PASSWORD.getCode()+ ":" + updatePasswordByEmailDTO.getEmail());
+        String key = RESET_PASSWORD_EMAIL_CODE + email;
         String storeCode = redisUtil.get(key);
         if(storeCode == null || !storeCode.equals(code)){
             throw new AuthException(CAPTCHA_INCORRECT);
@@ -206,7 +200,7 @@ public class AuthServiceImpl implements AuthService {
     public void addRole(String roleName, String description) {
         Role role = authMapper.getRoleByName(roleName);
         if(role != null){
-            throw new RuntimeException("角色已存在");
+            throw new BizException(ROLE_EXISTS);
         }
         role = Role.builder()
                 .name(roleName)
@@ -272,7 +266,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void sendEmailCode(SendCodeDTO sendCodeDTO) {
         if(!EmailCodeBusinessType.isValid(sendCodeDTO.getBusinessType())){
-            throw new AuthException(INVALID_BUSINESS);
+            throw new BizException(INVALID_BUSINESS_TYPE);
         }
 
         String code = RandomUtil.randomNumbers(verifyCodeProperties.getLength());
@@ -297,7 +291,7 @@ public class AuthServiceImpl implements AuthService {
             throw new BizException(EMAIL_SEND_FAIL);
         }
 
-        String key = RedisKeyConstants.format(RedisKeyConstants.EMAIL_CODE, sendCodeDTO.getBusinessType() + ":" + sendCodeDTO.getEmail());
+        String key = sendCodeDTO.getBusinessType() + ":" + EMAIL_CODE + sendCodeDTO.getEmail();
         redisUtil.set(key, code, verifyCodeProperties.getExpire(), TimeUnit.MINUTES);
     }
 

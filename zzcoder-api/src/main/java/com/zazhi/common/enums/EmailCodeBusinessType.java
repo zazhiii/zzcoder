@@ -6,8 +6,8 @@ import lombok.Getter;
 public enum EmailCodeBusinessType {
     REGISTER("register"),
     LOGIN("login"),
-    RESET_PASSWORD("reset_password"),
-    CHANGE_EMAIL("change_email");
+    RESET_PASSWORD("reset-password"),
+    CHANGE_EMAIL("change-email");
 
     private final String code;
 
