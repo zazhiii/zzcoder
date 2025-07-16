@@ -8,10 +8,12 @@ public class RedisKeyConstants {
     public static final String JWT_TOKEN = "jwt:token:";
 
     // ========== 注册相关 ==========
-    public static final String REGISTER_EMAIL_CODE = "register:email-code:%s"; // 注册邮箱验证码
+    public static final String REGISTER_EMAIL_CODE = "register:email-code:"; // 注册邮箱验证码
 
     // ========== 验证码相关 ==========
-    public static final String EMAIL_CODE = "email-code:%s"; // 邮箱验证码
+    public static final String EMAIL_CODE = "email-code:"; // 邮箱验证码
+    public static final String LOGIN_EMAIL_CODE = "login:email-code:";
+    public static final String RESET_PASSWORD_EMAIL_CODE = "reset-password:email-code:"; // 更新密码邮箱验证码
 
     // ========== 用户相关 ==========
     public static final String USER_INFO = "user:info:%s"; // 用户基础信息缓存
