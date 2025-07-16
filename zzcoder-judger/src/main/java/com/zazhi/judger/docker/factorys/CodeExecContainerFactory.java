@@ -59,6 +59,7 @@ public class CodeExecContainerFactory implements DockerContainerFactory<CodeExec
     }
 
     public CodeExecContainer createDockerContainer() {
+        String hostWorkingDir = this.hostWorkingDir + File.separator + UUID.randomUUID(); // 使用 UUID 确保每个容器的工作目录唯一
         CreateContainerResponse createRes = dockerClient.createContainerCmd(imageName)
                 .withHostConfig(
                         HostConfig.newHostConfig()

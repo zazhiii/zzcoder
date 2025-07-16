@@ -1,17 +1,22 @@
-package com.zazhi.judger.service;
+package com.zazhi.judger.sandbox;
 
 import com.github.dockerjava.api.command.ExecCreateCmdResponse;
 import com.zazhi.judger.common.pojo.CodeRunResult;
 import com.zazhi.judger.docker.containers.CodeExecContainer;
 import org.apache.commons.io.FileUtils;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
-public abstract class CodeExecutor {
+public abstract class SandBox {
+
+    protected CodeExecContainer container;
+
+    public SandBox(CodeExecContainer codeExecContainer) {
+        this.container = codeExecContainer;
+    }
+
     /**
      * 编译代码（如果是编译型语言）
      * @param container 当前容器对象
@@ -42,7 +47,7 @@ public abstract class CodeExecutor {
      * @param container 当前容器对象
      * @param stdin 标准输入流
      * @param timeout 执行超时时间
-     * @param unit 超时时间单位
+     * @param unit 超时时间��位
      * @return 代码运行结果
      */
     public CodeRunResult execute(CodeExecContainer container, InputStream stdin, long timeout, TimeUnit unit) {
@@ -92,14 +97,40 @@ public abstract class CodeExecutor {
      */
     abstract String buildCodeFileName();
 
+//    /**
+//     * 保存代码到指定路径
+//     * @param workPath
+//     * @param code
+//     */
+//    public void saveCode (String workPath, String code){
+//        try {
+//            File codeFile = new File(buildCodeFilePath(workPath));
+//            File parentDir = codeFile.getParentFile();
+//            if (parentDir != null && !parentDir.exists()) {
+//                parentDir.mkdirs();
+//            }
+//            FileUtils.writeStringToFile(codeFile, code, StandardCharsets.UTF_8);
+//        } catch (IOException e) {
+//            throw new RuntimeException("保存代码时出错", e);
+//        }
+//    }
+
     /**
-     * 保存代码到指定路径
-     * @param workPath
-     * @param code
-     * @throws Exception
+     * 保存代码到指定工作目录
+     * @param code 代码内容
+     * @param workDir 工作目录路径
      */
-    public void save (String workPath, String code) throws Exception {
-        File codeFile = new File(buildCodeFilePath(workPath));
-        FileUtils.writeStringToFile(codeFile, code, StandardCharsets.UTF_8);
+    public void saveCode(String code, String workDir) {
+        // TODO: fix BUG
+        File dir = new File(workDir);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        File file = new File(dir, buildCodeFileName());
+        try (FileWriter writer = new FileWriter(file)) {
+            writer.write(code);
+        } catch (IOException e) {
+            throw new RuntimeException("保存代码文件失败", e);
+        }
     }
 }

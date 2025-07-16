@@ -6,6 +6,7 @@ import com.zazhi.judger.docker.ContainerPoolExecutor;
 import com.zazhi.judger.docker.containers.CodeExecContainer;
 import com.zazhi.judger.docker.factorys.CodeExecContainerFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.concurrent.TimeUnit;
@@ -23,6 +24,7 @@ public class ContainerPoolExecutorConfig {
 
     private final DockerClient dockerClient;
 
+    @Bean
     public ContainerPoolExecutor<CodeExecContainer> containerPoolExecutor() {
         return new ContainerPoolExecutor<>(
                 prop.getMaxPoolSize(),

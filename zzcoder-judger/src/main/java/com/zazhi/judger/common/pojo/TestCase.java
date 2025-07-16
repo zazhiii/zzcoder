@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TestCase {
         private String input;
-        private String expectedOutput;
+        private String output;
 }

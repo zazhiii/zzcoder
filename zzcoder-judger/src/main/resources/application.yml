@@ -25,8 +25,25 @@ z-judger:
     pool:
       max-pool-size: 10
       keep-start-time: 30
-      host-working-dir: "/tmp"
+      host-working-dir: "/Users/lixinhuan/ZZCoder-Judger"
       container-working-dir: "/app"
-      image-name: judger
+      image-name: jger
       memory-limit-mb: 1024
 
+# springdoc-openapi项目配置
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: com.zazhi.judger.controller
+# knife4j的增强配置，不需要增强可以不配
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn

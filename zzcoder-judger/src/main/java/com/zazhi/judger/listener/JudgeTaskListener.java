@@ -2,7 +2,7 @@
 //
 //import com.zazhi.judger.common.pojo.JudgeResult;
 //import com.zazhi.judger.common.pojo.JudgeTask;
-//import com.zazhi.judger.service.JavaSandBox;
+//import com.zazhi.judger.sandbox.JavaSandBox;
 //import com.zazhi.judger.common.utils.MessageQueueUtil;
 //import lombok.RequiredArgsConstructor;
 //import lombok.extern.slf4j.Slf4j;

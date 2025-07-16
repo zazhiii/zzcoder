@@ -13,19 +13,19 @@ import lombok.Data;
 public class CodeRunResult {
     private String stdout;
     private String stderr;
-    private long timeUsed;
-    private long memoryUsed;
-    private boolean timeout;
+    private Long timeUsed;
+    private Long memoryUsed;
+    private Boolean timeout;
 
     public static CodeRunResult success(String stdout, long timeUsed, long memoryUsed) {
         return new CodeRunResult(stdout, "", timeUsed, memoryUsed, false);
     }
 
     public static CodeRunResult error(String err){
-        return new CodeRunResult("", err, 0, 0, false);
+        return new CodeRunResult("", err, 0L, 0L, false);
     }
 
     public static CodeRunResult timeout() {
-        return new CodeRunResult("", "", 0, 0, true);
+        return new CodeRunResult("", "", 0L, 0L, true);
     }
 }
