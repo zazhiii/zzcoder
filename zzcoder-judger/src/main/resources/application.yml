@@ -25,7 +25,7 @@ z-judger:
     pool:
       max-pool-size: 10
       keep-start-time: 30
-      host-working-dir: "/Users/lixinhuan/ZZCoder-Judger"
+      host-working-dir: "G:/zzcoder-judger-work"
       container-working-dir: "/app"
       image-name: jger
       memory-limit-mb: 1024

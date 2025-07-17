@@ -24,7 +24,6 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class JudgeServiceImpl implements JudgeService {
 
-//    private final SandBox sandBox;
     private final ContainerPoolExecutor<CodeExecContainer> pool;
 
     /**
@@ -50,24 +49,24 @@ public class JudgeServiceImpl implements JudgeService {
                 default -> throw new IllegalArgumentException("Unsupported language: " + judgeTask.getLanguage());
             };
 
-            sandBox.saveCode(judgeTask.getCode(), container.getContainerWorkingDir());
+            sandBox.saveCode(judgeTask.getCode());
 
             String err = sandBox.compile(container);
 
             if(err != null && !err.isEmpty()){
-                // TODO
-                return JudgeResult.builder()
-                        .errorMessage(err)
-                        .build();
+                return JudgeResult.compileError(err);
             }
 
-            ByteArrayInputStream in = new ByteArrayInputStream(judgeTask.getTestCases().get(0).getInput().getBytes());
-            CodeRunResult runRes = sandBox.execute(container, in, judgeTask.getTimeLimit(), TimeUnit.MILLISECONDS);
+            // TODO: 运行代码
+//            ByteArrayInputStream in = new ByteArrayInputStream(judgeTask.getTestCases().get(0).getInput().getBytes());
+//            CodeRunResult runRes = sandBox.execute(container, in, judgeTask.getTimeLimit(), TimeUnit.MILLISECONDS);
 
-            return JudgeResult.builder()
-                    .memoryUsed(runRes.getMemoryUsed())
-                    .timeUsed(runRes.getTimeUsed())
-                    .build();
+//            return JudgeResult.builder()
+//                    .memoryUsed(runRes.getMemoryUsed())
+//                    .timeUsed(runRes.getTimeUsed())
+//                    .build();
+
+            return null;
         } catch (IllegalArgumentException e) {
             throw new RuntimeException(e);
         } finally {

@@ -2,7 +2,7 @@ package com.zazhi.judger.docker.containers;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.ExecCreateCmdResponse;
-import com.zazhi.judger.docker.CodeRunResult;
+import com.zazhi.judger.common.pojo.CodeRunResult;
 import lombok.Getter;
 
 import java.io.ByteArrayOutputStream;

@@ -31,7 +31,7 @@ public class JavaSandBox extends SandBox{
 
     @Override
     String buildCodeFilePath(String workPath) {
-        return workPath + File.separator + buildCodeFileName();
+        return workPath + "/" + buildCodeFileName();
     }
 
     @Override

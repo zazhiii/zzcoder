@@ -8,6 +8,7 @@ import com.github.dockerjava.api.model.Volume;
 import com.zazhi.judger.docker.containers.CodeExecContainer;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 /**
@@ -37,12 +38,14 @@ public class CodeExecContainerFactory implements DockerContainerFactory<CodeExec
 
     public CodeExecContainer createDockerContainer(String containerName) {
 
-        String hostWorkingDir = this.hostWorkingDir + File.separator + UUID.randomUUID(); // 使用 UUID 确保每个容器的工作目录唯一
+        String hostWorkDir = Paths.get(this.hostWorkingDir).toAbsolutePath().toString();
+
+        hostWorkDir = hostWorkDir + "/" + UUID.randomUUID().toString();
 
         CreateContainerResponse createRes = dockerClient.createContainerCmd(imageName)
                 .withHostConfig(
                         HostConfig.newHostConfig()
-                                .withBinds(new Bind(hostWorkingDir, new Volume(containerWorkingDir))) // 挂载路径注意要挂载绝对路径，否则会有点问题
+                                .withBinds(new Bind(hostWorkDir, new Volume(containerWorkingDir))) // 挂载路径注意要挂载绝对路径，否则会有点问题
                                 .withMemory(memoryLimitMb * 1024 * 1024L) // 设置最大内存限制
                                 .withMemorySwap(memoryLimitMb * 1024 * 1024L) // 禁止交换分区 (swap)
                 )
@@ -59,11 +62,19 @@ public class CodeExecContainerFactory implements DockerContainerFactory<CodeExec
     }
 
     public CodeExecContainer createDockerContainer() {
-        String hostWorkingDir = this.hostWorkingDir + File.separator + UUID.randomUUID(); // 使用 UUID 确保每个容器的工作目录唯一
+
+        String hostWorkDir = Paths.get(this.hostWorkingDir).toAbsolutePath().toString();
+
+        hostWorkDir = hostWorkDir + "/" + UUID.randomUUID();
+//
+//        if(!new File(hostWorkDir).mkdirs()) {
+//            throw new RuntimeException("Failed to create host working directory: " + hostWorkDir);
+//        }
+
         CreateContainerResponse createRes = dockerClient.createContainerCmd(imageName)
                 .withHostConfig(
                         HostConfig.newHostConfig()
-                                .withBinds(new Bind(hostWorkingDir, new Volume(containerWorkingDir))) // 挂载路径注意要挂载绝对路径，否则会有点问题
+                                .withBinds(new Bind(hostWorkDir, new Volume(containerWorkingDir))) // 挂载路径注意要挂载绝对路径，否则会有点问题
                                 .withMemory(memoryLimitMb * 1024 * 1024L) // 设置最大内存限制
                                 .withMemorySwap(memoryLimitMb * 1024 * 1024L) // 禁止交换分区 (swap)
                 )
@@ -71,7 +82,7 @@ public class CodeExecContainerFactory implements DockerContainerFactory<CodeExec
                 .exec();
 
         return new CodeExecContainer(dockerClient, createRes.getId(), "",
-                containerWorkingDir, hostWorkingDir);
+                containerWorkingDir, hostWorkDir);
     }
 
 }

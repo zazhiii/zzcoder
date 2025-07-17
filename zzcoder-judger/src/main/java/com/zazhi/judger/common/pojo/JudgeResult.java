@@ -22,4 +22,11 @@ public class JudgeResult {
     private Long memoryUsed = 0L; // 内存
 //    private String result;
 //    private int exitCode; // 容器退出代码
+
+    public static JudgeResult compileError(String errorMessage) {
+        return JudgeResult.builder()
+                .status("CE")
+                .errorMessage(errorMessage)
+                .build();
+    }
 }

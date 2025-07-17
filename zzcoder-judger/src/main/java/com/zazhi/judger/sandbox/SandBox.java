@@ -118,15 +118,10 @@ public abstract class SandBox {
     /**
      * 保存代码到指定工作目录
      * @param code 代码内容
-     * @param workDir 工作目录路径
      */
-    public void saveCode(String code, String workDir) {
-        // TODO: fix BUG
-        File dir = new File(workDir);
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-        File file = new File(dir, buildCodeFileName());
+    public void saveCode(String code) {
+        String codePath = buildCodeFilePath(container.getHostWorkingDir());
+        File file = new File(codePath);
         try (FileWriter writer = new FileWriter(file)) {
             writer.write(code);
         } catch (IOException e) {
