@@ -1,7 +1,7 @@
 package com.zazhi.judger.sandbox;
 
 import com.zazhi.judger.common.enums.LanguageType;
-import com.zazhi.judger.docker.containers.CodeExecContainer;
+import com.zazhi.judger.dockerpool.containers.CodeExecContainer;
 
 /**
  * @author lixh

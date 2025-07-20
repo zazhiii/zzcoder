@@ -1,4 +1,4 @@
-package com.zazhi.judger.docker.pojo;
+package com.zazhi.judger.dockerpool.pojo;
 
 import lombok.Builder;
 import lombok.Data;

@@ -3,6 +3,14 @@ server:
 spring:
   profiles:
     active: dev
+  thymeleaf:
+    cache: false         # 开发环境建议关闭缓存
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+  mvc:
+    static-path-pattern: /static/**
 
   rabbitmq:
     host: ${zz.rabbitmq.host} #IP

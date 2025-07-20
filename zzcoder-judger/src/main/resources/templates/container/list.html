@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>容器池管理</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .status-running {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .status-idle {
+            color: #007bff;
+        }
+
+        .status-error {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .container-id {
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        .container-id-cell {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .copy-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 2px 6px;
+            font-size: 0.7em;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .copy-btn:hover {
+            opacity: 1;
+            background: #495057;
+        }
+
+        .copy-btn:active {
+            background: #343a40;
+        }
+
+        .memory-info {
+            font-size: 0.9em;
+        }
+
+        .action-buttons {
+            white-space: nowrap;
+        }
+
+        .action-buttons button {
+            margin: 2px;
+            padding: 4px 8px;
+            font-size: 0.8em;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .empty-state h3 {
+            margin: 0 0 10px;
+        }
+
+        .empty-state p {
+            color: #666;
+            margin: 0 0 20px;
+        }
+
+        .empty-state a, .empty-state button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .empty-state button {
+            margin-left: 10px;
+            background-color: #28a745;
+        }
+
+        .nav-links {
+            margin-top: 20px;
+        }
+
+        .nav-links a {
+            margin-right: 10px;
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .port-info {
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+<h2>容器列表</h2>
+
+<div th:if="${containers != null and not containers.isEmpty()}">
+    <table>
+        <tr>
+            <th>容器ID</th>
+            <th>名称</th>
+            <th>镜像</th>
+            <th>业务状态</th>
+            <th>Docker状态</th>
+            <th>创建时间</th>
+            <th>内存限制</th>
+            <th>端口映射</th>
+            <th>操作</th>
+        </tr>
+        <tr th:each="c : ${containers}">
+            <td class="container-id-cell">
+                <span class="container-id" th:text="${#strings.length(c.id) > 12 ? #strings.substring(c.id, 0, 12) + '...' : c.id}"
+                      th:title="${c.id}">容器ID</span>
+                <button class="copy-btn" th:data-container-id="${c.id}" onclick="copyToClipboard(this.dataset.containerId)">复制</button>
+            </td>
+            <td th:text="${c.name ?: '-'}">名称</td>
+            <td th:text="${c.image ?: '-'}">镜像</td>
+            <td>
+                <span th:text="${c.status ?: '-'}"
+                      th:class="${c.status != null ? 'status-' + c.status : ''}">状态</span>
+            </td>
+            <td th:text="${c.state ?: '-'}">Docker状态</td>
+            <td>
+                <span th:if="${c.createdTime != null}"
+                      th:text="${#strings.substring(c.createdTime, 0, 10)}">创建时间</span>
+                <span th:unless="${c.createdTime != null}">-</span>
+            </td>
+            <td class="memory-info">
+                <span th:if="${c.memoryLimit != null and c.memoryLimit > 0}"
+                      th:text="${#numbers.formatInteger(c.memoryLimit / 1024 / 1024, 0)} + ' MB'">内存限制</span>
+                <span th:unless="${c.memoryLimit != null and c.memoryLimit > 0}">-</span>
+            </td>
+            <td class="port-info">
+                <span th:if="${c.ports != null and not #strings.isEmpty(c.ports) and c.ports != '{}'}"
+                      th:text="${#strings.replace(#strings.replace(c.ports, '{', ''), '}', '')}">端口映射</span>
+                <span th:unless="${c.ports != null and not #strings.isEmpty(c.ports) and c.ports != '{}'}">未映射</span>
+            </td>
+            <td class="action-buttons">
+                <form th:action="@{'/containers/start/' + ${c.id}}" method="post" style="display: inline;">
+                    <button type="submit" th:disabled="${c.status == 'running'}">启动</button>
+                </form>
+                <form th:action="@{'/containers/stop/' + ${c.id}}" method="post" style="display: inline;">
+                    <button type="submit" th:disabled="${c.status != 'running'}">停止</button>
+                </form>
+                <form th:action="@{'/containers/remove/' + ${c.id}}" method="post" style="display: inline;">
+                    <button type="submit" th:disabled="${c.status == 'running'}"
+                            onclick="return confirm('确定要删除容器吗？')">删除</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div th:if="${containers == null or containers.isEmpty()}" class="empty-state">
+    <h3>当前没有容器</h3>
+    <p>容器池为空，请先创建一些容器来开始使用。</p>
+    <div>
+        <a href="/containers/create">创建新容器</a>
+        <button onclick="initializePool()">初始化容器池</button>
+    </div>
+</div>
+
+<div class="nav-links">
+    <a href="/containers/create">创建新容器</a> |
+    <a href="javascript:location.reload()">刷新列表</a>
+</div>
+
+<script>
+function initializePool() {
+    if(confirm('确定要初始化容器池吗？这将创建默认数量的容器。')) {
+        fetch('/docker/pool/initialize', {method: 'POST'})
+            .then(response => {
+                if(response.ok) {
+                    alert('容器池初始化成功！');
+                    location.reload();
+                } else {
+                    alert('容器池初始化失败，请检查日志。');
+                }
+            })
+            .catch(error => {
+                alert('请求失败: ' + error.message);
+            });
+    }
+}
+
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        alert('容器ID已复制到剪贴板');
+    }, (err) => {
+        alert('复制失败，请手动复制：' + text);
+    });
+}
+</script>
+</body>
+</html>

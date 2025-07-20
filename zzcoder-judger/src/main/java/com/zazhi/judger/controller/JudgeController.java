@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @author lixinhuan
+ * @author zazhi
  * @date 2025/7/10
  * @description: JudgeController 类用于处理判题请求的控制器
  */

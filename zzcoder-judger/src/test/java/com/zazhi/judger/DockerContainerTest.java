@@ -6,11 +6,9 @@ import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
 import com.github.dockerjava.transport.DockerHttpClient;
-import com.zazhi.judger.docker.containers.CodeExecContainer;
-import com.zazhi.judger.docker.pojo.CmdExecResult;
-import lombok.RequiredArgsConstructor;
+import com.zazhi.judger.dockerpool.containers.CodeExecContainer;
+import com.zazhi.judger.dockerpool.pojo.CmdExecResult;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;

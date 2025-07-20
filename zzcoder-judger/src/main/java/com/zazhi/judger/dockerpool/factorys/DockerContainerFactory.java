@@ -1,7 +1,7 @@
-package com.zazhi.judger.docker.factorys;
+package com.zazhi.judger.dockerpool.factorys;
 
 
-import com.zazhi.judger.docker.containers.DockerContainer;
+import com.zazhi.judger.dockerpool.containers.DockerContainer;
 
 public interface DockerContainerFactory<T extends DockerContainer> {
     /**

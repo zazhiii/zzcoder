@@ -1,4 +1,4 @@
-package com.zazhi.judger.docker.containers;
+package com.zazhi.judger.dockerpool.containers;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.async.ResultCallback;
@@ -6,7 +6,7 @@ import com.github.dockerjava.api.command.ExecCreateCmdResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.StreamType;
-import com.zazhi.judger.docker.pojo.CmdExecResult;
+import com.zazhi.judger.dockerpool.pojo.CmdExecResult;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

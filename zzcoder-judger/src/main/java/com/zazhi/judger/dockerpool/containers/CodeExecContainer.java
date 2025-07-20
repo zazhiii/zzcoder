@@ -1,4 +1,4 @@
-package com.zazhi.judger.docker.containers;
+package com.zazhi.judger.dockerpool.containers;
 
 import com.github.dockerjava.api.DockerClient;
 import lombok.Getter;

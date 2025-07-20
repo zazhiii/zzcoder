@@ -2,9 +2,9 @@ package com.zazhi.judger.config;
 
 import com.github.dockerjava.api.DockerClient;
 import com.zazhi.judger.config.properties.ContainerPoolExecutorProperties;
-import com.zazhi.judger.docker.ContainerPoolExecutor;
-import com.zazhi.judger.docker.containers.CodeExecContainer;
-import com.zazhi.judger.docker.factorys.CodeExecContainerFactory;
+import com.zazhi.judger.dockerpool.ContainerPoolExecutor;
+import com.zazhi.judger.dockerpool.containers.CodeExecContainer;
+import com.zazhi.judger.dockerpool.factorys.CodeExecContainerFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
