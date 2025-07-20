@@ -1,12 +1,12 @@
 package com.zazhi.judger.common.exception;
 
-public class TimeLimitExceededException extends JudgeException {
+public class TimeLimitExceededException extends RuntimeException {
 
     public TimeLimitExceededException() {
-        super("Time limit exceeded", 1001);
+        super("运行超时");
     }
 
     public TimeLimitExceededException(String details) {
-        super("Time limit exceeded", 1001, details);
+        super("运行超时: " + details);
     }
 }

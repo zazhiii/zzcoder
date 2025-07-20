@@ -6,13 +6,13 @@ import com.github.dockerjava.api.command.ExecCreateCmdResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.api.model.StreamType;
+import com.zazhi.judger.docker.pojo.CmdExecResult;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -45,9 +45,8 @@ public abstract class DockerContainer {
     /**
      * 创建执行命令
      * 可以传入标准输入、标准输出和错误输出的流
-     *
      * @param cmd 命令
-     * @return 执行命令的响应
+     * @return 执行命令的ID
      */
     public ExecCreateCmdResponse createCmd(String... cmd) {
         return dockerClient.execCreateCmd(containerId)
@@ -58,76 +57,67 @@ public abstract class DockerContainer {
                 .exec();
     }
 
-    /**
-     * 异步执行命令
-     * @param execResponse 创建命令的结果
-     * @param stdout 标准输出流
-     * @param stderr 标准错误输出流
-     * @param stdin 标准输入流
-     * @return
-     */
-    public ResultCallback.Adapter<Frame> execCmdAsync(ExecCreateCmdResponse execResponse,
-                                                ByteArrayOutputStream stdout,
-                                                ByteArrayOutputStream stderr,
-                                                      InputStream stdin) {
-        return dockerClient.execStartCmd(execResponse.getId())
-                .withStdIn(stdin)
+    public CmdExecResult execCmd(String[] cmd, int timeout, TimeUnit unit) throws InterruptedException {
+
+        String execID = this.createCmd(cmd).getId();
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ByteArrayOutputStream err = new ByteArrayOutputStream();
+
+        boolean awaited = dockerClient.execStartCmd(execID)
                 .exec(new ResultCallback.Adapter<Frame>() {
                     @Override
                     public void onNext(Frame frame) {
                         try {
                             if (frame.getStreamType() == StreamType.STDOUT) {
-                                stdout.write(frame.getPayload());
+                                out.write(frame.getPayload());
                             } else if (frame.getStreamType() == StreamType.STDERR) {
-                                stderr.write(frame.getPayload());
+                                err.write(frame.getPayload());
                             }
                         } catch (IOException e) {
                             throw new RuntimeException("Error writing to output streams", e);
                         }
                     }
-                });
+                }).awaitCompletion(timeout, unit);
+
+        return CmdExecResult.builder()
+                .stdout(out.toString(StandardCharsets.UTF_8))
+                .stderr(err.toString(StandardCharsets.UTF_8))
+                .isTimeout(!awaited)
+                .build();
     }
 
-    /**
-     * 执行命令
-     *
-     * @param execResponse 创建命令的结果
-     * @param stdout       标准输出流
-     * @param stderr       标准错误输出流
-     * @param stdin        标准输入流
-     * @throws InterruptedException 如果执行过程中被中断
-     */
-    public void execCmd(ExecCreateCmdResponse execResponse,
-                        ByteArrayOutputStream stdout,
-                        ByteArrayOutputStream stderr,
-                        InputStream stdin
-    ) throws InterruptedException {
-        this.execCmdAsync(execResponse, stdout, stderr, stdin)
-                .awaitCompletion();
-    }
+    public CmdExecResult execCmd(String[] cmd, String stdin, int timeout, TimeUnit unit) throws InterruptedException {
 
-    /**
-     * 超时等待命令执行
-     * @param execResponse 创建命令的结果
-     * @param stdout       标准输出流
-     * @param stderr       标准错误输出流
-     * @param stdin        标准输入流
-     * @param timeout      超时时间
-     * @param timeUnit  超时时间单位
-     * @return 是否在超时时间内成功执行
-     * @throws InterruptedException 如果执行过程中被中断
-     */
-    public boolean execCmdWithTimeout(
-            ExecCreateCmdResponse execResponse,
-            ByteArrayOutputStream stdout,
-            ByteArrayOutputStream stderr,
-            InputStream stdin,
-            int timeout,
-            TimeUnit timeUnit
-            ) throws InterruptedException {
+        String execID = this.createCmd(cmd).getId();
 
-        return this.execCmdAsync(execResponse, stdout, stderr, stdin)
-                .awaitCompletion(timeout, timeUnit);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ByteArrayOutputStream err = new ByteArrayOutputStream();
+
+        InputStream in = new ByteArrayInputStream(stdin.getBytes());
+
+        boolean awaited = dockerClient.execStartCmd(execID)
+                .withStdIn(in)
+                .exec(new ResultCallback.Adapter<Frame>() {
+                    @Override
+                    public void onNext(Frame frame) {
+                        try {
+                            if (frame.getStreamType() == StreamType.STDOUT) {
+                                out.write(frame.getPayload());
+                            } else if (frame.getStreamType() == StreamType.STDERR) {
+                                err.write(frame.getPayload());
+                            }
+                        } catch (IOException e) {
+                            throw new RuntimeException("Error writing to output streams", e);
+                        }
+                    }
+                }).awaitCompletion(timeout, unit);
+
+        return CmdExecResult.builder()
+                .stdout(out.toString())
+                .stderr(err.toString())
+                .isTimeout(!awaited)
+                .build();
     }
 
     /**
@@ -146,5 +136,13 @@ public abstract class DockerContainer {
      */
     public boolean isRunning() {
         return Boolean.TRUE.equals(inspectContainer().getState().getRunning());
+    }
+
+    /**
+     * 判断容器是否被OOM杀死
+     * @return 是否OOMKilled
+     */
+    public boolean isOOMKilled() {
+        return Boolean.TRUE.equals(inspectContainer().getState().getOOMKilled());
     }
 }

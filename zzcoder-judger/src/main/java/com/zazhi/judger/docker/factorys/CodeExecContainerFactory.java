@@ -57,7 +57,6 @@ public class CodeExecContainerFactory implements DockerContainerFactory<CodeExec
                 dockerClient,
                 createRes.getId(),
                 containerName,
-                containerWorkingDir,
                 hostWorkingDir);
     }
 
@@ -81,8 +80,7 @@ public class CodeExecContainerFactory implements DockerContainerFactory<CodeExec
                 .withWorkingDir(containerWorkingDir) // 设置工作目录
                 .exec();
 
-        return new CodeExecContainer(dockerClient, createRes.getId(), "",
-                containerWorkingDir, hostWorkDir);
+        return new CodeExecContainer(dockerClient, createRes.getId(), "", hostWorkDir);
     }
 
 }

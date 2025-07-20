@@ -3,7 +3,7 @@ package com.zazhi.judger.common.exception;
 public class SystemException extends RuntimeException {
 
     public SystemException() {
-        super("System error");
+        super("系统错误");
     }
 
     public SystemException(String message) {

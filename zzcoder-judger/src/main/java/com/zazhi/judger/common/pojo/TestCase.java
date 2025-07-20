@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TestCase {
-        private String id;
+        private Integer id;
         private String input;
         private String output;
 }

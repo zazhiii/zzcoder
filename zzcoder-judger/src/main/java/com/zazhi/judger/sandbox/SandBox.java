@@ -1,8 +1,10 @@
 package com.zazhi.judger.sandbox;
 
 import com.github.dockerjava.api.command.ExecCreateCmdResponse;
+import com.zazhi.judger.common.exception.*;
 import com.zazhi.judger.common.pojo.CodeRunResult;
 import com.zazhi.judger.docker.containers.CodeExecContainer;
+import com.zazhi.judger.docker.pojo.CmdExecResult;
 import org.apache.commons.io.FileUtils;
 
 import java.io.*;
@@ -20,76 +22,74 @@ public abstract class SandBox {
     /**
      * 编译代码（如果是编译型语言）
      * @param container 当前容器对象
-     * @return 错误信息，成功返回 ""
      */
-    public String compile(CodeExecContainer container){
-        String[] compileCommand = buildCompileCommand(container.getContainerWorkingDir());
-        ExecCreateCmdResponse resp = container.createCmd(compileCommand);
-        ByteArrayOutputStream stderr = new ByteArrayOutputStream();
+    public void compile(CodeExecContainer container){
+        String[] compileCommand = buildCompileCommand();
+        CmdExecResult res = null;
         try {
-            container.execCmdAsync(resp, new ByteArrayOutputStream(), stderr, null)
-                    .awaitCompletion(10, java.util.concurrent.TimeUnit.SECONDS);
+            res = container.execCmd(compileCommand, 10, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
-            throw new RuntimeException("编译代码时被中断", e);
+            throw new SystemException("编译代码时被中断", e);
         }
-        return stderr.toString(StandardCharsets.UTF_8);
+        if (!res.getStderr().isEmpty()) {
+            throw new CompilationException("编译错误: " + res.getStderr());
+        }
     }
 
     /**
      * 构建编译命令
-     * @param workDir 容器工作目录
      * @return 编译命令数组
      */
-    abstract String[] buildCompileCommand(String workDir);
+    abstract String[] buildCompileCommand();
+
+    private String[] buildTimeCommand() {
+        return new String[]{"time", "-f", "__TIME__:%U %S %E %M"};
+    }
+
+    private String[] combineCommands(String[] timeCommand, String[] runCommand) {
+        String[] combined = new String[timeCommand.length + runCommand.length];
+        System.arraycopy(timeCommand, 0, combined, 0, timeCommand.length);
+        System.arraycopy(runCommand, 0, combined, timeCommand.length, runCommand.length);
+        return combined;
+    }
 
     /**
      * 执行代码
      * @param container 当前容器对象
      * @param stdin 标准输入流
-     * @param timeout 执行超时时间
-     * @param unit 超时时间��位
      * @return 代码运行结果
      */
-    public CodeRunResult execute(CodeExecContainer container, InputStream stdin, long timeout, TimeUnit unit) {
-        String[] runCommand = buildRunCommand(buildCodeFilePath(container.getContainerWorkingDir()));
-        ExecCreateCmdResponse resp = container.createCmd(runCommand);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ByteArrayOutputStream err = new ByteArrayOutputStream();
-        boolean ok = false;
-
-        try {
-            ok = container.execCmdAsync(resp, out, err, stdin).awaitCompletion(timeout, unit);
+    public CodeRunResult execute(CodeExecContainer container, String stdin) {
+        String[] cmd = combineCommands(buildTimeCommand(), buildRunCommand());
+        CmdExecResult res = null;
+        try { // TODO: 超时等待时间抽取为配置
+            res = container.execCmd(cmd, stdin, 10, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
-            return CodeRunResult.error("执行中断");
+            throw new SystemException("运行代码时出错", e);
         }
 
-        if (!ok) return CodeRunResult.timeout();
+        if(res.isTimeout()) throw new TimeLimitExceededException();
 
-        String errStr = err.toString(StandardCharsets.UTF_8);
-        String outStr = out.toString(StandardCharsets.UTF_8);
-        if (errStr.startsWith("__TIME__:")) {
-            String[] parts = errStr.substring(9).trim().split(" ");
+        // 检查容器是否oom
+        if (Boolean.TRUE.equals(container.inspectContainer().getState().getOOMKilled())) {
+            throw new MemoryLimitExceededException();
+        }
+
+        if (res.getStderr().startsWith("__TIME__:")) {
+            String[] parts = res.getStderr().substring(9).trim().split(" ");
             long timeUsed = (long)(Double.parseDouble(parts[2].split(":")[1]) * 1000);
-            long memoryUsed = Long.parseLong(parts[3]) / 1024;
-            return CodeRunResult.success(outStr, timeUsed, memoryUsed);
+            long memoryUsed = Long.parseLong(parts[3]);
+            return new CodeRunResult(res.getStdout(), timeUsed, memoryUsed);
+        }else{
+            throw new RuntimeErrorException(res.getStderr().split("__TIME__:")[0].trim());
         }
-
-        return CodeRunResult.error(errStr.split("__TIME__:")[0].trim());
     }
 
     /**
      * 构建运行命令
-     * @param codePath 容器内代码路径
      * @return 运行命令数组
      */
-    abstract String[] buildRunCommand(String codePath);
-
-    /**
-     * 构建代码文件路径
-     * @param workPath
-     * @return
-     */
-    abstract String buildCodeFilePath(String workPath);
+    abstract String[] buildRunCommand();
 
     /**
      * 构建代码文件名
@@ -97,35 +97,16 @@ public abstract class SandBox {
      */
     abstract String buildCodeFileName();
 
-//    /**
-//     * 保存代码到指定路径
-//     * @param workPath
-//     * @param code
-//     */
-//    public void saveCode (String workPath, String code){
-//        try {
-//            File codeFile = new File(buildCodeFilePath(workPath));
-//            File parentDir = codeFile.getParentFile();
-//            if (parentDir != null && !parentDir.exists()) {
-//                parentDir.mkdirs();
-//            }
-//            FileUtils.writeStringToFile(codeFile, code, StandardCharsets.UTF_8);
-//        } catch (IOException e) {
-//            throw new RuntimeException("保存代码时出错", e);
-//        }
-//    }
-
     /**
      * 保存代码到指定工作目录
      * @param code 代码内容
      */
     public void saveCode(String code) {
-        String codePath = buildCodeFilePath(container.getHostWorkingDir());
-        File file = new File(codePath);
+        File file = new File(container.getHostWorkingDir() + "/" + buildCodeFileName());
         try (FileWriter writer = new FileWriter(file)) {
             writer.write(code);
         } catch (IOException e) {
-            throw new RuntimeException("保存代码文件失败", e);
+            throw new SystemException("保存代码文件失败", e);
         }
     }
 }

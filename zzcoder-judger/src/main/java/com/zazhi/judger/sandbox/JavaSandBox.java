@@ -20,18 +20,13 @@ public class JavaSandBox extends SandBox{
     }
 
     @Override
-    String[] buildCompileCommand(String workDir) {
-        return new String[]{"javac", buildCodeFilePath(workDir)};
+    String[] buildCompileCommand() {
+        return new String[]{"javac", "Main.java"};
     }
 
     @Override
-    String[] buildRunCommand(String workDir) {
-        return new String[]{"java", workDir, "Main"};
-    }
-
-    @Override
-    String buildCodeFilePath(String workPath) {
-        return workPath + "/" + buildCodeFileName();
+    String[] buildRunCommand() {
+        return new String[]{"java", "Main"};
     }
 
     @Override

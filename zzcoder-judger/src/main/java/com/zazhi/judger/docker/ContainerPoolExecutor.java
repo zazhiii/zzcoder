@@ -1,6 +1,7 @@
 package com.zazhi.judger.docker;
 
 
+import com.zazhi.judger.common.exception.SystemException;
 import com.zazhi.judger.docker.containers.DockerContainer;
 import com.zazhi.judger.docker.factorys.DockerContainerFactory;
 
@@ -42,7 +43,7 @@ public class ContainerPoolExecutor<T extends DockerContainer> {
                 1, 1, TimeUnit.SECONDS);
     }
 
-    public T acquireContainer() throws InterruptedException {
+    public T acquireContainer(){
         T container = containerQueue.poll();
         if (container == null) {
             if (containerCount.get() < maximumPoolSize) {
@@ -55,7 +56,7 @@ public class ContainerPoolExecutor<T extends DockerContainer> {
             }
         }
         if(container == null){
-            throw new InterruptedException("No available container in the pool");
+            throw new SystemException("没有可用的容器");
         }
         if(!container.isRunning()){
             container.start();

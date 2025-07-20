@@ -1,11 +1,11 @@
 package com.zazhi.judger.common.exception;
 
-public class MemoryLimitExceededException extends JudgeException {
+public class MemoryLimitExceededException extends RuntimeException {
     public MemoryLimitExceededException() {
-        super("Memory limit exceeded", 1002);
+        super("超出内存限制");
     }
 
     public MemoryLimitExceededException(String details) {
-        super("Memory limit exceeded", 1002, details);
+        super("超出内存限制: " + details);
     }
 }
