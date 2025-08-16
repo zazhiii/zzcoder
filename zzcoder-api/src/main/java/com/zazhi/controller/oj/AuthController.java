@@ -37,11 +37,11 @@ public class AuthController {
 
     @PostMapping("/send-email-code")
     @Operation(summary = "发送邮箱验证码")
-    public Result sendEmailCode(@RequestBody @Validated SendCodeDTO sendCodeDTO){
+    public Result<Void> sendEmailCode(@RequestBody @Validated SendCodeDTO sendCodeDTO){
         log.info("开始发送验证码，{}", sendCodeDTO.getEmail());
 
         authService.sendEmailCode(sendCodeDTO);
-        return  Result.success();
+        return Result.success();
     }
 
     @PostMapping("/register")

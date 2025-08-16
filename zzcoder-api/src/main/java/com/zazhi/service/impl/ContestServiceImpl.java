@@ -1,32 +1,39 @@
 package com.zazhi.service.impl;
 
+import cn.hutool.http.Header;
+import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpResponse;
+import cn.hutool.json.JSON;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zazhi.common.enums.ContestStatus;
-import com.zazhi.common.enums.JudgeStatus;
-import com.zazhi.pojo.dto.ContestDTO;
-import com.zazhi.pojo.entity.Contest;
-import com.zazhi.pojo.entity.Problem;
-import com.zazhi.pojo.entity.User;
+import com.zazhi.common.utils.ThreadLocalUtil;
+import com.zazhi.config.properties.ClistProperties;
 import com.zazhi.mapper.ContestMapper;
 import com.zazhi.mapper.ProblemMapper;
 import com.zazhi.mapper.UserMapper;
+import com.zazhi.pojo.dto.ContestDTO;
+import com.zazhi.pojo.entity.ClistContestResponse;
+import com.zazhi.pojo.entity.Contest;
+import com.zazhi.pojo.entity.Problem;
+import com.zazhi.pojo.entity.User;
 import com.zazhi.pojo.result.PageResult;
 import com.zazhi.pojo.vo.ContestPageVO;
-import com.zazhi.service.ContestService;
-import com.zazhi.common.utils.ThreadLocalUtil;
 import com.zazhi.pojo.vo.ContestProblemVO;
 import com.zazhi.pojo.vo.ContestVO;
+import com.zazhi.pojo.vo.UpcomingContestVO;
+import com.zazhi.service.ContestService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
 
 
 /**
@@ -35,16 +42,16 @@ import java.util.concurrent.TimeUnit;
  * @description: 管理员比赛相关接口
  */
 @Service
+@RequiredArgsConstructor
 public class ContestServiceImpl implements ContestService {
 
-    @Autowired
-    ContestMapper contestMapper;
+    private final ContestMapper contestMapper;
 
-    @Autowired
-    UserMapper userMapper;
+    private final UserMapper userMapper;
 
-    @Autowired
-    ProblemMapper problemMapper;
+    private final ProblemMapper problemMapper;
+
+    private final ClistProperties clistProp;
 
     /**
      * 添加比赛
@@ -201,5 +208,39 @@ public class ContestServiceImpl implements ContestService {
         return new PageResult<>(res.getTotal(), res.getResult());
     }
 
+    /**
+     * 从clist获取即将开始的比赛
+     * @param upcoming 是否即将开始的比赛
+     * @param resourceRegex
+     * @return 即将开始的比赛列表
+     */
+    @Override
+    public List<UpcomingContestVO> getUpcomingContestsFromClist(Boolean upcoming, String resourceRegex) {
+        String url = clistProp.getUrl();
+        Map<String, Object> params = new HashMap<>();
+        params.put("upcoming", upcoming);
+        params.put("username", clistProp.getUsername());
+        params.put("api_key", clistProp.getApiKey());
+        params.put("resource__regex", resourceRegex);
+        params.put("order__by", "start");
+        try {
+            // 发送HTTP请求，启用自动重定向
+            HttpResponse response = HttpRequest.get(url)
+                    .header(Header.AUTHORIZATION, clistProp.getAuthorization())
+                    .form(params)
+                    .timeout(15000)
+                    .setFollowRedirects(true)
+                    .execute();
+            // 检查响应状态
+            if (response.getStatus() != 200 || response.body() == null || response.body().trim().isEmpty()) {
+                return List.of();
+            }
+            ClistContestResponse resp = JSONUtil.toBean(response.body(), ClistContestResponse.class);
+            return resp.getObjects();
+        } catch (Exception e) {
+            // 返回空列表而不是抛出异常
+            return List.of();
+        }
+    }
 
 }

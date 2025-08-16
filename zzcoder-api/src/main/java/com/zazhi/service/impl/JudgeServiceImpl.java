@@ -10,10 +10,11 @@ import com.zazhi.mapper.UserMapper;
 import com.zazhi.pojo.entity.*;
 import com.zazhi.pojo.result.PageResult;
 import com.zazhi.service.JudgeService;
-import com.zazhi.common.utils.MessageQueueUtil;
+//import com.zazhi.common.utils.MessageQueueUtil;
 import com.zazhi.common.utils.ThreadLocalUtil;
 import com.zazhi.pojo.vo.SubmissionInfoVO;
 import com.zazhi.pojo.vo.SubmissionPageVO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,20 +26,14 @@ import java.util.List;
  * @description: 判题模块接口实现
  */
 @Service
+@RequiredArgsConstructor
 public class JudgeServiceImpl implements JudgeService {
 
-    @Autowired
-    JudgeMapper judgeMapper;
+    private final JudgeMapper judgeMapper;
 
-    @Autowired
-    ProblemMapper problemMapper;
+    private final ProblemMapper problemMapper;
 
-    @Autowired
-    UserMapper userMapper;
-
-    @Autowired
-    MessageQueueUtil messageQueueUtil;
-
+    private final UserMapper userMapper;
 
     /**
      * 提交代码
@@ -82,7 +77,7 @@ public class JudgeServiceImpl implements JudgeService {
 //                .judgeType("ACM")
                 .retryCount(0)
                 .build();
-        messageQueueUtil.sendJudgeTask(judgeTask);
+//        messageQueueUtil.sendJudgeTask(judgeTask);
         return taskId;
     }
 
@@ -114,8 +109,7 @@ public class JudgeServiceImpl implements JudgeService {
      * @return
      */
     public SubmissionInfoVO getSubmissionInfo(Long submitId) {
-        SubmissionInfoVO submissionInfoVO = judgeMapper.getSubmissionInfoById(submitId);
 
-        return submissionInfoVO;
+        return judgeMapper.getSubmissionInfoById(submitId);
     }
 }

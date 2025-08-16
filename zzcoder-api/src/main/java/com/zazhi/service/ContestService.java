@@ -8,6 +8,8 @@ import com.zazhi.pojo.result.PageResult;
 import com.zazhi.pojo.vo.ContestPageVO;
 import com.zazhi.pojo.vo.ContestProblemVO;
 import com.zazhi.pojo.vo.ContestVO;
+import com.zazhi.pojo.vo.UpcomingContestVO;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -95,4 +97,10 @@ public interface ContestService {
      * @return
      */
     PageResult<ContestPageVO> page(Integer pageNum, Integer pageSize, String keyword, Integer contestStatus, Integer type);
+
+    /**
+     * 从clist获取即将开始的比赛
+     * @return 即将开始的比赛列表
+     */
+    List<UpcomingContestVO> getUpcomingContestsFromClist(Boolean upcoming, String resourceRegex);
 }

@@ -77,3 +77,9 @@ knife4j:
   enable: true
   setting:
     language: zh_cn
+
+clist:
+  Authorization:
+  username:
+  api-key:
+  url:

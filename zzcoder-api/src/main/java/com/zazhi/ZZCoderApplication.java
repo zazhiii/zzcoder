@@ -6,8 +6,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-public class ZzCoderApplication {
+public class ZZCoderApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ZzCoderApplication.class, args);
+        SpringApplication.run(ZZCoderApplication.class, args);
     }
 }
