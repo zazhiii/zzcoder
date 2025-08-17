@@ -155,7 +155,7 @@
         <collection property="examples" ofType="com.zazhi.pojo.entity.TestCase">
             <id column="test_case_id" property="id"/>
             <result column="input" property="input"/>
-            <result column="expected_output" property="output"/>
+            <result column="output" property="output"/>
         </collection>
     </resultMap>
     <select id="getProblemInfoById" resultMap="getProblemInfoByIdMap">

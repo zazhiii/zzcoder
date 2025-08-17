@@ -47,7 +47,7 @@ public interface ProblemTagMapper {
      * 为题目添加测试用例
      * @param testCase
      */
-    @Insert("insert into test_case (problem_id, input, expected_output, is_sample) values (#{problemId}, #{input}, #{expectedOutput}, #{isSample})")
+    @Insert("insert into test_case (problem_id, input, output, is_sample) values (#{problemId}, #{input}, #{output}, #{isSample})")
     void addTestCase(TestCase testCase);
 
     /**
