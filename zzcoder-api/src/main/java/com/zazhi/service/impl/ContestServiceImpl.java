@@ -222,7 +222,7 @@ public class ContestServiceImpl implements ContestService {
         params.put("username", clistProp.getUsername());
         params.put("api_key", clistProp.getApiKey());
         params.put("resource__regex", resourceRegex);
-        params.put("order__by", "start");
+        params.put("order_by", "start");
         try {
             // 发送HTTP请求，启用自动重定向
             HttpResponse response = HttpRequest.get(url)

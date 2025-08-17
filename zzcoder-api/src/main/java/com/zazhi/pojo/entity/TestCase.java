@@ -15,7 +15,7 @@ public class TestCase {
         private String id;
         private String problemId;
         private String input;
-        private String expectedOutput;
+        private String output;
         private Integer isSample;
         private Timestamp createTime;
         private Timestamp updateTime;

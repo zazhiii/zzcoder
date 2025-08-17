@@ -6,3 +6,12 @@ Java Scanner读写 a + b:
 
 Java 死循环 a + b:
     import java.util.*;public class Main{public static void main(String[]a){Scanner s=new Scanner(System.in);System.out.println(s.nextInt()+s.nextInt());while(true){}}}
+
+Java a + b WA测试:
+    import java.util.*;public class Main{public static void main(String[]a){Scanner s=new Scanner(System.in);System.out.println(s.nextInt()+s.nextInt()+1);}}
+
+Java a + b RE测试(超出堆内存):
+    import java.util.*;public class Main{public static void main(String[]a){Scanner s=new Scanner(System.in);System.out.println(s.nextInt()+s.nextInt());int[]x=new int[(int)1e9];}}
+
+Java a + b MLE测试:
+    import java.util.*;public class Main{public static void main(String[]a){Scanner s=new Scanner(System.in);System.out.println(s.nextInt()+s.nextInt());int[]x=new int[(int)3e7];}}

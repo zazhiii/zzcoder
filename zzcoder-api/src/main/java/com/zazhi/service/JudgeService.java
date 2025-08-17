@@ -1,8 +1,8 @@
 package com.zazhi.service;
 
+import com.zazhi.common.pojo.entity.JudgeResult;
 import com.zazhi.pojo.dto.JudgeDTO;
 import com.zazhi.pojo.dto.SubmissionQueryDTO;
-import com.zazhi.pojo.entity.JudgeResult;
 import com.zazhi.pojo.result.PageResult;
 import com.zazhi.pojo.vo.SubmissionInfoVO;
 import com.zazhi.pojo.vo.SubmissionPageVO;

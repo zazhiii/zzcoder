@@ -9,6 +9,7 @@ import com.zazhi.pojo.vo.SubmissionInfoVO;
 import com.zazhi.pojo.vo.SubmissionPageVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +25,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/judge")
 @Slf4j
 @Tag(name = "判题模块接口")
+@RequiredArgsConstructor
 public class JudgeController {
-
-    @Autowired
-    JudgeService judgeService;
+    private final JudgeService judgeService;
 
     @PostMapping("/submit")
     @Operation(summary = "提交代码")
@@ -47,6 +47,4 @@ public class JudgeController {
     public Result<PageResult<SubmissionPageVO>> getSubmissions(@RequestBody SubmissionQueryDTO submissionQueryDTO) {
         return Result.success(judgeService.getSubmissions(submissionQueryDTO));
     }
-
-
 }
