@@ -1,6 +1,8 @@
 package com.zazhi.judger.service.impl;
 
-import com.zazhi.judger.common.enums.JudgeStatus;
+import com.zazhi.common.enums.JudgeStatus;
+import com.zazhi.common.pojo.entity.JudgeResult;
+import com.zazhi.common.pojo.entity.TestCaseResult;
 import com.zazhi.judger.common.enums.LanguageType;
 import com.zazhi.judger.common.exception.*;
 import com.zazhi.judger.common.pojo.*;
@@ -22,7 +24,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class JudgeServiceImpl implements JudgeService {
-
     private final ContainerPoolExecutor<CodeExecContainer> pool;
 
     /**
@@ -55,24 +56,23 @@ public class JudgeServiceImpl implements JudgeService {
                 TestCaseResult caseResult = new TestCaseResult();
                 caseResult.setId(testCase.getId());
 
-
                 CodeRunResult codeRunResult = new CodeRunResult();
                 try {
-                    codeRunResult = sandBox.execute(container, testCase.getInput());
+                    codeRunResult = sandBox.execute(container, testCase.getInput().trim() + "\n");
                 } catch (TimeLimitExceededException e) {
-                    caseResult.setStatus(JudgeStatus.TIME_LIMIT_EXCEEDED); // TLE
+                    caseResult.setStatus(JudgeStatus.TLE);
                 } catch (MemoryLimitExceededException e){
-                    caseResult.setStatus(JudgeStatus.MEMORY_LIMIT_EXCEEDED); // MLE
+                    caseResult.setStatus(JudgeStatus.MLE);
                 } catch (RuntimeErrorException e){
-                    caseResult.setStatus(JudgeStatus.RUNTIME_ERROR); // RE
-                    caseResult.setErrorMessage(e.getMessage());
+                    caseResult.setStatus(JudgeStatus.RE);
+                    caseResult.setErrorMessage(e.getDetails());
                 }
 
                 if(codeRunResult.getTimeUsed() > task.getTimeLimit()){
-                    caseResult.setStatus(JudgeStatus.TIME_LIMIT_EXCEEDED);
+                    caseResult.setStatus(JudgeStatus.TLE);
                 }
-                if(codeRunResult.getMemoryUsed() > task.getMemoryLimit()) {
-                    caseResult.setStatus(JudgeStatus.MEMORY_LIMIT_EXCEEDED);
+                if(codeRunResult.getMemoryUsed() > task.getMemoryLimit() * 1024L) {
+                    caseResult.setStatus(JudgeStatus.MLE);
                 }
 
                 // 没有TLE也没有MLE，则比较输出。
@@ -84,7 +84,7 @@ public class JudgeServiceImpl implements JudgeService {
                     actualOutput = actualOutput.trim();
 
                     caseResult.setStatus(expectedOutput.equals(actualOutput) ?
-                            JudgeStatus.ACCEPTED : JudgeStatus.WRONG_ANSWER);
+                            JudgeStatus.AC : JudgeStatus.WA);
 
                     maxTimeUsed = Math.max(maxTimeUsed, codeRunResult.getTimeUsed());
                     maxMemoryUsed = Math.max(maxMemoryUsed, codeRunResult.getMemoryUsed());
@@ -95,12 +95,13 @@ public class JudgeServiceImpl implements JudgeService {
                 }
 
                 //  若单个用例没有AC，则设置整个结果的状态
-                if(!caseResult.getStatus().equals(JudgeStatus.ACCEPTED)) {
+                if(!caseResult.getStatus().equals(JudgeStatus.AC)) {
                     result.setStatus(caseResult.getStatus());
+                    result.setErrorMessage(caseResult.getErrorMessage());
                 }
 
                 // 非全评测模式下，如果测试点不通过，则不需要继续执行后续测试点
-                if(!task.getFullJudge() && !caseResult.getStatus().equals(JudgeStatus.ACCEPTED)){
+                if(!task.getFullJudge() && !caseResult.getStatus().equals(JudgeStatus.AC)){
                     return JudgeResult.builder()
                             .taskId(task.getTaskId())
                             .status(caseResult.getStatus())
@@ -114,18 +115,18 @@ public class JudgeServiceImpl implements JudgeService {
 
             // 全部测试点测评完成
             if(result.getStatus() == null) {
-                result.setStatus(JudgeStatus.ACCEPTED);
+                result.setStatus(JudgeStatus.AC);
             }
             result.setTimeUsed(maxTimeUsed);
             result.setMemoryUsed(maxMemoryUsed);
         } catch (SystemException e) {
-            result.setStatus(JudgeStatus.SYSTEM_ERROR);
+            result.setStatus(JudgeStatus.SE);
             result.setErrorMessage(e.getMessage());
         } catch (CompilationException e){
-            result.setStatus(JudgeStatus.COMPILE_ERROR);
+            result.setStatus(JudgeStatus.CE);
             result.setErrorMessage(e.getMessage());
         } catch (Exception e){
-            result.setStatus(JudgeStatus.SYSTEM_ERROR);
+            result.setStatus(JudgeStatus.SE);
             result.setErrorMessage("unknown error: " + e.getMessage());
         }finally {
             pool.releaseContainer(container);

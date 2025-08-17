@@ -1,7 +1,10 @@
 package com.zazhi.judger.common.exception;
 
+import lombok.Getter;
+
+@Getter
 public class JudgeException extends RuntimeException {
-    private int errorCode; // 自定义错误码
+    private final int errorCode; // 自定义错误码
     private String details; // 详细信息
 
     public JudgeException(String message, int errorCode, String details) {
@@ -15,11 +18,4 @@ public class JudgeException extends RuntimeException {
         this.errorCode = errorCode;
     }
 
-    public int getErrorCode() {
-        return errorCode;
-    }
-
-    public String getDetails() {
-        return details;
-    }
 }

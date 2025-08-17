@@ -14,6 +14,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CodeRunResult {
     private String stdout;
+    private String errMsg;
     private Long timeUsed = 0L;
     private Long memoryUsed = 0L;
+
+    public CodeRunResult re(String errMsg) {
+        return new CodeRunResult("", errMsg, 0L, 0L);
+    }
 }

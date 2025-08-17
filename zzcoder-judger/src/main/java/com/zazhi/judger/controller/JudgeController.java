@@ -1,6 +1,6 @@
 package com.zazhi.judger.controller;
 
-import com.zazhi.judger.common.pojo.JudgeResult;
+import com.zazhi.common.pojo.entity.JudgeResult;
 import com.zazhi.judger.common.pojo.JudgeTask;
 import com.zazhi.judger.common.pojo.Result;
 import com.zazhi.judger.service.JudgeService;

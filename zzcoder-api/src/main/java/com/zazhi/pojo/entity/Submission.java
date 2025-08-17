@@ -1,5 +1,6 @@
 package com.zazhi.pojo.entity;
 
+import com.zazhi.common.enums.JudgeStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,13 +26,12 @@ public class Submission {
     private Integer contestId;// 比赛id
     private String code; // 代码
     private String language;// 语言
-    private String status;// 状态 (PENDING JUDGING COMPLETED)
-//    private String result;// 结果 (ACCEPTED WRONG_ANSWER TIME_LIMIT_EXCEEDED MEMORY_LIMIT_EXCEEDED RUNTIME_ERROR COMPILE_ERROR)
+    private JudgeStatus status;// 状态 (PENDING JUDGING AC ... RE CE)
     private List<TestCaseResult> testCaseResults; // 测试用例结果
     private Boolean fullJudge; // 是否全量评测
     private String errorMessage;// 错误信息
-    private Integer timeUsed;// 时间
-    private Integer memoryUsed;// 内存
+    private Long timeUsed;// 时间
+    private Long memoryUsed;// 内存
     private Timestamp createTime;
     private Timestamp updateTime;
 }

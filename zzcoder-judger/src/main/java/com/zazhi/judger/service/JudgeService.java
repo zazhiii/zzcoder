@@ -1,8 +1,7 @@
 package com.zazhi.judger.service;
 
-import com.zazhi.judger.common.pojo.JudgeResult;
+import com.zazhi.common.pojo.entity.JudgeResult;
 import com.zazhi.judger.common.pojo.JudgeTask;
-import org.jvnet.hk2.annotations.Service;
 
 /**
  * @author lixinhuan

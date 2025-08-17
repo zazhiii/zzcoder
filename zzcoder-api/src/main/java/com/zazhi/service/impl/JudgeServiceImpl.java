@@ -2,6 +2,9 @@ package com.zazhi.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.zazhi.common.enums.JudgeStatus;
+import com.zazhi.common.pojo.entity.JudgeResult;
+import com.zazhi.common.utils.MessageQueueUtil;
 import com.zazhi.pojo.dto.JudgeDTO;
 import com.zazhi.pojo.dto.SubmissionQueryDTO;
 import com.zazhi.mapper.JudgeMapper;
@@ -10,13 +13,11 @@ import com.zazhi.mapper.UserMapper;
 import com.zazhi.pojo.entity.*;
 import com.zazhi.pojo.result.PageResult;
 import com.zazhi.service.JudgeService;
-//import com.zazhi.common.utils.MessageQueueUtil;
 import com.zazhi.common.utils.ThreadLocalUtil;
 import com.zazhi.pojo.vo.SubmissionInfoVO;
 import com.zazhi.pojo.vo.SubmissionPageVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -35,6 +36,8 @@ public class JudgeServiceImpl implements JudgeService {
 
     private final UserMapper userMapper;
 
+    private final MessageQueueUtil messageQueueUtil;
+
     /**
      * 提交代码
      * @param judgeDTO
@@ -52,7 +55,7 @@ public class JudgeServiceImpl implements JudgeService {
                 .contestId(0) // TODO: 比赛id
                 .code(judgeDTO.getCode())
                 .language(judgeDTO.getLanguage())
-                .status("pending") // TODO 抽取为常量
+                .status(JudgeStatus.PENDING)
                 .build();
         judgeMapper.insertSubmission(submission);
 
@@ -75,9 +78,10 @@ public class JudgeServiceImpl implements JudgeService {
                 .submissionTime(submission.getSubmitTime())
                 .testCases(testCases)
 //                .judgeType("ACM")
+                .fullJudge(true) // TODO 暂时写死为全量评测
                 .retryCount(0)
                 .build();
-//        messageQueueUtil.sendJudgeTask(judgeTask);
+        messageQueueUtil.sendJudgeTask(judgeTask);
         return taskId;
     }
 

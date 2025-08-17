@@ -155,7 +155,7 @@
         <collection property="examples" ofType="com.zazhi.pojo.entity.TestCase">
             <id column="test_case_id" property="id"/>
             <result column="input" property="input"/>
-            <result column="expected_output" property="expectedOutput"/>
+            <result column="expected_output" property="output"/>
         </collection>
     </resultMap>
     <select id="getProblemInfoById" resultMap="getProblemInfoByIdMap">
@@ -168,7 +168,7 @@
         <!-- 样例测试数据 -->
         tc.id AS test_case_id,
         tc.input AS input,
-        tc.expected_output AS expected_output
+        tc.output AS output
 
         FROM problem p
         LEFT JOIN problem_tag pt ON p.id = pt.pid

@@ -58,7 +58,7 @@ public abstract class SandBox {
      */
     public CodeRunResult execute(CodeExecContainer container, String stdin) {
         String[] cmd = combineCommands(buildTimeCommand(), buildRunCommand());
-        CmdExecResult res = null;
+        CmdExecResult res;
         try { // TODO: 超时等待时间应该是比限制时间多一点的的时长
             res = container.execCmd(cmd, stdin, 10, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
@@ -76,7 +76,7 @@ public abstract class SandBox {
             String[] parts = res.getStderr().substring(9).trim().split(" ");
             long timeUsed = (long)(Double.parseDouble(parts[2].split(":")[1]) * 1000);
             long memoryUsed = Long.parseLong(parts[3]);
-            return new CodeRunResult(res.getStdout(), timeUsed, memoryUsed);
+            return new CodeRunResult(res.getStdout(), null, timeUsed, memoryUsed);
         }else{
             throw new RuntimeErrorException(res.getStderr().split("__TIME__:")[0].trim());
         }
