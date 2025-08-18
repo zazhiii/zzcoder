@@ -1,6 +1,7 @@
 package com.zazhi.judger.service.impl;
 
 import com.github.dockerjava.api.command.InspectContainerResponse;
+import com.zazhi.common.pojo.entity.DockerContainerInfoVO;
 import com.zazhi.judger.common.pojo.ContainerInfo;
 import com.zazhi.judger.dockerpool.ContainerPoolExecutor;
 import com.zazhi.judger.dockerpool.containers.CodeExecContainer;
@@ -19,7 +20,6 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class DockerPoolServiceImpl implements DockerPoolService {
-
     private final ContainerPoolExecutor<CodeExecContainer> containerPoolExecutor;
 
     @Override
@@ -73,5 +73,15 @@ public class DockerPoolServiceImpl implements DockerPoolService {
         }
 
         return containerInfoList;
+    }
+
+    /**
+     * 获取所有 Docker 容器的详细信息
+     * @return
+     */
+    @Override
+    public List<DockerContainerInfoVO> list() {
+
+        return null; // TODO
     }
 }

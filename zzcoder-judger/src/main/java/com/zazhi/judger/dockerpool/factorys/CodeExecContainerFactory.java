@@ -39,7 +39,7 @@ public class CodeExecContainerFactory implements DockerContainerFactory<CodeExec
 
         String hostWorkDir = Paths.get(this.hostWorkingDir).toAbsolutePath().toString();
 
-        hostWorkDir = hostWorkDir + "/" + UUID.randomUUID().toString();
+        hostWorkDir = hostWorkDir + "/" + UUID.randomUUID();
 
         CreateContainerResponse createRes = dockerClient.createContainerCmd(imageName)
                 .withHostConfig(

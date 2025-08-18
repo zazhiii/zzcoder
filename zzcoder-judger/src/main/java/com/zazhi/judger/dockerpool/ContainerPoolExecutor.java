@@ -1,12 +1,14 @@
 package com.zazhi.judger.dockerpool;
 
 
+import com.zazhi.judger.common.enums.ContainerStatus;
 import com.zazhi.judger.common.exception.SystemException;
 import com.zazhi.judger.dockerpool.containers.DockerContainer;
 import com.zazhi.judger.dockerpool.factorys.DockerContainerFactory;
 import lombok.Getter;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -29,7 +31,7 @@ public class ContainerPoolExecutor<T extends DockerContainer> {
     @Getter
     private final Set<T> allContainers = ConcurrentHashMap.newKeySet();
 
-//    private final AtomicInteger containerCount;
+    private final Map<String, ContainerStatus> containerStatusMap = new ConcurrentHashMap<>();
 
     public ContainerPoolExecutor(int maximumPoolSize,
                                  long keepStartTime,
@@ -38,7 +40,6 @@ public class ContainerPoolExecutor<T extends DockerContainer> {
         this.maximumPoolSize = maximumPoolSize;
         this.keepStartTime = unit.toMillis(keepStartTime);
         this.dockerContainerFactory = dockerContainerFactory;
-//        this.containerCount = new AtomicInteger(0);
 
         // 启动定时任务停止空闲容器
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
@@ -47,46 +48,53 @@ public class ContainerPoolExecutor<T extends DockerContainer> {
     }
 
     public T acquireContainer(){
-        T container = containerQueue.poll();
-        // 如果没有可用的容器，尝试创建新的容器
-        if (container == null) {
-            if (allContainers.size() < maximumPoolSize) {
-                // 创建新的容器
-                container = dockerContainerFactory.createDockerContainer();
-//                containerCount.incrementAndGet();
-                allContainers.add(container);
-            } else {
-                // 等待直到有可用的容器
-                try {
-                    container = containerQueue.take();
-                } catch (InterruptedException e) {
-                    throw new SystemException("没有获取到容器");
-                }
+        T container;
+        if(containerQueue.isEmpty() && getContainerCount() < maximumPoolSize){
+            container = dockerContainerFactory.createDockerContainer();
+        }else{
+            try {
+                container = containerQueue.take();
+            } catch (InterruptedException e) {
+                throw new RuntimeException("获取容器时被中断", e);
             }
-        }
-        if(container == null){
-            throw new SystemException("没有可用的容器");
         }
         if(!container.isRunning()){
             container.start();
         }
-        container.setLastUsedTime(System.currentTimeMillis());
+        // 更新容器状态
+        containerStatusMap.put(container.getContainerId(), ContainerStatus.BUSY);
         return container;
     }
 
+    /**
+     * 释放容器，将其放回池中
+     * @param container 要释放的容器
+     */
     public void releaseContainer(T container) {
-        if (container != null) {
-            containerQueue.offer(container);
-        }
+        containerQueue.offer(container);
+        containerStatusMap.put(container.getContainerId(), ContainerStatus.IDLE);
+        container.setLastUsedTime(System.currentTimeMillis());
     }
 
+    /**
+     * 清理空闲容器，停止那些空闲时间超过 keepStartTime 的容器
+     */
     private void cleanIdleContainers(){
         long currentTime = System.currentTimeMillis();
         containerQueue.forEach(container -> {
             if (currentTime - container.getLastUsedTime() > keepStartTime) {
                 container.stop();
+                containerStatusMap.put(container.getContainerId(), ContainerStatus.STOPPED);
             }
         });
+    }
+
+    /**
+     * 获取当前容器池中的容器总数
+     * @return 容器数量
+     */
+    public Integer getContainerCount(){
+        return containerStatusMap.size();
     }
 
 }

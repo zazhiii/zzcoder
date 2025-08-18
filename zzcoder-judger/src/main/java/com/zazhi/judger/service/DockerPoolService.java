@@ -1,5 +1,6 @@
 package com.zazhi.judger.service;
 
+import com.zazhi.common.pojo.entity.DockerContainerInfoVO;
 import com.zazhi.judger.common.pojo.ContainerInfo;
 
 import java.util.List;
@@ -15,4 +16,10 @@ public interface DockerPoolService {
      * @return
      */
     List<ContainerInfo> listAllContainers();
+
+    /**
+     * 获取所有 Docker 容器的详细信息
+     * @return
+     */
+    List<DockerContainerInfoVO> list();
 }

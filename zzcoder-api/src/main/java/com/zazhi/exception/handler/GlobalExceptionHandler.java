@@ -23,7 +23,7 @@ public class GlobalExceptionHandler{
      */
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(UnauthenticatedException.class)
-    public Result handleUnauthenticatedException(UnauthenticatedException e){
+    public Result<Void> handleUnauthenticatedException(UnauthenticatedException e){
         return Result.error("未认证或Token无效，请重新登录");
     }
 
@@ -45,7 +45,7 @@ public class GlobalExceptionHandler{
     }
 
     @ExceptionHandler(Exception.class)
-    public Result handleException(Exception e){
+    public Result<Void> handleException(Exception e){
         log.error("{}", e);
         return Result.error(StringUtils.hasLength(e.getMessage())? e.getMessage():"操作失败");
     }

@@ -28,8 +28,8 @@ public class Result<T> implements Serializable {
         return result;
     }
 
-    public static <T> Result<T> error(String msg) {
-        Result result = new Result();
+    public static Result<Void> error(String msg) {
+        Result<Void> result = new Result<>();
         result.msg = msg;
         result.code = 0;
         return result;
