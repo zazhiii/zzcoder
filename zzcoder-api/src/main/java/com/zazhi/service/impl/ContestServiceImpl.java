@@ -3,8 +3,6 @@ package com.zazhi.service.impl;
 import cn.hutool.http.Header;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
-import cn.hutool.json.JSON;
-import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -14,16 +12,16 @@ import com.zazhi.config.properties.ClistProperties;
 import com.zazhi.mapper.ContestMapper;
 import com.zazhi.mapper.ProblemMapper;
 import com.zazhi.mapper.UserMapper;
-import com.zazhi.pojo.dto.ContestDTO;
-import com.zazhi.pojo.entity.ClistContestResponse;
-import com.zazhi.pojo.entity.Contest;
-import com.zazhi.pojo.entity.Problem;
-import com.zazhi.pojo.entity.User;
-import com.zazhi.pojo.result.PageResult;
-import com.zazhi.pojo.vo.ContestPageVO;
-import com.zazhi.pojo.vo.ContestProblemVO;
-import com.zazhi.pojo.vo.ContestVO;
-import com.zazhi.pojo.vo.UpcomingContestVO;
+import com.zazhi.common.pojo.dto.ContestDTO;
+import com.zazhi.common.pojo.entity.ClistContestResponse;
+import com.zazhi.common.pojo.entity.Contest;
+import com.zazhi.common.pojo.entity.Problem;
+import com.zazhi.common.pojo.entity.User;
+import com.zazhi.common.pojo.result.PageResult;
+import com.zazhi.common.pojo.vo.ContestPageVO;
+import com.zazhi.common.pojo.vo.ContestProblemVO;
+import com.zazhi.common.pojo.vo.ContestVO;
+import com.zazhi.common.pojo.vo.UpcomingContestVO;
 import com.zazhi.service.ContestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -61,7 +59,7 @@ public class ContestServiceImpl implements ContestService {
         Contest contest = new Contest();
         BeanUtils.copyProperties(contestDTO, contest);
         contest.setStatus(ContestStatus.UPCOMING); // 默认未开始
-        Long userId = ThreadLocalUtil.getCurrentId();
+        Integer userId = ThreadLocalUtil.getCurrentId();
         contest.setCreateUser(userId); // 创建人
         // 结束时间
         contest.setEndTime(contest.getStartTime().plus(contest.getDuration(), ChronoUnit.MINUTES));
@@ -73,7 +71,7 @@ public class ContestServiceImpl implements ContestService {
      * @return 比赛列表
      */
     public List<Contest> getContestList() {
-        Long userId = ThreadLocalUtil.getCurrentId();
+        Integer userId = ThreadLocalUtil.getCurrentId();
         return contestMapper.getContestList(userId);
     }
 

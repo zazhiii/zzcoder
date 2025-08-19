@@ -1,6 +1,6 @@
 package com.zazhi.mapper;
 
-import com.zazhi.pojo.entity.ProblemTag;
+import com.zazhi.common.pojo.entity.ProblemTag;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;

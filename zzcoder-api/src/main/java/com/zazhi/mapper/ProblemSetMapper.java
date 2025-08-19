@@ -1,8 +1,8 @@
 package com.zazhi.mapper;
 
 import com.github.pagehelper.Page;
-import com.zazhi.pojo.entity.ProblemSet;
-import com.zazhi.pojo.vo.ProblemSetVO;
+import com.zazhi.common.pojo.entity.ProblemSet;
+import com.zazhi.common.pojo.vo.ProblemSetVO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -34,7 +34,7 @@ public interface ProblemSetMapper {
      * @return
      */
     @Select("select * from problem_set where create_user = #{currentId}")
-    List<ProblemSet> listPrivateProblemSet(Long currentId);
+    List<ProblemSet> listPrivateProblemSet(Integer currentId);
 
     /**
      * 添加题目到题单

@@ -1,10 +1,11 @@
 package com.zazhi.service;
 
-import com.zazhi.pojo.dto.UpdateEmailDTO;
-import com.zazhi.pojo.dto.UserInfoDTO;
-import com.zazhi.pojo.entity.Permission;
-import com.zazhi.pojo.entity.Role;
-import com.zazhi.pojo.entity.User;
+import com.zazhi.common.pojo.dto.UpdateEmailDTO;
+import com.zazhi.common.pojo.dto.UserInfoDTO;
+import com.zazhi.common.pojo.dto.UserUpdateDTO;
+import com.zazhi.common.pojo.entity.Permission;
+import com.zazhi.common.pojo.entity.Role;
+import com.zazhi.common.pojo.entity.User;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface UserService {
      * @param userId
      * @return
      */
-    User getUserById(Long userId);
+    User getUserById(Integer userId);
 
     /**
      * 获取用户基本信息
@@ -40,7 +41,7 @@ public interface UserService {
      * @param userId
      * @return
      */
-    List<Role> getUserRolesById(Long userId);
+    List<Role> getUserRolesById(Integer userId);
 
     /**
      * 查询用户权限
@@ -55,4 +56,10 @@ public interface UserService {
      * @return
      */
     User getUserByName(String username);
+
+    /**
+     * 更新用户信息
+     * @param userInfo
+     */
+    void updateUserInfo(UserUpdateDTO userInfo);
 }

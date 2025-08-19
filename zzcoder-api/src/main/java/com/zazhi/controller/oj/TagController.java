@@ -1,10 +1,10 @@
 package com.zazhi.controller.oj;
 
-import com.zazhi.pojo.result.Result;
+import com.zazhi.common.pojo.result.Result;
 import com.zazhi.service.TagService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import com.zazhi.pojo.entity.ProblemTag;
+import com.zazhi.common.pojo.entity.ProblemTag;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;

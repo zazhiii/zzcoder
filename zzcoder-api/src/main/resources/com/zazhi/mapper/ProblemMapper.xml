@@ -5,7 +5,7 @@
 <mapper namespace="com.zazhi.mapper.ProblemMapper">
 
     <!-- 插入题目 -->
-    <insert id="insert" parameterType="com.zazhi.pojo.entity.Problem">
+    <insert id="insert" parameterType="com.zazhi.common.pojo.entity.Problem">
         INSERT INTO `problem` (
         `problem_id`,
         `title`,
@@ -39,17 +39,17 @@
         )
     </insert>
 
-    <resultMap id="pageMap" type="com.zazhi.pojo.vo.ProblemVO">
+    <resultMap id="pageMap" type="com.zazhi.common.pojo.vo.ProblemVO">
         <id column="id" property="id"/>
         <result column="problem_id" property="problemId"/>
         <result column="title" property="title"/>
         <result column="difficulty" property="difficulty"/>
-        <collection property="tags" ofType="com.zazhi.pojo.entity.ProblemTag">
+        <collection property="tags" ofType="com.zazhi.common.pojo.entity.ProblemTag">
             <id column="tid" property="id"/>
             <result column="name" property="name"/>
         </collection>
     </resultMap>
-    <select id="page" parameterType="com.zazhi.pojo.dto.ProblemQueryDTO" resultMap="pageMap">
+    <select id="page" parameterType="com.zazhi.common.pojo.dto.ProblemQueryDTO" resultMap="pageMap">
         select
         p.id,
         p.problem_id,
@@ -87,7 +87,7 @@
         </where>
     </select>
 
-    <update id="update" parameterType="com.zazhi.pojo.entity.Problem">
+    <update id="update" parameterType="com.zazhi.common.pojo.entity.Problem">
         UPDATE problem
         <set>
             <if test="problemId != null">
@@ -133,7 +133,7 @@
         WHERE id = #{id}
     </update>
 
-    <resultMap id="getProblemInfoByIdMap" type="com.zazhi.pojo.vo.ProblemInfoVO">
+    <resultMap id="getProblemInfoByIdMap" type="com.zazhi.common.pojo.vo.ProblemInfoVO">
         <id column="id" property="id"/>
         <result column="problem_id" property="problemId"/>
         <result column="title" property="title"/>
@@ -148,11 +148,11 @@
         <result column="hint" property="hint"/>
         <result column="status" property="status"/>
         <result column="create_user" property="createUser"/>
-        <collection property="tags" ofType="com.zazhi.pojo.entity.ProblemTag">
+        <collection property="tags" ofType="com.zazhi.common.pojo.entity.ProblemTag">
             <id column="tid" property="id"/>
             <result column="name" property="name"/>
         </collection>
-        <collection property="examples" ofType="com.zazhi.pojo.entity.TestCase">
+        <collection property="examples" ofType="com.zazhi.common.pojo.entity.TestCase">
             <id column="test_case_id" property="id"/>
             <result column="input" property="input"/>
             <result column="output" property="output"/>

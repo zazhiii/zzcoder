@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zazhi.mapper.ProblemSetMapper">
 
-    <update id="updateProblemSet" parameterType="com.zazhi.pojo.entity.ProblemSet">
+    <update id="updateProblemSet" parameterType="com.zazhi.common.pojo.entity.ProblemSet">
         update problem_set
         <set>
             <if test="title != null">
@@ -23,7 +23,7 @@
         where id = #{id}
     </update>
 
-    <select id="listPublicProblemSet" parameterType="string" resultType="com.zazhi.pojo.entity.ProblemSet">
+    <select id="listPublicProblemSet" parameterType="string" resultType="com.zazhi.common.pojo.entity.ProblemSet">
         select * from problem_set
         <where>
             status = 1
@@ -33,24 +33,24 @@
         </where>
     </select>
 
-    <resultMap id="getProblemSetMap" type="com.zazhi.pojo.vo.ProblemSetVO">
+    <resultMap id="getProblemSetMap" type="com.zazhi.common.pojo.vo.ProblemSetVO">
         <id column="id" property="id"/>
         <result column="title" property="title"/>
         <result column="description" property="description"/>
         <result column="create_user" property="createUser"/>
         <result column="create_time" property="createTime"/>
-        <collection property="problems" ofType="com.zazhi.pojo.vo.ProblemVO">
+        <collection property="problems" ofType="com.zazhi.common.pojo.vo.ProblemVO">
             <id column="pid" property="id"/>
             <result column="problem_id" property="problemId"/>
             <result column="problem_title" property="title"/>
             <result column="difficulty" property="difficulty"/>
-            <collection property="tags" ofType="com.zazhi.pojo.entity.ProblemTag">
+            <collection property="tags" ofType="com.zazhi.common.pojo.entity.ProblemTag">
                 <id column="tid" property="id"/>
                 <result column="tag_name" property="name"/>
             </collection>
         </collection>
     </resultMap>
-    <select id="getProblemSet" parameterType="java.lang.Integer" resultType="com.zazhi.pojo.vo.ProblemSetVO" resultMap="getProblemSetMap">
+    <select id="getProblemSet" parameterType="java.lang.Integer" resultType="com.zazhi.common.pojo.vo.ProblemSetVO" resultMap="getProblemSetMap">
         SELECT
             ps.id id,
             ps.title title,

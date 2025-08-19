@@ -1,6 +1,6 @@
 package com.zazhi.judger.service;
 
-import com.zazhi.common.pojo.entity.DockerContainerInfoVO;
+import com.zazhi.common.pojo.vo.DockerContainerInfoVO;
 import com.zazhi.judger.common.pojo.ContainerInfo;
 
 import java.util.List;

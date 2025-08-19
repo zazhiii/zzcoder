@@ -1,11 +1,11 @@
 package com.zazhi.service;
 
-import com.zazhi.pojo.dto.ProblemQueryDTO;
-import com.zazhi.pojo.entity.Problem;
-import com.zazhi.pojo.entity.TestCase;
-import com.zazhi.pojo.result.PageResult;
-import com.zazhi.pojo.vo.ProblemInfoVO;
-import com.zazhi.pojo.vo.ProblemVO;
+import com.zazhi.common.pojo.dto.ProblemQueryDTO;
+import com.zazhi.common.pojo.entity.Problem;
+import com.zazhi.common.pojo.entity.TestCase;
+import com.zazhi.common.pojo.result.PageResult;
+import com.zazhi.common.pojo.vo.ProblemInfoVO;
+import com.zazhi.common.pojo.vo.ProblemVO;
 
 import java.util.List;
 

@@ -1,13 +1,12 @@
 package com.zazhi.initializer;
 
-import cn.hutool.crypto.digest.DigestUtil;
 import cn.hutool.crypto.digest.MD5;
-import com.zazhi.pojo.entity.Permission;
-import com.zazhi.pojo.entity.Role;
-import com.zazhi.pojo.entity.User;
+import com.zazhi.common.pojo.entity.Permission;
+import com.zazhi.common.pojo.entity.Role;
+import com.zazhi.common.pojo.entity.User;
 import com.zazhi.mapper.AuthMapper;
 import com.zazhi.mapper.UserMapper;
-import com.zazhi.pojo.properties.AdminProperties;
+import com.zazhi.common.pojo.properties.AdminProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;

@@ -2,19 +2,17 @@ package com.zazhi.service.impl;
 
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.digest.DigestUtil;
-import com.zazhi.common.constant.MsgConstant;
-import com.zazhi.common.constant.RedisKeyConstants;
 import com.zazhi.common.enums.EmailCodeBusinessType;
+import com.zazhi.common.pojo.dto.*;
 import com.zazhi.common.utils.*;
 import com.zazhi.config.properties.VerifyCodeProperties;
 import com.zazhi.exception.model.*;
-import com.zazhi.pojo.dto.*;
-import com.zazhi.pojo.entity.Permission;
-import com.zazhi.pojo.entity.Role;
+import com.zazhi.common.pojo.entity.Permission;
+import com.zazhi.common.pojo.entity.Role;
 import com.zazhi.mapper.AuthMapper;
 import com.zazhi.mapper.UserMapper;
 import com.zazhi.service.AuthService;
-import com.zazhi.pojo.entity.User;
+import com.zazhi.common.pojo.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -64,7 +62,7 @@ public class AuthServiceImpl implements AuthService {
         String oldPassword = updatePasswordDTO.getOldPassword();
         String newPassword = updatePasswordDTO.getNewPassword();
         // 判断原密码是否正确
-        Long userId = ThreadLocalUtil.getCurrentId();
+        Integer userId = ThreadLocalUtil.getCurrentId();
         User user = userMapper.findById(userId);
         if(!DigestUtil.md5Hex(oldPassword).equals(user.getPassword())){
             throw new BizException(ORIGINAL_PASSWORD_INCORRECT);
@@ -247,7 +245,7 @@ public class AuthServiceImpl implements AuthService {
      * @param roleId
      * @param userId
      */
-    public void addRoleToUser(Integer roleId, Long userId) {
+    public void addRoleToUser(Integer roleId, Integer userId) {
        authMapper.addRoleToUser(roleId, userId);
     }
 

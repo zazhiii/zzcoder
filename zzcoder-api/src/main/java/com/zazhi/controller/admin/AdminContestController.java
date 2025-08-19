@@ -1,8 +1,8 @@
 package com.zazhi.controller.admin;
 
-import com.zazhi.pojo.dto.ContestDTO;
-import com.zazhi.pojo.entity.Contest;
-import com.zazhi.pojo.result.Result;
+import com.zazhi.common.pojo.dto.ContestDTO;
+import com.zazhi.common.pojo.entity.Contest;
+import com.zazhi.common.pojo.result.Result;
 import com.zazhi.service.ContestService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

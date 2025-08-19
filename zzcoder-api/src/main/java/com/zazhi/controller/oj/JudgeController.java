@@ -1,18 +1,17 @@
 package com.zazhi.controller.oj;
 
-import com.zazhi.pojo.dto.JudgeDTO;
-import com.zazhi.pojo.dto.SubmissionQueryDTO;
-import com.zazhi.pojo.result.PageResult;
-import com.zazhi.pojo.result.Result;
+import com.zazhi.common.pojo.dto.JudgeDTO;
+import com.zazhi.common.pojo.dto.SubmissionQueryDTO;
+import com.zazhi.common.pojo.result.PageResult;
+import com.zazhi.common.pojo.result.Result;
 import com.zazhi.service.JudgeService;
-import com.zazhi.pojo.vo.SubmissionInfoVO;
-import com.zazhi.pojo.vo.SubmissionPageVO;
+import com.zazhi.common.pojo.vo.SubmissionInfoVO;
+import com.zazhi.common.pojo.vo.SubmissionPageVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

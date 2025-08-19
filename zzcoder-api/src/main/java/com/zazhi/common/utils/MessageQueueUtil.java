@@ -1,6 +1,6 @@
 package com.zazhi.common.utils;
 
-import com.zazhi.pojo.entity.JudgeTask;
+import com.zazhi.common.pojo.entity.JudgeTask;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

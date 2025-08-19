@@ -2,17 +2,17 @@ package com.zazhi.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.zazhi.pojo.dto.ProblemQueryDTO;
-import com.zazhi.pojo.entity.Problem;
-import com.zazhi.pojo.entity.TestCase;
+import com.zazhi.common.pojo.dto.ProblemQueryDTO;
+import com.zazhi.common.pojo.entity.Problem;
+import com.zazhi.common.pojo.entity.TestCase;
 import com.zazhi.mapper.ProblemMapper;
 import com.zazhi.mapper.ProblemTagMapper;
 import com.zazhi.mapper.UserMapper;
-import com.zazhi.pojo.result.PageResult;
+import com.zazhi.common.pojo.result.PageResult;
 import com.zazhi.service.ProblemService;
 import com.zazhi.common.utils.ThreadLocalUtil;
-import com.zazhi.pojo.vo.ProblemInfoVO;
-import com.zazhi.pojo.vo.ProblemVO;
+import com.zazhi.common.pojo.vo.ProblemInfoVO;
+import com.zazhi.common.pojo.vo.ProblemVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +41,7 @@ public class ProblemServiceImpl implements ProblemService {
      * @param problem
      */
     public void addProblem(Problem problem) {
-        Long id = ThreadLocalUtil.getCurrentId();
+        Integer id = ThreadLocalUtil.getCurrentId();
         problem.setCreateUser(id);
         problem.setUpdateUser(id);
         problemMapper.insert(problem);

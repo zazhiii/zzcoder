@@ -1,10 +1,10 @@
 package com.zazhi.mapper;
 
 import com.github.pagehelper.Page;
-import com.zazhi.pojo.dto.SubmissionQueryDTO;
-import com.zazhi.pojo.entity.Submission;
-import com.zazhi.pojo.vo.SubmissionInfoVO;
-import com.zazhi.pojo.vo.SubmissionPageVO;
+import com.zazhi.common.pojo.dto.SubmissionQueryDTO;
+import com.zazhi.common.pojo.entity.Submission;
+import com.zazhi.common.pojo.vo.SubmissionInfoVO;
+import com.zazhi.common.pojo.vo.SubmissionPageVO;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

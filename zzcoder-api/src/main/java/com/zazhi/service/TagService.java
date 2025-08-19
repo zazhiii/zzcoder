@@ -1,6 +1,6 @@
 package com.zazhi.service;
 
-import com.zazhi.pojo.entity.ProblemTag;
+import com.zazhi.common.pojo.entity.ProblemTag;
 
 import java.util.List;
 

@@ -16,16 +16,15 @@ public class ThreadLocalUtil {
     }
 
     // 获取用户id
-    public static Long getCurrentId(){
+    public static Integer getCurrentId(){
         Map<String, Object> map = get();
-        return ((Number)map.get("id")).longValue();
+        return ((Number)map.get("id")).intValue();
     }
 	
     //存储键值对
     public static void set(Object value){
         THREAD_LOCAL.set(value);
     }
-
 
     //清除ThreadLocal 防止内存泄漏
     public static void remove(){

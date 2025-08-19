@@ -20,6 +20,13 @@ spring:
       host: ${redis.host}
       port: ${redis.port}
       password: ${redis.password}
+
+  # minio
+  minio:
+    endpoint: ${minio.endpoint}
+    access-key: ${minio.access-key}
+    secret-key: ${minio.secret-key}
+    bucket-name: ${minio.bucket-name}
   # mail
   mail:
     host: ${mail.host}

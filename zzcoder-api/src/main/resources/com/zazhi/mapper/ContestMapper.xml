@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zazhi.mapper.ContestMapper">
-    <update id="updateContest" parameterType="com.zazhi.pojo.dto.ContestDTO">
+    <update id="updateContest" parameterType="com.zazhi.common.pojo.dto.ContestDTO">
         update contest
         <set>
             <if test="title != null">title = #{title},</if>
@@ -17,7 +17,7 @@
         where id = #{id}
     </update>
 
-    <select id="getContestProblems" parameterType="java.lang.Long" resultType="com.zazhi.pojo.vo.ContestProblemVO">
+    <select id="getContestProblems" parameterType="java.lang.Long" resultType="com.zazhi.common.pojo.vo.ContestProblemVO">
         select
         p.id as problemId,
         p.title as title,
@@ -30,7 +30,7 @@
         cp.contest_id = #{contestId}
     </select>
 
-    <select id="page" resultType="com.zazhi.pojo.vo.ContestPageVO">
+    <select id="page" resultType="com.zazhi.common.pojo.vo.ContestPageVO">
         SELECT
             c.id,
             c.title,

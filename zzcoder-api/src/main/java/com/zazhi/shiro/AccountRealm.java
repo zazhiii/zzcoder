@@ -1,8 +1,8 @@
 package com.zazhi.shiro;
 
-import com.zazhi.pojo.entity.Permission;
-import com.zazhi.pojo.entity.Role;
-import com.zazhi.pojo.entity.User;
+import com.zazhi.common.pojo.entity.Permission;
+import com.zazhi.common.pojo.entity.Role;
+import com.zazhi.common.pojo.entity.User;
 import com.zazhi.service.UserService;
 import com.zazhi.common.utils.JwtUtil;
 import com.zazhi.common.utils.RedisUtil;
@@ -47,7 +47,7 @@ public class AccountRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        Long userId = (Long) principals.getPrimaryPrincipal();
+        Integer userId = (Integer) principals.getPrimaryPrincipal();
         // 这里查询数据库获取用户的角色和权限
         List<Role> roles = userService.getUserRolesById(userId);
         List<Permission> permissions = userService.getUserPermissionsByRoles(roles);
@@ -99,7 +99,7 @@ public class AccountRealm extends AuthorizingRealm {
         ThreadLocalUtil.set(map);
         log.info(map.toString());
         // 获取用户 id
-        Long userId = Long.valueOf(map.get("id").toString());
+        Integer userId = Integer.valueOf(map.get("id").toString());
         User user = userService.getUserById(userId);
         if (user == null) {
             throw new AuthenticationException("用户不存在");

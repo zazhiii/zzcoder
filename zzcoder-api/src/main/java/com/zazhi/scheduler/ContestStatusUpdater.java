@@ -1,7 +1,7 @@
 package com.zazhi.scheduler;
 
 import com.zazhi.common.enums.ContestStatus;
-import com.zazhi.pojo.entity.Contest;
+import com.zazhi.common.pojo.entity.Contest;
 import com.zazhi.service.ContestService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

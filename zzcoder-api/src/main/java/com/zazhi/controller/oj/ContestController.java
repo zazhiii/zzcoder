@@ -1,19 +1,17 @@
 package com.zazhi.controller.oj;
 
-import com.zazhi.pojo.entity.Contest;
-import com.zazhi.pojo.result.PageResult;
-import com.zazhi.pojo.result.Result;
-import com.zazhi.pojo.vo.ContestPageVO;
-import com.zazhi.pojo.vo.UpcomingContestVO;
+import com.zazhi.common.pojo.result.PageResult;
+import com.zazhi.common.pojo.result.Result;
+import com.zazhi.common.pojo.vo.ContestPageVO;
+import com.zazhi.common.pojo.vo.UpcomingContestVO;
 import com.zazhi.service.ContestService;
-import com.zazhi.pojo.vo.ContestProblemVO;
-import com.zazhi.pojo.vo.ContestVO;
+import com.zazhi.common.pojo.vo.ContestProblemVO;
+import com.zazhi.common.pojo.vo.ContestVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

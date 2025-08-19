@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zazhi.mapper.JudgeMapper">
-    <select id="getSubmissions" resultType="com.zazhi.pojo.vo.SubmissionPageVO" parameterType="com.zazhi.pojo.dto.SubmissionQueryDTO">
+    <select id="getSubmissions" resultType="com.zazhi.common.pojo.vo.SubmissionPageVO" parameterType="com.zazhi.common.pojo.dto.SubmissionQueryDTO">
         select
         s.id, s.problem_id, s.user_id, s.submit_time, s.language, s.status, s.result, s.time_used, s.memory_used, u.username, p.title
         from submission s
@@ -26,12 +26,12 @@
         ORDER BY s.submit_time DESC
     </select>
 
-    <insert id="insertSubmission" parameterType="com.zazhi.pojo.entity.Submission" keyProperty="id" useGeneratedKeys="true">
+    <insert id="insertSubmission" parameterType="com.zazhi.common.pojo.entity.Submission" keyProperty="id" useGeneratedKeys="true">
         insert into submission (id, user_id, problem_id, contest_id, language, code, status, time_used, memory_used)
         values (#{id}, #{userId}, #{problemId}, #{contestId}, #{language}, #{code}, #{status}, #{timeUsed}, #{memoryUsed})
     </insert>
 
-    <update id="updateSubmission" parameterType="com.zazhi.pojo.entity.Submission">
+    <update id="updateSubmission" parameterType="com.zazhi.common.pojo.entity.Submission">
         update submission
         <set>
             <if test="status != null">
@@ -50,7 +50,7 @@
         where id = #{id}
     </update>
 
-    <select id="getSubmissionInfoById" resultType="com.zazhi.pojo.vo.SubmissionInfoVO" parameterType="long">
+    <select id="getSubmissionInfoById" resultType="com.zazhi.common.pojo.vo.SubmissionInfoVO" parameterType="long">
         select
         s.id, s.user_id, s.problem_id, s.contest_id, s.submit_time, s.language, s.code, s.status, s.result, s.time_used, s.memory_used, s.error_message, u.username, p.title
         from submission s

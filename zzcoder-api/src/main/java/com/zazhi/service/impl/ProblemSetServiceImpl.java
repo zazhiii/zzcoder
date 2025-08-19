@@ -2,13 +2,13 @@ package com.zazhi.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.zazhi.pojo.dto.ProblemSetDTO;
-import com.zazhi.pojo.entity.ProblemSet;
+import com.zazhi.common.pojo.dto.ProblemSetDTO;
+import com.zazhi.common.pojo.entity.ProblemSet;
 import com.zazhi.mapper.ProblemSetMapper;
-import com.zazhi.pojo.result.PageResult;
+import com.zazhi.common.pojo.result.PageResult;
 import com.zazhi.service.ProblemSetService;
 import com.zazhi.common.utils.ThreadLocalUtil;
-import com.zazhi.pojo.vo.ProblemSetVO;
+import com.zazhi.common.pojo.vo.ProblemSetVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ public class ProblemSetServiceImpl implements ProblemSetService {
     public void addProblemSet(ProblemSetDTO problemSetDTO) {
         ProblemSet problemSet = new ProblemSet();
         BeanUtils.copyProperties(problemSetDTO, problemSet);
-        Long userId = ThreadLocalUtil.getCurrentId();
+        Integer userId = ThreadLocalUtil.getCurrentId();
         problemSet.setCreateUser(userId);
         problemSet.setUpdateUser(userId);
         problemSetMapper.addProblemSet(problemSet);
@@ -46,7 +46,7 @@ public class ProblemSetServiceImpl implements ProblemSetService {
     public void updateProblemSet(ProblemSetDTO problemSetDTO) {
         ProblemSet problemSet = new ProblemSet();
         BeanUtils.copyProperties(problemSetDTO, problemSet);
-        Long userId = ThreadLocalUtil.getCurrentId();
+        Integer userId = ThreadLocalUtil.getCurrentId();
         problemSet.setUpdateUser(userId);
         problemSetMapper.updateProblemSet(problemSet);
     }

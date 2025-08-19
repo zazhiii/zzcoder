@@ -1,8 +1,8 @@
 package com.zazhi.mapper;
 
 
-import com.zazhi.pojo.entity.Permission;
-import com.zazhi.pojo.entity.Role;
+import com.zazhi.common.pojo.entity.Permission;
+import com.zazhi.common.pojo.entity.Role;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -53,7 +53,7 @@ public interface AuthMapper {
      * @param userId
      */
     @Insert("insert into user_role (role_id, user_id) values (#{roleId}, #{userId})")
-    void addRoleToUser(Integer roleId, Long userId);
+    void addRoleToUser(Integer roleId, Integer userId);
 
     /**
      * 获取所有权限
@@ -94,5 +94,5 @@ public interface AuthMapper {
      * @return
      */
     @Select("select count(*) > 0 from user_role where user_id = #{userId} and role_id = #{roleId}")
-    Boolean userHasRole(Long userId, Integer roleId);
+    Boolean userHasRole(Integer userId, Integer roleId);
 }

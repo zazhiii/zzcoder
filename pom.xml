@@ -31,10 +31,17 @@
         <mybatis.version>3.0.3</mybatis.version>
         <mysql.connector.version>8.2.0</mysql.connector.version>
         <lombok.version>1.18.32</lombok.version>
+        <minio.version>8.4.0</minio.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <!-- minio -->
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio.version}</version>
+            </dependency>
             <!-- hutool -->
             <dependency>
                 <groupId>cn.hutool</groupId>

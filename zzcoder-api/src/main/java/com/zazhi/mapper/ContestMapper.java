@@ -2,10 +2,10 @@ package com.zazhi.mapper;
 
 import com.github.pagehelper.Page;
 import com.zazhi.common.enums.ContestStatus;
-import com.zazhi.pojo.dto.ContestDTO;
-import com.zazhi.pojo.entity.Contest;
-import com.zazhi.pojo.vo.ContestPageVO;
-import com.zazhi.pojo.vo.ContestProblemVO;
+import com.zazhi.common.pojo.dto.ContestDTO;
+import com.zazhi.common.pojo.entity.Contest;
+import com.zazhi.common.pojo.vo.ContestPageVO;
+import com.zazhi.common.pojo.vo.ContestProblemVO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public interface ContestMapper {
      * @return 比赛列表
      */
     @Select("select * from contest where create_user = #{userId}")
-    List<Contest> getContestList(Long userId);
+    List<Contest> getContestList(Integer userId);
 
     /**
      * 修改比赛
@@ -69,7 +69,7 @@ public interface ContestMapper {
      * @param contestId
      */
     @Insert("insert into contest_user(contest_id, user_id) values(#{contestId}, #{userId})")
-    void registerContest(Long contestId, Long userId);
+    void registerContest(Long contestId, Integer userId);
 
     /**
      * 获取报名人数

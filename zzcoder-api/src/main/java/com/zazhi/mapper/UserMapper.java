@@ -1,8 +1,8 @@
 package com.zazhi.mapper;
 
-import com.zazhi.pojo.entity.Permission;
-import com.zazhi.pojo.entity.Role;
-import com.zazhi.pojo.entity.User;
+import com.zazhi.common.pojo.entity.Permission;
+import com.zazhi.common.pojo.entity.Role;
+import com.zazhi.common.pojo.entity.User;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -50,7 +50,7 @@ public interface UserMapper {
      * @return
      */
     @Select("select * from user where id = #{userId}")
-    User findById(Long userId);
+    User findById(Integer userId);
 
     /**
      * 更新用户的密码
@@ -58,7 +58,7 @@ public interface UserMapper {
      * @param password
      */
     @Update("update user set password = #{password}, update_time = now() where id = #{id}")
-    void updatePsw(Long id, String password);
+    void updatePsw(Integer id, String password);
 
     /**
      * 更新用户信息通用方法
@@ -72,7 +72,7 @@ public interface UserMapper {
      * @return
      */
     @Select("select r.* from user_role ur left join role r on ur.role_id = r.id where ur.user_id = #{userId}")
-    List<Role> getUserRolesById(Long userId);
+    List<Role> getUserRolesById(Integer userId);
 
     /**
      * 通过角色查询权限

@@ -36,6 +36,12 @@ alioss:
   access-key-secret: 9j7zMZfZ7uPJBkpY2yd5D1tyiTREiB
   bucket-name: big-eventzazhiii
 
+minio:
+  endpoint: http://localhost:9000
+  access-key: 4b69bykSKeUHSTugKDAS
+  secret-key: hDaXiWjQcAHoGRqUzDd5QFHEl2rEgo8GkQHQx9Wl
+  bucket-name: zzcoder
+
 logging:
   level:
     com:

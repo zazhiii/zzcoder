@@ -1,8 +1,8 @@
 package com.zazhi.controller.admin;
 
-import com.zazhi.pojo.entity.Permission;
-import com.zazhi.pojo.entity.Role;
-import com.zazhi.pojo.result.Result;
+import com.zazhi.common.pojo.entity.Permission;
+import com.zazhi.common.pojo.entity.Role;
+import com.zazhi.common.pojo.result.Result;
 import com.zazhi.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -95,7 +95,7 @@ public class AdminAuthController {
     @Operation(summary = "添加角色到用户")
     @RequiresAuthentication
     @RequiresPermissions(USER_ADD_ROLE)
-    public Result addRoleToUser(Integer roleId, Long userId) {
+    public Result addRoleToUser(Integer roleId, Integer userId) {
         log.info("添加角色到用户：{}, {}", roleId, userId);
         authService.addRoleToUser(roleId, userId);
         return Result.success();

@@ -1,13 +1,12 @@
 package com.zazhi.controller.oj;
 
-import com.zazhi.pojo.dto.*;
-import com.zazhi.pojo.result.Result;
+import com.zazhi.common.pojo.dto.*;
+import com.zazhi.common.pojo.result.Result;
 import com.zazhi.service.AuthService;
 import com.zazhi.common.utils.RedisUtil;
 import com.zazhi.service.impl.VerificationCodeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.Email;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;

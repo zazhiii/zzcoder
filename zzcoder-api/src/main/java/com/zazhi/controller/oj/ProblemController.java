@@ -1,12 +1,12 @@
 package com.zazhi.controller.oj;
 
-import com.zazhi.pojo.entity.TestCase;
-import com.zazhi.pojo.vo.ProblemInfoVO;
-import com.zazhi.pojo.dto.ProblemQueryDTO;
-import com.zazhi.pojo.result.PageResult;
-import com.zazhi.pojo.result.Result;
+import com.zazhi.common.pojo.entity.TestCase;
+import com.zazhi.common.pojo.vo.ProblemInfoVO;
+import com.zazhi.common.pojo.dto.ProblemQueryDTO;
+import com.zazhi.common.pojo.result.PageResult;
+import com.zazhi.common.pojo.result.Result;
 import com.zazhi.service.ProblemService;
-import com.zazhi.pojo.vo.ProblemVO;
+import com.zazhi.common.pojo.vo.ProblemVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;

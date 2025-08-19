@@ -1,9 +1,8 @@
 package com.zazhi.judger.controller;
 
-import com.zazhi.common.pojo.entity.DockerContainerInfoVO;
+import com.zazhi.common.pojo.vo.DockerContainerInfoVO;
 import com.zazhi.judger.common.pojo.Result;
 import com.zazhi.judger.service.DockerPoolService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

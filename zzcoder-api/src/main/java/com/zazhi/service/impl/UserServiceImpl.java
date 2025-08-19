@@ -1,10 +1,11 @@
 package com.zazhi.service.impl;
 
-import com.zazhi.pojo.dto.UpdateEmailDTO;
-import com.zazhi.pojo.dto.UserInfoDTO;
-import com.zazhi.pojo.entity.Permission;
-import com.zazhi.pojo.entity.Role;
-import com.zazhi.pojo.entity.User;
+import com.zazhi.common.pojo.dto.UpdateEmailDTO;
+import com.zazhi.common.pojo.dto.UserInfoDTO;
+import com.zazhi.common.pojo.dto.UserUpdateDTO;
+import com.zazhi.common.pojo.entity.Permission;
+import com.zazhi.common.pojo.entity.Role;
+import com.zazhi.common.pojo.entity.User;
 import com.zazhi.exception.model.VerificationCodeException;
 import com.zazhi.mapper.UserMapper;
 import com.zazhi.service.UserService;
@@ -35,7 +36,7 @@ public class UserServiceImpl implements UserService {
      * @param userId
      * @return
      */
-    public User getUserById(Long userId) {
+    public User getUserById(Integer userId) {
         return userMapper.findById(userId);
     }
 
@@ -45,7 +46,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     public UserInfoDTO getUserInfo() {
-        Long userId = ThreadLocalUtil.getCurrentId();
+        Integer userId = ThreadLocalUtil.getCurrentId();
         User user = userMapper.findById(userId);
         UserInfoDTO userInfoDTO = new UserInfoDTO();
         BeanUtils.copyProperties(user, userInfoDTO);
@@ -69,7 +70,7 @@ public class UserServiceImpl implements UserService {
         String code = updateEmailDTO.getEmailVerificationCode();
         if (verificationCodeService.verifyCode(newEmail, code)) {
             User user = new User();
-            Long userId = ThreadLocalUtil.getCurrentId();
+            Integer userId = ThreadLocalUtil.getCurrentId();
             user.setId(userId);
             user.setEmail(newEmail);
             userMapper.update(user);
@@ -84,7 +85,7 @@ public class UserServiceImpl implements UserService {
      * @param avatarUrl
      */
     public void updateAvatar(String avatarUrl) {
-        Long userId = ThreadLocalUtil.getCurrentId();
+        Integer userId = ThreadLocalUtil.getCurrentId();
         User user = new User();
         user.setAvatarUrl(avatarUrl);
         user.setId(userId);
@@ -97,7 +98,7 @@ public class UserServiceImpl implements UserService {
      * @param userId
      * @return
      */
-    public List<Role> getUserRolesById(Long userId) {
+    public List<Role> getUserRolesById(Integer userId) {
         return userMapper.getUserRolesById(userId);
     }
 
@@ -121,4 +122,19 @@ public class UserServiceImpl implements UserService {
     public User getUserByName(String username) {
         return userMapper.getByName(username);
     }
+
+    /**
+     * 更新用户信息
+     *
+     * @param userInfo
+     */
+    @Override
+    public void updateUserInfo(UserUpdateDTO userInfo) {
+        User user = new User();
+        BeanUtils.copyProperties(userInfo, user);
+        user.setId(ThreadLocalUtil.getCurrentId());
+        userMapper.update(user);
+    }
+
+
 }

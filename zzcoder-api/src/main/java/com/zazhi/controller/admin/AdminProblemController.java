@@ -1,8 +1,8 @@
 package com.zazhi.controller.admin;
 
-import com.zazhi.pojo.entity.Problem;
-import com.zazhi.pojo.entity.TestCase;
-import com.zazhi.pojo.result.Result;
+import com.zazhi.common.pojo.entity.Problem;
+import com.zazhi.common.pojo.entity.TestCase;
+import com.zazhi.common.pojo.result.Result;
 import com.zazhi.service.ProblemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

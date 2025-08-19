@@ -3,19 +3,18 @@ package com.zazhi.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zazhi.common.enums.JudgeStatus;
-import com.zazhi.common.pojo.entity.JudgeResult;
+import com.zazhi.common.pojo.entity.*;
 import com.zazhi.common.utils.MessageQueueUtil;
-import com.zazhi.pojo.dto.JudgeDTO;
-import com.zazhi.pojo.dto.SubmissionQueryDTO;
+import com.zazhi.common.pojo.dto.JudgeDTO;
+import com.zazhi.common.pojo.dto.SubmissionQueryDTO;
 import com.zazhi.mapper.JudgeMapper;
 import com.zazhi.mapper.ProblemMapper;
 import com.zazhi.mapper.UserMapper;
-import com.zazhi.pojo.entity.*;
-import com.zazhi.pojo.result.PageResult;
+import com.zazhi.common.pojo.result.PageResult;
 import com.zazhi.service.JudgeService;
 import com.zazhi.common.utils.ThreadLocalUtil;
-import com.zazhi.pojo.vo.SubmissionInfoVO;
-import com.zazhi.pojo.vo.SubmissionPageVO;
+import com.zazhi.common.pojo.vo.SubmissionInfoVO;
+import com.zazhi.common.pojo.vo.SubmissionPageVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -46,7 +45,7 @@ public class JudgeServiceImpl implements JudgeService {
     public Long submitCode(JudgeDTO judgeDTO) {
         // 记录任务状态, pending、judging、finished ( 、判题中、判题完成)
         // (生成submission存入数据库)
-        Long userId = ThreadLocalUtil.getCurrentId();
+        Integer userId = ThreadLocalUtil.getCurrentId();
 
 //        judgeDTO.setUserId(ThreadLocalUtil.getCurrentId());
         Submission submission = Submission.builder()

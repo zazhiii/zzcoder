@@ -1,9 +1,8 @@
 package com.zazhi.service;
 
-import com.zazhi.pojo.dto.*;
-import com.zazhi.pojo.entity.Permission;
-import com.zazhi.pojo.entity.User;
-import com.zazhi.pojo.entity.Role;
+import com.zazhi.common.pojo.dto.*;
+import com.zazhi.common.pojo.entity.Permission;
+import com.zazhi.common.pojo.entity.Role;
 
 import java.util.List;
 
@@ -79,7 +78,7 @@ public interface AuthService {
      * @param roleId
      * @param userId
      */
-    void addRoleToUser(Integer roleId, Long userId);
+    void addRoleToUser(Integer roleId, Integer userId);
 
     /**
      * 获取所有权限

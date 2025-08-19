@@ -1,6 +1,6 @@
 package com.zazhi.service.impl;
 
-import com.zazhi.pojo.entity.ProblemTag;
+import com.zazhi.common.pojo.entity.ProblemTag;
 import com.zazhi.mapper.TagMapper;
 import com.zazhi.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;

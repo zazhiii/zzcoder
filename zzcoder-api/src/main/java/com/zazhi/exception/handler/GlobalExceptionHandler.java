@@ -1,7 +1,6 @@
 package com.zazhi.exception.handler;
 
-import com.zazhi.exception.model.AuthException;
-import com.zazhi.pojo.result.Result;
+import com.zazhi.common.pojo.result.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;

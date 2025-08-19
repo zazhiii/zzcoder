@@ -1,11 +1,11 @@
 package com.zazhi.controller.oj;
 
-import com.zazhi.pojo.dto.ProblemSetDTO;
-import com.zazhi.pojo.entity.ProblemSet;
-import com.zazhi.pojo.result.PageResult;
-import com.zazhi.pojo.result.Result;
+import com.zazhi.common.pojo.dto.ProblemSetDTO;
+import com.zazhi.common.pojo.entity.ProblemSet;
+import com.zazhi.common.pojo.result.PageResult;
+import com.zazhi.common.pojo.result.Result;
 import com.zazhi.service.ProblemSetService;
-import com.zazhi.pojo.vo.ProblemSetVO;
+import com.zazhi.common.pojo.vo.ProblemSetVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;

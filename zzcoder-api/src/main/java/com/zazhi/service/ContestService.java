@@ -2,14 +2,13 @@ package com.zazhi.service;
 
 
 import com.zazhi.common.enums.ContestStatus;
-import com.zazhi.pojo.dto.ContestDTO;
-import com.zazhi.pojo.entity.Contest;
-import com.zazhi.pojo.result.PageResult;
-import com.zazhi.pojo.vo.ContestPageVO;
-import com.zazhi.pojo.vo.ContestProblemVO;
-import com.zazhi.pojo.vo.ContestVO;
-import com.zazhi.pojo.vo.UpcomingContestVO;
-import org.springframework.web.bind.annotation.RequestParam;
+import com.zazhi.common.pojo.dto.ContestDTO;
+import com.zazhi.common.pojo.entity.Contest;
+import com.zazhi.common.pojo.result.PageResult;
+import com.zazhi.common.pojo.vo.ContestPageVO;
+import com.zazhi.common.pojo.vo.ContestProblemVO;
+import com.zazhi.common.pojo.vo.ContestVO;
+import com.zazhi.common.pojo.vo.UpcomingContestVO;
 
 import java.util.List;
 

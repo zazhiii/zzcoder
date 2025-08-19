@@ -1,8 +1,10 @@
 package com.zazhi.controller.oj;
 
-import com.zazhi.pojo.dto.UpdateEmailDTO;
-import com.zazhi.pojo.dto.UserInfoDTO;
-import com.zazhi.pojo.result.Result;
+import com.zazhi.common.pojo.dto.UpdateEmailDTO;
+import com.zazhi.common.pojo.dto.UserInfoDTO;
+import com.zazhi.common.pojo.dto.UserUpdateDTO;
+import com.zazhi.common.pojo.entity.User;
+import com.zazhi.common.pojo.result.Result;
 import com.zazhi.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -48,6 +50,14 @@ public class UserController {
     public Result updateAvatar(@RequestParam String avatarUrl){
         log.info("更新用户头像，{}", avatarUrl);
         userService.updateAvatar(avatarUrl);
+        return Result.success();
+    }
+
+    @PutMapping()
+    @Operation(summary = "更新用户基本信息")
+    public Result<Void> updateUserInfo(@RequestBody UserUpdateDTO userInfo) {
+        log.info("更新用户信息：{}", userInfo);
+        userService.updateUserInfo(userInfo);
         return Result.success();
     }
 }

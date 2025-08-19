@@ -1,11 +1,11 @@
 package com.zazhi.service;
 
 import com.zazhi.common.pojo.entity.JudgeResult;
-import com.zazhi.pojo.dto.JudgeDTO;
-import com.zazhi.pojo.dto.SubmissionQueryDTO;
-import com.zazhi.pojo.result.PageResult;
-import com.zazhi.pojo.vo.SubmissionInfoVO;
-import com.zazhi.pojo.vo.SubmissionPageVO;
+import com.zazhi.common.pojo.dto.JudgeDTO;
+import com.zazhi.common.pojo.dto.SubmissionQueryDTO;
+import com.zazhi.common.pojo.result.PageResult;
+import com.zazhi.common.pojo.vo.SubmissionInfoVO;
+import com.zazhi.common.pojo.vo.SubmissionPageVO;
 
 public interface JudgeService {
     /**
