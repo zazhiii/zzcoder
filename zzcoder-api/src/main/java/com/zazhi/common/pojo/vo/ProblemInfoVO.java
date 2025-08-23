@@ -38,7 +38,7 @@ public class ProblemInfoVO implements Serializable {
 
     private String outputDescription; // 输出描述
 
-    private List<TestCase> examples; // 输入样例
+    private List<SampleTestCaseVO> samples; // 输入样例
 
     private String source; // 题目来源，默认为zzcoder
 
@@ -50,5 +50,5 @@ public class ProblemInfoVO implements Serializable {
 
     private String createUser; // 创建人
 
-    private List<ProblemTag> tags; // 题目标签
+    private List<String> tags; // 题目标签
 }

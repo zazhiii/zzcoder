@@ -106,13 +106,10 @@ CREATE TABLE `tag`
 drop table if exists `problem_tag`;
 CREATE TABLE `problem_tag`
 (
-    `id`          INTEGER NOT NULL AUTO_INCREMENT UNIQUE,
-    `pid`         INTEGER NOT NULL COMMENT '题目id',
-    `tid`         INTEGER NOT NULL COMMENT '标签id',
-    `create_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    PRIMARY KEY (`id`)
-) COMMENT ='题目标签表';
+    `problem_id` int NOT NULL COMMENT '题目id',
+    `tag_id`     int NOT NULL COMMENT '标签id',
+    primary key (`problem_id`, `tag_id`)
+) COMMENT='题目标签关联表';
 
 -- ===============
 -- === 题目模块 ===

@@ -1,11 +1,12 @@
 package com.zazhi.mapper;
 
 import com.github.pagehelper.Page;
-import com.zazhi.common.pojo.dto.ProblemQueryDTO;
+import com.zazhi.common.pojo.dto.ProblemPageDTO;
 import com.zazhi.common.pojo.entity.Problem;
 import com.zazhi.common.pojo.entity.TestCase;
 import com.zazhi.common.pojo.vo.ProblemInfoVO;
-import com.zazhi.common.pojo.vo.ProblemVO;
+import com.zazhi.common.pojo.vo.ProblemPageVO;
+import com.zazhi.common.pojo.vo.TagVO;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -24,10 +25,10 @@ public interface ProblemMapper {
     /**
      * 题目条件分页查询
      *
-     * @param problemQueryDTO
+     * @param problemPageDTO
      * @return
      */
-    Page<ProblemVO> page(ProblemQueryDTO problemQueryDTO);
+    Page<Integer> pageIds(ProblemPageDTO problemPageDTO);
 
     /**
      * 更新题目信息
@@ -69,4 +70,20 @@ public interface ProblemMapper {
      */
     @Select("select * from test_case where problem_id = #{problemId}")
     List<TestCase> getTestCases(Integer problemId);
+
+    /**
+     * 根据题目id查询题目的标签
+     * @param problemId 题目id
+     * @return 标签列表
+     */
+    @Select("select t.id, t.name from tag t left join problem_tag pt on t.id = pt.tag_id " +
+            "where pt.problem_id = #{problemId}")
+    List<TagVO> getProblemTags(Integer problemId);
+
+    /**
+     * 根据id列表查询题目分页数据
+     * @param result id列表
+     * @return 题目分页数据
+     */
+    List<ProblemPageVO> pageByIds(List<Integer> result);
 }

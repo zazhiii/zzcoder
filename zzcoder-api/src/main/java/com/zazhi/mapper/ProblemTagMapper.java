@@ -32,7 +32,7 @@ public interface ProblemTagMapper {
      * @param tagId
      * @param problemId
      */
-    @Insert("insert into problem_tag (pid, tid) values (#{problemId}, #{tagId})")
+    @Insert("insert into problem_tag (problem_id, tag_id) values (#{problemId}, #{tagId})")
     void addTagToProblem(Integer tagId, Integer problemId);
 
     /**
@@ -40,7 +40,7 @@ public interface ProblemTagMapper {
      * @param problemId
      * @param tagId
      */
-    @Delete("delete from problem_tag where pid = #{problemId} and tid = #{tagId}")
+    @Delete("delete from problem_tag where problem_id = #{problemId} and tag_id = #{tagId}")
     void deleteTagFromProblem(Integer problemId, Integer tagId);
 
     /**

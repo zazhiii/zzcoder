@@ -25,5 +25,5 @@ public class ProblemSetVO {
     private Long createUser;       // 创建人（用户ID）
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp createTime;  // 创建时间
-    private List<ProblemVO> problems; // 题目列表
+    private List<ProblemPageVO> problems; // 题目列表
 }

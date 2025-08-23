@@ -2,17 +2,18 @@ package com.zazhi.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.zazhi.common.pojo.dto.ProblemQueryDTO;
+import com.zazhi.common.pojo.dto.ProblemPageDTO;
 import com.zazhi.common.pojo.entity.Problem;
 import com.zazhi.common.pojo.entity.TestCase;
+import com.zazhi.common.pojo.result.PageResult;
+import com.zazhi.common.pojo.vo.ProblemInfoVO;
+import com.zazhi.common.pojo.vo.ProblemPageVO;
+import com.zazhi.common.pojo.vo.TagVO;
+import com.zazhi.common.utils.ThreadLocalUtil;
 import com.zazhi.mapper.ProblemMapper;
 import com.zazhi.mapper.ProblemTagMapper;
 import com.zazhi.mapper.UserMapper;
-import com.zazhi.common.pojo.result.PageResult;
 import com.zazhi.service.ProblemService;
-import com.zazhi.common.utils.ThreadLocalUtil;
-import com.zazhi.common.pojo.vo.ProblemInfoVO;
-import com.zazhi.common.pojo.vo.ProblemVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,14 +50,16 @@ public class ProblemServiceImpl implements ProblemService {
 
     /**
      * 题目条件分页查询
+     * 注意：这里先查满足条件的题目id列表，再根据id列表查询题目信息，避免mybatis结果集映射和分页插件冲突
      *
-     * @param problemQueryDTO
+     * @param problemPageDTO
      * @return
      */
-    public PageResult<ProblemVO> page(ProblemQueryDTO problemQueryDTO) {
-        PageHelper.startPage(problemQueryDTO.getCurrentPage(), problemQueryDTO.getLimit());
-        Page<ProblemVO> res = problemMapper.page(problemQueryDTO);
-        return new PageResult<>(res.getTotal(), res.getResult());
+    public PageResult<ProblemPageVO> page(ProblemPageDTO problemPageDTO) {
+        PageHelper.startPage(problemPageDTO.getPage(), problemPageDTO.getPageSize());
+        Page<Integer> ids = problemMapper.pageIds(problemPageDTO);
+        List<ProblemPageVO> records = problemMapper.pageByIds(ids.getResult());
+        return new PageResult<>(ids.getTotal(), records);
     }
 
     /**
@@ -81,11 +84,6 @@ public class ProblemServiceImpl implements ProblemService {
 
     /**
      * 获取单个题目信息
-     * 这里我的设计是通过联查将题目的标签信息和创建人信息一起查出来
-     * 这样的好处是只需要一次数据库查询就可以将所有信息查出来
-     * 当然也可以分开查，但是会有多次查询
-     * 由于查看题目是一个比较频繁的操作，所以这里我选择一次查出来，效率更高
-     * 但是sql语句会比较复杂
      *
      * @param id 题目id
      * @return ProblemInfoVO
@@ -100,7 +98,7 @@ public class ProblemServiceImpl implements ProblemService {
      * @param tagId
      */
     public void addTagToProblem(Integer problemId, Integer tagId) {
-            problemTagMapper.addTagToProblem(tagId, problemId);
+        problemTagMapper.addTagToProblem(tagId, problemId);
     }
 
     /**
@@ -135,6 +133,16 @@ public class ProblemServiceImpl implements ProblemService {
      */
     public List<TestCase> getTestCases(Integer problemId) {
         return problemTagMapper.getTestCases(problemId);
+    }
+
+    /**
+     * 根据题目id查询题目的标签
+     * @param problemId 题目id
+     * @return 标签列表
+     */
+    @Override
+    public List<TagVO> getProblemTags(Integer problemId) {
+        return problemMapper.getProblemTags(problemId);
     }
 
 

@@ -1,11 +1,12 @@
 package com.zazhi.service;
 
-import com.zazhi.common.pojo.dto.ProblemQueryDTO;
+import com.zazhi.common.pojo.dto.ProblemPageDTO;
 import com.zazhi.common.pojo.entity.Problem;
 import com.zazhi.common.pojo.entity.TestCase;
 import com.zazhi.common.pojo.result.PageResult;
 import com.zazhi.common.pojo.vo.ProblemInfoVO;
-import com.zazhi.common.pojo.vo.ProblemVO;
+import com.zazhi.common.pojo.vo.ProblemPageVO;
+import com.zazhi.common.pojo.vo.TagVO;
 
 import java.util.List;
 
@@ -20,10 +21,10 @@ public interface ProblemService {
     /**
      * 题目条件分页查询
      *
-     * @param problemQueryDTO
+     * @param problemPageDTO
      * @return
      */
-    PageResult<ProblemVO> page(ProblemQueryDTO problemQueryDTO);
+    PageResult<ProblemPageVO> page(ProblemPageDTO problemPageDTO);
 
     /**
      * 更新题目信息
@@ -78,4 +79,11 @@ public interface ProblemService {
      * @return
      */
     List<TestCase> getTestCases(Integer problemId);
+
+    /**
+     * 根据题目id查询题目的标签
+     * @param problemId
+     * @return
+     */
+    List<TagVO> getProblemTags(Integer problemId);
 }

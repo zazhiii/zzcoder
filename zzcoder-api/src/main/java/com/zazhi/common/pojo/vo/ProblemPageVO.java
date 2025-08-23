@@ -1,6 +1,5 @@
 package com.zazhi.common.pojo.vo;
 
-import com.zazhi.common.pojo.entity.ProblemTag;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,10 +12,10 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProblemVO implements Serializable {
+public class ProblemPageVO implements Serializable {
     private Integer id;
     private String problemId; // 题目编号
     private String title; // 题目标题
     private Integer difficulty; // 难度
-    private List<ProblemTag> tags; // 标签
+    private List<String> tags; // 标签
 }

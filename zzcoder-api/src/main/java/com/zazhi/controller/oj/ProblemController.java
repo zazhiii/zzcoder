@@ -2,11 +2,12 @@ package com.zazhi.controller.oj;
 
 import com.zazhi.common.pojo.entity.TestCase;
 import com.zazhi.common.pojo.vo.ProblemInfoVO;
-import com.zazhi.common.pojo.dto.ProblemQueryDTO;
+import com.zazhi.common.pojo.dto.ProblemPageDTO;
 import com.zazhi.common.pojo.result.PageResult;
 import com.zazhi.common.pojo.result.Result;
+import com.zazhi.common.pojo.vo.TagVO;
 import com.zazhi.service.ProblemService;
-import com.zazhi.common.pojo.vo.ProblemVO;
+import com.zazhi.common.pojo.vo.ProblemPageVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -31,11 +32,11 @@ public class ProblemController {
     @Autowired
     ProblemService problemService;
 
-    @PostMapping("/list")
+    @PostMapping("/page")
     @Operation(summary = "题目条件分页查询")
-    public Result<PageResult<ProblemVO>> list(@RequestBody ProblemQueryDTO problemQueryDTO){
-        log.info("分页查询题目，{}", problemQueryDTO);
-        return Result.success(problemService.page(problemQueryDTO));
+    public Result<PageResult<ProblemPageVO>> list(@RequestBody ProblemPageDTO problemPageDTO){
+        log.info("分页查询题目，{}", problemPageDTO);
+        return Result.success(problemService.page(problemPageDTO));
     }
 
     @GetMapping("/{id}")
@@ -43,6 +44,13 @@ public class ProblemController {
     public Result<ProblemInfoVO> getProblemInfo(@PathVariable Integer id){
         log.info("查看题目：{}", id);
         return Result.success(problemService.getProblemInfo(id));
+    }
+
+    @GetMapping("{problemId}/tags")
+    @Operation(summary = "查询题目的标签")
+    public Result<List<TagVO>> getProblemTags(@PathVariable Integer problemId){
+        log.info("查询题目{}的标签", problemId);
+        return Result.success(problemService.getProblemTags(problemId));
     }
 
     @GetMapping("/test-cases")

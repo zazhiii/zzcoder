@@ -61,7 +61,7 @@ public class AdminProblemController {
     @Operation(summary = "为题目添加标签")
     @RequiresAuthentication
     @RequiresPermissions(PROBLEM_ADD_TAG)
-    public Result addTagToProblem(Integer problemId, Integer tagId){
+    public Result<Void> addTagToProblem(Integer problemId, Integer tagId){
         log.info("添加标签到题目：{}, {}", problemId, tagId);
         problemService.addTagToProblem(problemId, tagId);
         return Result.success();

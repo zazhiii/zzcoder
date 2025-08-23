@@ -39,40 +39,53 @@
         )
     </insert>
 
-    <resultMap id="pageMap" type="com.zazhi.common.pojo.vo.ProblemVO">
+    <resultMap id="pageMap" type="com.zazhi.common.pojo.vo.ProblemPageVO">
         <id column="id" property="id"/>
         <result column="problem_id" property="problemId"/>
         <result column="title" property="title"/>
         <result column="difficulty" property="difficulty"/>
-        <collection property="tags" ofType="com.zazhi.common.pojo.entity.ProblemTag">
-            <id column="tid" property="id"/>
-            <result column="name" property="name"/>
+        <collection property="tags" ofType="java.lang.String">
+            <result column="name"/>
         </collection>
     </resultMap>
-    <select id="page" parameterType="com.zazhi.common.pojo.dto.ProblemQueryDTO" resultMap="pageMap">
+    <select id="pageByIds" parameterType="java.util.List" resultMap="pageMap">
         select
         p.id,
         p.problem_id,
         p.title,
         p.difficulty,
-        pt.tid,
         t.name
         from problem p
-        LEFT JOIN problem_tag pt ON p.id = pt.pid
-        LEFT JOIN tag t ON pt.tid = t.id
+        LEFT JOIN problem_tag pt ON p.id = pt.problem_id
+        LEFT JOIN tag t ON pt.tag_id = t.id
+        where p.id in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <!-- 根据标签id集合查询题目id集合 -->
+    <select id="pageIds" parameterType="com.zazhi.common.pojo.dto.ProblemPageDTO">
+        select
+        <!-- 题目 -->
+        p.id
+<!--        p.problem_id,-->
+<!--        p.title,-->
+<!--        p.difficulty,-->
+<!--        &lt;!&ndash; 标签 &ndash;&gt;-->
+<!--        t.name-->
+        from problem p
+<!--        LEFT JOIN problem_tag pt ON p.id = pt.problem_id-->
+<!--        LEFT JOIN tag t ON pt.tag_id = t.id-->
         <where>
             <if test="keyword != null and keyword.trim() != ''">
-                AND (
-                title LIKE CONCAT('%', #{keyword}, '%')
-                OR
-                problem_id LIKE CONCAT('%', #{keyword}, '%')
-                )
+                AND ( title LIKE CONCAT('%', #{keyword}, '%') OR p.problem_id LIKE CONCAT('%', #{keyword}, '%') )
             </if>
             <if test="tagId != null and tagId.size() > 0">
                 AND p.id IN
                 (
-                SELECT pid FROM problem_tag
-                WHERE tid IN
+                SELECT problem_id FROM problem_tag
+                WHERE tag_id IN
                 <foreach item="tid" collection="tagId" open="(" separator="," close=")">
                     #{tid}
                 </foreach>
@@ -85,6 +98,7 @@
                 AND source = #{source}
             </if>
         </where>
+<!--        GROUP BY p.problem_id-->
     </select>
 
     <update id="update" parameterType="com.zazhi.common.pojo.entity.Problem">
@@ -139,7 +153,7 @@
         <result column="title" property="title"/>
         <result column="time_limit" property="timeLimit"/>
         <result column="memory_limit" property="memoryLimit"/>
-        <result column="stack_limit" property="stackLimit"/>
+<!--        <result column="stack_limit" property="stackLimit"/>-->
         <result column="description" property="description"/>
         <result column="input_description" property="inputDescription"/>
         <result column="output_description" property="outputDescription"/>
@@ -148,14 +162,15 @@
         <result column="hint" property="hint"/>
         <result column="status" property="status"/>
         <result column="create_user" property="createUser"/>
-        <collection property="tags" ofType="com.zazhi.common.pojo.entity.ProblemTag">
-            <id column="tid" property="id"/>
-            <result column="name" property="name"/>
+        <!-- 标签集合 -->
+        <collection property="tags" ofType="java.lang.String">
+            <result column="name"/>
         </collection>
-        <collection property="examples" ofType="com.zazhi.common.pojo.entity.TestCase">
-            <id column="test_case_id" property="id"/>
+        <!-- 样例集合 -->
+        <collection property="samples" ofType="com.zazhi.common.pojo.vo.SampleTestCaseVO">
             <result column="input" property="input"/>
             <result column="output" property="output"/>
+            <result column="explanation" property="explanation"/>
         </collection>
     </resultMap>
     <select id="getProblemInfoById" resultMap="getProblemInfoByIdMap">
@@ -163,16 +178,14 @@
         <!-- 题目基本信息 -->
         p.*,
         <!-- 标签 -->
-        pt.tid AS tid,
-        t.name AS name,
+        t.name,
         <!-- 样例测试数据 -->
-        tc.id AS test_case_id,
-        tc.input AS input,
-        tc.output AS output
-
+        tc.input,
+        tc.output,
+        tc.explanation
         FROM problem p
-        LEFT JOIN problem_tag pt ON p.id = pt.pid
-        LEFT JOIN tag t ON pt.tid = t.id
+        LEFT JOIN problem_tag pt ON p.id = pt.problem_id
+        LEFT JOIN tag t ON pt.tag_id = t.id
         LEFT JOIN test_case tc ON (p.id = tc.problem_id AND tc.is_sample = 1)
         WHERE p.id = #{id}
     </select>
