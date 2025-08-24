@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zazhi.common.pojo.dto.ProblemSetDTO;
 import com.zazhi.common.pojo.entity.ProblemSet;
+import com.zazhi.common.pojo.vo.ProblemSetPageVO;
 import com.zazhi.mapper.ProblemSetMapper;
 import com.zazhi.common.pojo.result.PageResult;
 import com.zazhi.service.ProblemSetService;
@@ -31,11 +32,12 @@ public class ProblemSetServiceImpl implements ProblemSetService {
      * @param problemSetDTO
      */
     public void addProblemSet(ProblemSetDTO problemSetDTO) {
-        ProblemSet problemSet = new ProblemSet();
-        BeanUtils.copyProperties(problemSetDTO, problemSet);
-        Integer userId = ThreadLocalUtil.getCurrentId();
-        problemSet.setCreateUser(userId);
-        problemSet.setUpdateUser(userId);
+        ProblemSet problemSet = ProblemSet.builder()
+                .title(problemSetDTO.getTitle())
+                .description(problemSetDTO.getDescription())
+                .createUser(ThreadLocalUtil.getCurrentId())
+                .updateUser(ThreadLocalUtil.getCurrentId())
+                .build();
         problemSetMapper.addProblemSet(problemSet);
     }
 
@@ -58,9 +60,9 @@ public class ProblemSetServiceImpl implements ProblemSetService {
      * @param title
      * @return
      */
-    public PageResult<ProblemSet> listPublicProblemSet(Integer page, Integer size, String title) {
+    public PageResult<ProblemSetPageVO> pagePublicProblemSet(Integer page, Integer size, String title) {
         PageHelper.startPage(page, size);
-        Page<ProblemSet> problemSets = problemSetMapper.listPublicProblemSet(title);
+        Page<ProblemSetPageVO> problemSets = problemSetMapper.pagePublicProblemSet(title);
         return new PageResult<>(problemSets.getTotal(), problemSets.getResult());
     }
 
@@ -68,7 +70,7 @@ public class ProblemSetServiceImpl implements ProblemSetService {
      * 查询我的所有题单
      * @return
      */
-    public List<ProblemSet> listPrivateProblemSet() {
+    public List<ProblemSetPageVO> listMyProblemSet() {
         return problemSetMapper.listPrivateProblemSet(ThreadLocalUtil.getCurrentId());
     }
 

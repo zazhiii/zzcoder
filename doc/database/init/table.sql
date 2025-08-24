@@ -7,12 +7,12 @@ drop table if exists user;
 create table user
 (
     id            bigint auto_increment primary key,
-    username      varchar(32)         not null unique comment '用户名',
-    password      varchar(128)        not null comment '登录密码',
-    email         varchar(32)         not null unique comment '邮箱',
-    phone_number  varchar(11)         null unique comment '手机号码',
-    avatar_url    varchar(128)        null unique comment '头像图片地址',
-    cf_username   varchar(32)         null unique comment 'Codeforces用户名',
+    username      varchar(32)  not null unique comment '用户名',
+    password      varchar(128) not null comment '登录密码',
+    email         varchar(32)  not null unique comment '邮箱',
+    phone_number  varchar(11) null unique comment '手机号码',
+    avatar_url    varchar(128) null unique comment '头像图片地址',
+    cf_username   varchar(32) null unique comment 'Codeforces用户名',
     status        int       default 0 null comment '账号状态, 0可用, 1不可用',
     `create_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
@@ -83,7 +83,7 @@ create table problem
     output_description mediumtext                     not null comment '输出描述',
     source             varchar(255) default 'zzcoder' not null comment '题目来源',
     difficulty         int                            not null comment '题目难度，0入门，1简单，2简单+，3中等，4中等+，5困难，6困难+',
-    hint               varchar(255)                   null comment '备注提醒',
+    hint               varchar(255) null comment '备注提醒',
     status             varchar(255) default '0'       not null comment '默认0公开，1私有，3比赛中',
     create_user        bigint                         not null comment '创建人',
     update_user        bigint                         not null comment '修改人',
@@ -117,28 +117,33 @@ CREATE TABLE `problem_tag`
 
 -- 题单表
 drop table if exists problem_set;
-create table problem_set
+CREATE TABLE `problem_set`
 (
-    id          int auto_increment primary key comment '主键，自增长',
-    title       varchar(255)                        not null comment '题单标题',
-    description text                                null comment '题单描述',
-    status      tinyint   default 0                 not null comment '状态（0私有，1公开）',
-    create_user bigint                              null comment '创建人（用户ID）',
-    update_user bigint                              null comment '修改人（用户ID）',
-    create_time timestamp default CURRENT_TIMESTAMP null comment '创建时间',
-    update_time timestamp default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '更新时间'
-) comment '题单表';
+    `id`          int          NOT NULL AUTO_INCREMENT COMMENT '主键，自增长',
+    `title`       varchar(255) NOT NULL COMMENT '题单标题',
+    `description` text COMMENT '题单描述',
+    `status`      tinyint      NOT NULL DEFAULT '0' COMMENT '状态（0私有，1公开）',
+    `create_user` int          NOT NULL COMMENT '创建人（用户ID）',
+    `update_user` int          NOT NULL COMMENT '修改人（用户ID）',
+    `create_time` timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time` timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    PRIMARY KEY (`id`)
+) COMMENT='题单表';
 
--- 题目-题单关联表
-drop table if exists problem_problem_set;
-create table problem_problem_set
+-- 题单-题目关联表
+-- 题单-题目关联表
+drop table if exists problem_set_problem;
+CREATE TABLE `problem_set_problem`
 (
-    id             int auto_increment primary key comment '主键，自增长',
-    problem_set_id int                                 not null comment '题单ID',
-    problem_id     int                                 not null comment '题目ID',
-    create_time    timestamp default CURRENT_TIMESTAMP null comment '创建时间',
-    update_time    timestamp default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '更新时间'
-) comment '题目-题单关联表';
+    `id`             int     NOT NULL,
+    `problem_set_id` int     NOT NULL COMMENT '题单ID',
+    `problem_type`   tinyint NOT NULL COMMENT '题目类型：0-本站题目，1-外部题目',
+    `problem_id`     int          DEFAULT NULL COMMENT '本站题目ID（当problem_type=0时必填）',
+    `external_title` varchar(255) DEFAULT NULL COMMENT '外部题目名称（当problem_type=1时必填）',
+    `external_url`   varchar(512) DEFAULT NULL COMMENT '外部题目链接（当problem_type=1时必填）',
+    `create_time`    timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+) COMMENT='题单-题目关联表';
 
 -- ===============
 -- === 判题模块 ===
@@ -172,6 +177,7 @@ CREATE TABLE test_case
     input       TEXT NOT NULL COMMENT '输入数据',
     output      TEXT NOT NULL COMMENT '期望输出',
     is_sample   BOOLEAN   DEFAULT FALSE COMMENT '是否是示例用例（用于展示）',
+    explanation VARCHAR(255) COMMENT '用例说明',
     create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
 );

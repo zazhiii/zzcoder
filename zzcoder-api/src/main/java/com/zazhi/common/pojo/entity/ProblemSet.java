@@ -1,5 +1,6 @@
 package com.zazhi.common.pojo.entity;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,7 @@ import java.sql.Timestamp;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ProblemSet {
     private Integer id;            // 主键
     private String title;          // 题单标题

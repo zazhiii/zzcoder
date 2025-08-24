@@ -23,12 +23,17 @@
         where id = #{id}
     </update>
 
-    <select id="listPublicProblemSet" parameterType="string" resultType="com.zazhi.common.pojo.entity.ProblemSet">
-        select * from problem_set
+    <select id="pagePublicProblemSet" parameterType="string" resultType="com.zazhi.common.pojo.vo.ProblemSetPageVO">
+        select
+        ps.id,
+        ps.title,
+        u.id as create_user_id,
+        u.username as create_user_name
+        from problem_set ps left join user u on ps.create_user = u.id
         <where>
-            status = 1
-            <if test="title != null">
-                and title like concat('%', #{title}, '%')
+            ps.status = 1
+            <if test="title != null and title.trim() != ''">
+                and ps.title like concat('%', #{title}, '%')
             </if>
         </where>
     </select>

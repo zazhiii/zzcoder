@@ -3,6 +3,7 @@ package com.zazhi.service;
 import com.zazhi.common.pojo.dto.ProblemSetDTO;
 import com.zazhi.common.pojo.entity.ProblemSet;
 import com.zazhi.common.pojo.result.PageResult;
+import com.zazhi.common.pojo.vo.ProblemSetPageVO;
 import com.zazhi.common.pojo.vo.ProblemSetVO;
 
 import java.util.List;
@@ -27,14 +28,14 @@ public interface ProblemSetService {
      * @param title
      * @return
      */
-    PageResult<ProblemSet> listPublicProblemSet(Integer page, Integer size, String title);
+    PageResult<ProblemSetPageVO> pagePublicProblemSet(Integer page, Integer size, String title);
 
 
     /**
      * 查询我的所有题单
      * @return
      */
-    List<ProblemSet> listPrivateProblemSet();
+    List<ProblemSetPageVO> listMyProblemSet();
 
     /**
      * 添加题目到题单

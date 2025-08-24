@@ -10,9 +10,8 @@ import com.zazhi.service.ProblemService;
 import com.zazhi.common.pojo.vo.ProblemPageVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,13 +23,12 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/problem")
-@Validated
+//@Validated
 @Slf4j
 @Tag(name = "题目相关接口")
+@RequiredArgsConstructor
 public class ProblemController {
-
-    @Autowired
-    ProblemService problemService;
+    private final ProblemService problemService;
 
     @PostMapping("/page")
     @Operation(summary = "题目条件分页查询")
