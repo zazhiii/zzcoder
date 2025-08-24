@@ -190,4 +190,27 @@
         WHERE p.id = #{id}
     </select>
 
+
+    <resultMap id="getProblemWithTestCases" type="com.zazhi.common.pojo.vo.ProblemWithTestCaseVO">
+        <id column="id" property="problemId"/>
+        <result column="time_limit" property="timeLimit"/>
+        <result column="memory_limit" property="memoryLimit"/>
+        <collection property="testCases" ofType="com.zazhi.common.pojo.entity.TestCase">
+            <id property="id" column="tc_id"/>
+            <result property="input" column="input"/>
+            <result property="output" column="output"/>
+        </collection>
+    </resultMap>
+    <select id="getProblemWithTestCases" resultMap="getProblemWithTestCases">
+        SELECT
+        p.id,
+        p.time_limit,
+        p.memory_limit,
+        tc.id AS tc_id,
+        tc.input,
+        tc.output
+        FROM problem p
+        LEFT JOIN test_case tc ON p.id = tc.problem_id
+        WHERE p.id = #{id}
+    </select>
 </mapper>

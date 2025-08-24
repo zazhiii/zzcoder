@@ -6,6 +6,7 @@ import com.zazhi.common.pojo.entity.Problem;
 import com.zazhi.common.pojo.entity.TestCase;
 import com.zazhi.common.pojo.vo.ProblemInfoVO;
 import com.zazhi.common.pojo.vo.ProblemPageVO;
+import com.zazhi.common.pojo.vo.ProblemWithTestCaseVO;
 import com.zazhi.common.pojo.vo.TagVO;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
@@ -86,4 +87,11 @@ public interface ProblemMapper {
      * @return 题目分页数据
      */
     List<ProblemPageVO> pageByIds(List<Integer> result);
+
+    /**
+     * 获取题目及其测试用例
+     * @param problemId
+     * @return
+     */
+    ProblemWithTestCaseVO getProblemWithTestCases(Integer problemId);
 }

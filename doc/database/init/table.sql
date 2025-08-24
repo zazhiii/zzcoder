@@ -131,7 +131,6 @@ CREATE TABLE `problem_set`
 ) COMMENT='题单表';
 
 -- 题单-题目关联表
--- 题单-题目关联表
 drop table if exists problem_set_problem;
 CREATE TABLE `problem_set_problem`
 (
@@ -141,6 +140,7 @@ CREATE TABLE `problem_set_problem`
     `problem_id`     int          DEFAULT NULL COMMENT '本站题目ID（当problem_type=0时必填）',
     `external_title` varchar(255) DEFAULT NULL COMMENT '外部题目名称（当problem_type=1时必填）',
     `external_url`   varchar(512) DEFAULT NULL COMMENT '外部题目链接（当problem_type=1时必填）',
+    `external_source` varchar(255) DEFAULT NULL COMMENT '外部题目来源（当problem_type=1时选填）',
     `create_time`    timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 ) COMMENT='题单-题目关联表';

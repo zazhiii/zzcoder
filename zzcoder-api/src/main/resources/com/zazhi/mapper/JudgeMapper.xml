@@ -26,10 +26,10 @@
         ORDER BY s.submit_time DESC
     </select>
 
-    <insert id="insertSubmission" parameterType="com.zazhi.common.pojo.entity.Submission" keyProperty="id" useGeneratedKeys="true">
-        insert into submission (id, user_id, problem_id, contest_id, language, code, status, time_used, memory_used)
-        values (#{id}, #{userId}, #{problemId}, #{contestId}, #{language}, #{code}, #{status}, #{timeUsed}, #{memoryUsed})
-    </insert>
+<!--    <insert id="insertSubmission" parameterType="com.zazhi.common.pojo.entity.Submission" keyProperty="id" useGeneratedKeys="true">-->
+<!--        insert into submission (id, user_id, problem_id, contest_id, language, code, status, time_used, memory_used)-->
+<!--        values (#{id}, #{userId}, #{problemId}, #{contestId}, #{language}, #{code}, #{status}, #{timeUsed}, #{memoryUsed})-->
+<!--    </insert>-->
 
     <update id="updateSubmission" parameterType="com.zazhi.common.pojo.entity.Submission">
         update submission

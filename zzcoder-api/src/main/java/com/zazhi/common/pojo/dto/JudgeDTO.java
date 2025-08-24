@@ -16,4 +16,5 @@ public class JudgeDTO implements Serializable {
     private Integer problemId;
     private String code;
     private String language;
+    private Boolean fullJudge; // 是否全量评测
 }

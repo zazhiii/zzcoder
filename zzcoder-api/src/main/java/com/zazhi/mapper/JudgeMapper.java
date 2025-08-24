@@ -5,7 +5,9 @@ import com.zazhi.common.pojo.dto.SubmissionQueryDTO;
 import com.zazhi.common.pojo.entity.Submission;
 import com.zazhi.common.pojo.vo.SubmissionInfoVO;
 import com.zazhi.common.pojo.vo.SubmissionPageVO;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 
 @Mapper
 public interface JudgeMapper {
@@ -21,7 +23,10 @@ public interface JudgeMapper {
      * 插入提交记录
      * @param submission
      */
-    void insertSubmission(Submission submission);
+    @Insert("insert into submission (id, user_id, problem_id, contest_id, language, code, status, time_used, memory_used) " +
+            "values (#{id}, #{userId}, #{problemId}, #{contestId}, #{language}, #{code}, #{status}, #{timeUsed}, #{memoryUsed})")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
+    Long insertSubmission(Submission submission);
 
     /**
      * 更新提交记录

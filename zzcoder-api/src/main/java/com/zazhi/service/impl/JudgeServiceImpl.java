@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zazhi.common.enums.JudgeStatus;
 import com.zazhi.common.pojo.entity.*;
+import com.zazhi.common.pojo.vo.ProblemWithTestCaseVO;
 import com.zazhi.common.utils.MessageQueueUtil;
 import com.zazhi.common.pojo.dto.JudgeDTO;
 import com.zazhi.common.pojo.dto.SubmissionQueryDTO;
@@ -18,7 +19,6 @@ import com.zazhi.common.pojo.vo.SubmissionPageVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
 /**
  * @author zazhi
@@ -43,45 +43,37 @@ public class JudgeServiceImpl implements JudgeService {
      * @return
      */
     public Long submitCode(JudgeDTO judgeDTO) {
-        // 记录任务状态, pending、judging、finished ( 、判题中、判题完成)
-        // (生成submission存入数据库)
         Integer userId = ThreadLocalUtil.getCurrentId();
 
-//        judgeDTO.setUserId(ThreadLocalUtil.getCurrentId());
         Submission submission = Submission.builder()
                 .userId(userId)
                 .problemId(judgeDTO.getProblemId())
-                .contestId(0) // TODO: 比赛id
                 .code(judgeDTO.getCode())
                 .language(judgeDTO.getLanguage())
                 .status(JudgeStatus.PENDING)
                 .build();
-        judgeMapper.insertSubmission(submission);
+        Long submissionId = judgeMapper.insertSubmission(submission);
 
         // 生成提交id ( 将submission的主键作为任务id )
         Long taskId = submission.getId();
 
         // TODO 可以优化为一次查询
-        Problem problem = problemMapper.getById(judgeDTO.getProblemId());
-        List<TestCase> testCases = problemMapper.getTestCases(problem.getId());
+        ProblemWithTestCaseVO problemWithTestCase = problemMapper.getProblemWithTestCases(judgeDTO.getProblemId());
+//        Problem problem = problemMapper.getById(judgeDTO.getProblemId());
+//        List<TestCase> testCases = problemMapper.getTestCases(problem.getId());
 
         // 生成判题任务
         JudgeTask judgeTask = JudgeTask.builder()
                 .taskId(taskId)
-                .problemId(judgeDTO.getProblemId())
-                .userId(userId)
                 .language(judgeDTO.getLanguage())
                 .code(judgeDTO.getCode())
-                .timeLimit(problem.getTimeLimit())
-                .memoryLimit(problem.getMemoryLimit())
-                .submissionTime(submission.getSubmitTime())
-                .testCases(testCases)
-//                .judgeType("ACM")
-                .fullJudge(true) // TODO 暂时写死为全量评测
-                .retryCount(0)
+                .timeLimit(problemWithTestCase.getTimeLimit())
+                .memoryLimit(problemWithTestCase.getMemoryLimit())
+                .testCases(problemWithTestCase.getTestCases())
+                .fullJudge(judgeDTO.getFullJudge())
                 .build();
         messageQueueUtil.sendJudgeTask(judgeTask);
-        return taskId;
+        return submissionId;
     }
 
     /**
