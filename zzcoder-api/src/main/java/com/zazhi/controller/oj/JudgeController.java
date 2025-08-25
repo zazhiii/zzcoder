@@ -4,6 +4,7 @@ import com.zazhi.common.pojo.dto.JudgeDTO;
 import com.zazhi.common.pojo.dto.SubmissionQueryDTO;
 import com.zazhi.common.pojo.result.PageResult;
 import com.zazhi.common.pojo.result.Result;
+import com.zazhi.common.pojo.vo.UserProblemSubmissionVO;
 import com.zazhi.service.JudgeService;
 import com.zazhi.common.pojo.vo.SubmissionInfoVO;
 import com.zazhi.common.pojo.vo.SubmissionPageVO;
@@ -14,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author zazhi
@@ -45,5 +48,11 @@ public class JudgeController {
     @Operation(summary = "获取提交记录")
     public Result<PageResult<SubmissionPageVO>> getSubmissions(@RequestBody SubmissionQueryDTO submissionQueryDTO) {
         return Result.success(judgeService.getSubmissions(submissionQueryDTO));
+    }
+
+    @Operation(summary = "获取某题目用户的所有提交记录")
+    @GetMapping("/submission/user/{problemId}")
+    public Result<List<UserProblemSubmissionVO>> getUserSubmissionsByProblemId(@PathVariable Integer problemId) {
+        return Result.success(judgeService.getUserSubmissionsByProblemId(problemId));
     }
 }

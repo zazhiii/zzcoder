@@ -134,14 +134,14 @@ CREATE TABLE `problem_set`
 drop table if exists problem_set_problem;
 CREATE TABLE `problem_set_problem`
 (
-    `id`             int     NOT NULL,
-    `problem_set_id` int     NOT NULL COMMENT '题单ID',
-    `problem_type`   tinyint NOT NULL COMMENT '题目类型：0-本站题目，1-外部题目',
-    `problem_id`     int          DEFAULT NULL COMMENT '本站题目ID（当problem_type=0时必填）',
-    `external_title` varchar(255) DEFAULT NULL COMMENT '外部题目名称（当problem_type=1时必填）',
-    `external_url`   varchar(512) DEFAULT NULL COMMENT '外部题目链接（当problem_type=1时必填）',
+    `id`              int     NOT NULL,
+    `problem_set_id`  int     NOT NULL COMMENT '题单ID',
+    `problem_type`    tinyint NOT NULL COMMENT '题目类型：0-本站题目，1-外部题目',
+    `problem_id`      int          DEFAULT NULL COMMENT '本站题目ID（当problem_type=0时必填）',
+    `external_title`  varchar(255) DEFAULT NULL COMMENT '外部题目名称（当problem_type=1时必填）',
+    `external_url`    varchar(512) DEFAULT NULL COMMENT '外部题目链接（当problem_type=1时必填）',
     `external_source` varchar(255) DEFAULT NULL COMMENT '外部题目来源（当problem_type=1时选填）',
-    `create_time`    timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+    `create_time`     timestamp NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 ) COMMENT='题单-题目关联表';
 
@@ -181,6 +181,20 @@ CREATE TABLE test_case
     create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
 );
+
+-- 测试用例测评结果表
+DROP TABLE IF EXISTS test_case_result;
+CREATE TABLE `test_case_result`
+(
+    `test_case_id`  int       NOT NULL COMMENT '测试用例ID',
+    `submission_id` int       NOT NULL COMMENT '提交记录ID',
+    `result`        varchar(100)       DEFAULT NULL COMMENT '测评结果（AC，WA……）',
+    `time_used`     int                DEFAULT NULL COMMENT '运行时间',
+    `memory_used`   int                DEFAULT NULL COMMENT '运行内存',
+    `error_message` text      DEFAULT NULL,
+    `create_time`   timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    primary key (`test_case_id`, `submission_id`)
+) COMMENT='单个测试用例测评结果';
 
 -- ===============
 -- === 竞赛模块 ===

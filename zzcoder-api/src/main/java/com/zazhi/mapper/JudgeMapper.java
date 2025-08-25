@@ -5,9 +5,13 @@ import com.zazhi.common.pojo.dto.SubmissionQueryDTO;
 import com.zazhi.common.pojo.entity.Submission;
 import com.zazhi.common.pojo.vo.SubmissionInfoVO;
 import com.zazhi.common.pojo.vo.SubmissionPageVO;
+import com.zazhi.common.pojo.vo.UserProblemSubmissionVO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 @Mapper
 public interface JudgeMapper {
@@ -26,7 +30,7 @@ public interface JudgeMapper {
     @Insert("insert into submission (id, user_id, problem_id, contest_id, language, code, status, time_used, memory_used) " +
             "values (#{id}, #{userId}, #{problemId}, #{contestId}, #{language}, #{code}, #{status}, #{timeUsed}, #{memoryUsed})")
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
-    Long insertSubmission(Submission submission);
+    void insertSubmission(Submission submission);
 
     /**
      * 更新提交记录
@@ -41,4 +45,9 @@ public interface JudgeMapper {
 //    @Select("select * from submission where id = #{submitId}")
     SubmissionInfoVO getSubmissionInfoById(Long submitId);
 
+    @Select("select id, status, language, time_used, memory_used, create_time AS submitTime, error_message " +
+            "from submission " +
+            "where user_id = #{userId} and problem_id = #{problemId} " +
+            "order by create_time desc")
+    List<UserProblemSubmissionVO> getUserSubmissionsByProblemId(Integer userId, Integer problemId);
 }

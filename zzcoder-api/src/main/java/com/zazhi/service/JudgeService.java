@@ -6,6 +6,9 @@ import com.zazhi.common.pojo.dto.SubmissionQueryDTO;
 import com.zazhi.common.pojo.result.PageResult;
 import com.zazhi.common.pojo.vo.SubmissionInfoVO;
 import com.zazhi.common.pojo.vo.SubmissionPageVO;
+import com.zazhi.common.pojo.vo.UserProblemSubmissionVO;
+
+import java.util.List;
 
 public interface JudgeService {
     /**
@@ -34,4 +37,11 @@ public interface JudgeService {
      * @return
      */
     SubmissionInfoVO getSubmissionInfo(Long submitId);
+
+    /**
+     * 获取某题目用户的所有提交记录
+     * @param problemId
+     * @return
+     */
+    List<UserProblemSubmissionVO> getUserSubmissionsByProblemId(Integer problemId);
 }

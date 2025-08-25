@@ -1,101 +1,94 @@
---INSERT INTO zzcoder.problem (id, problem_id, title, time_limit, memory_limit, stack_limit, description, input_description, output_description, source, difficulty, hint, status, create_user, update_user, create_time, update_time) VALUES
-INSERT INTO `problem` (`id`, `problem_id`, `title`, `time_limit`, `memory_limit`, `stack_limit`, `description`, `input_description`, `output_description`, `source`, `difficulty`, `hint`, `status`, `create_user`, `update_user`, `create_time`, `update_time`) VALUES
-(1, 'P0001', '两数之和', 1000, 128, 128, '输入两个数，输出两个数的和', '输入两个数 a, b', '输出 a + b 的和', 'zzcoder', 0, '0 <= a <= 100000', '0 <= b <= 100000', '0', 8, 4, '2025-01-01 00:00:00', '2025-05-02 10:29:56'),
-(2, 'P0002', 'Sample Problem 2', 1000, 128, 128, 'Description for Problem 2', 'Input description for Problem 2', 'Output description for Problem 2', 'zzcoder', 0, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(3, 'P0003', 'Sample Problem 3', 1000, 128, 128, 'Description for Problem 3', 'Input description for Problem 3', 'Output description for Problem 3', 'zzcoder', 5, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(4, 'P0004', 'Sample Problem 4', 1000, 128, 128, 'Description for Problem 4', 'Input description for Problem 4', 'Output description for Problem 4', 'zzcoder', 0, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(5, 'P0005', 'Sample Problem 5', 1000, 128, 128, 'Description for Problem 5', 'Input description for Problem 5', 'Output description for Problem 5', 'zzcoder', 1, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(6, 'P0006', 'Sample Problem 6', 1000, 128, 128, 'Description for Problem 6', 'Input description for Problem 6', 'Output description for Problem 6', 'zzcoder', 5, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(7, 'P0007', 'Sample Problem 7', 1000, 128, 128, 'Description for Problem 7', 'Input description for Problem 7', 'Output description for Problem 7', 'zzcoder', 6, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(8, 'P0008', 'Sample Problem 8', 1000, 128, 128, 'Description for Problem 8', 'Input description for Problem 8', 'Output description for Problem 8', 'zzcoder', 6, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(9, 'P0009', 'Sample Problem 9', 1000, 128, 128, 'Description for Problem 9', 'Input description for Problem 9', 'Output description for Problem 9', 'zzcoder', 1, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(10, 'P0010', 'Sample Problem 10', 1000, 128, 128, 'Description for Problem 10', 'Input description for Problem 10', 'Output description for Problem 10', 'zzcoder', 0, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(11, 'P0011', 'Sample Problem 11', 1000, 128, 128, 'Description for Problem 11', 'Input description for Problem 11', 'Output description for Problem 11', 'zzcoder', 3, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(12, 'P0012', 'Sample Problem 12', 1000, 128, 128, 'Description for Problem 12', 'Input description for Problem 12', 'Output description for Problem 12', 'zzcoder', 1, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(13, 'P0013', 'Sample Problem 13', 1000, 128, 128, 'Description for Problem 13', 'Input description for Problem 13', 'Output description for Problem 13', 'zzcoder', 6, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(14, 'P0014', 'Sample Problem 14', 1000, 128, 128, 'Description for Problem 14', 'Input description for Problem 14', 'Output description for Problem 14', 'zzcoder', 5, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(15, 'P0015', 'Sample Problem 15', 1000, 128, 128, 'Description for Problem 15', 'Input description for Problem 15', 'Output description for Problem 15', 'zzcoder', 6, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(16, 'P0016', 'Sample Problem 16', 1000, 128, 128, 'Description for Problem 16', 'Input description for Problem 16', 'Output description for Problem 16', 'zzcoder', 6, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(17, 'P0017', 'Sample Problem 17', 1000, 128, 128, 'Description for Problem 17', 'Input description for Problem 17', 'Output description for Problem 17', 'zzcoder', 1, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(18, 'P0018', 'Sample Problem 18', 1000, 128, 128, 'Description for Problem 18', 'Input description for Problem 18', 'Output description for Problem 18', 'zzcoder', 0, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(19, 'P0019', 'Sample Problem 19', 1000, 128, 128, 'Description for Problem 19', 'Input description for Problem 19', 'Output description for Problem 19', 'zzcoder', 4, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(20, 'P0020', 'Sample Problem 20', 1000, 128, 128, 'Description for Problem 20', 'Input description for Problem 20', 'Output description for Problem 20', 'zzcoder', 0, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(21, 'P0021', 'Sample Problem 21', 1000, 128, 128, 'Description for Problem 21', 'Input description for Problem 21', 'Output description for Problem 21', 'zzcoder', 3, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(22, 'P0022', 'Sample Problem 22', 1000, 128, 128, 'Description for Problem 22', 'Input description for Problem 22', 'Output description for Problem 22', 'zzcoder', 5, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(23, 'P0023', 'Sample Problem 23', 1000, 128, 128, 'Description for Problem 23', 'Input description for Problem 23', 'Output description for Problem 23', 'zzcoder', 1, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(24, 'P0024', 'Sample Problem 24', 1000, 128, 128, 'Description for Problem 24', 'Input description for Problem 24', 'Output description for Problem 24', 'zzcoder', 3, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(25, 'P0025', 'Sample Problem 25', 1000, 128, 128, 'Description for Problem 25', 'Input description for Problem 25', 'Output description for Problem 25', 'zzcoder', 5, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(26, 'P0026', 'Sample Problem 26', 1000, 128, 128, 'Description for Problem 26', 'Input description for Problem 26', 'Output description for Problem 26', 'zzcoder', 1, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(27, 'P0027', 'Sample Problem 27', 1000, 128, 128, 'Description for Problem 27', 'Input description for Problem 27', 'Output description for Problem 27', 'zzcoder', 5, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(28, 'P0028', 'Sample Problem 28', 1000, 128, 128, 'Description for Problem 28', 'Input description for Problem 28', 'Output description for Problem 28', 'zzcoder', 2, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(29, 'P0029', 'Sample Problem 29', 1000, 128, 128, 'Description for Problem 29', 'Input description for Problem 29', 'Output description for Problem 29', 'zzcoder', 0, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(30, 'P0030', 'Sample Problem 30', 1000, 128, 128, 'Description for Problem 30', 'Input description for Problem 30', 'Output description for Problem 30', 'zzcoder', 0, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(31, 'P0031', 'Sample Problem 31', 1000, 128, 128, 'Description for Problem 31', 'Input description for Problem 31', 'Output description for Problem 31', 'zzcoder', 5, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(32, 'P0032', 'Sample Problem 32', 1000, 128, 128, 'Description for Problem 32', 'Input description for Problem 32', 'Output description for Problem 32', 'zzcoder', 6, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(33, 'P0033', 'Sample Problem 33', 1000, 128, 128, 'Description for Problem 33', 'Input description for Problem 33', 'Output description for Problem 33', 'zzcoder', 2, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(34, 'P0034', 'Sample Problem 34', 1000, 128, 128, 'Description for Problem 34', 'Input description for Problem 34', 'Output description for Problem 34', 'zzcoder', 2, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(35, 'P0035', 'Sample Problem 35', 1000, 128, 128, 'Description for Problem 35', 'Input description for Problem 35', 'Output description for Problem 35', 'zzcoder', 4, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(36, 'P0036', 'Sample Problem 36', 1000, 128, 128, 'Description for Problem 36', 'Input description for Problem 36', 'Output description for Problem 36', 'zzcoder', 5, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(37, 'P0037', 'Sample Problem 37', 1000, 128, 128, 'Description for Problem 37', 'Input description for Problem 37', 'Output description for Problem 37', 'zzcoder', 1, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(38, 'P0038', 'Sample Problem 38', 1000, 128, 128, 'Description for Problem 38', 'Input description for Problem 38', 'Output description for Problem 38', 'zzcoder', 3, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(39, 'P0039', 'Sample Problem 39', 1000, 128, 128, 'Description for Problem 39', 'Input description for Problem 39', 'Output description for Problem 39', 'zzcoder', 4, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(40, 'P0040', 'Sample Problem 40', 1000, 128, 128, 'Description for Problem 40', 'Input description for Problem 40', 'Output description for Problem 40', 'zzcoder', 2, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(41, 'P0041', 'Sample Problem 41', 1000, 128, 128, 'Description for Problem 41', 'Input description for Problem 41', 'Output description for Problem 41', 'zzcoder', 1, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(42, 'P0042', 'Sample Problem 42', 1000, 128, 128, 'Description for Problem 42', 'Input description for Problem 42', 'Output description for Problem 42', 'zzcoder', 1, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(43, 'P0043', 'Sample Problem 43', 1000, 128, 128, 'Description for Problem 43', 'Input description for Problem 43', 'Output description for Problem 43', 'zzcoder', 2, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(44, 'P0044', 'Sample Problem 44', 1000, 128, 128, 'Description for Problem 44', 'Input description for Problem 44', 'Output description for Problem 44', 'zzcoder', 4, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(45, 'P0045', 'Sample Problem 45', 1000, 128, 128, 'Description for Problem 45', 'Input description for Problem 45', 'Output description for Problem 45', 'zzcoder', 0, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(46, 'P0046', 'Sample Problem 46', 1000, 128, 128, 'Description for Problem 46', 'Input description for Problem 46', 'Output description for Problem 46', 'zzcoder', 5, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(47, 'P0047', 'Sample Problem 47', 1000, 128, 128, 'Description for Problem 47', 'Input description for Problem 47', 'Output description for Problem 47', 'zzcoder', 6, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(48, 'P0048', 'Sample Problem 48', 1000, 128, 128, 'Description for Problem 48', 'Input description for Problem 48', 'Output description for Problem 48', 'zzcoder', 5, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(49, 'P0049', 'Sample Problem 49', 1000, 128, 128, 'Description for Problem 49', 'Input description for Problem 49', 'Output description for Problem 49', 'zzcoder', 4, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(50, 'P0050', 'Sample Problem 50', 1000, 128, 128, 'Description for Problem 50', 'Input description for Problem 50', 'Output description for Problem 50', 'zzcoder', 6, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(51, 'P0051', 'Sample Problem 51', 1000, 128, 128, 'Description for Problem 51', 'Input description for Problem 51', 'Output description for Problem 51', 'zzcoder', 5, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(52, 'P0052', 'Sample Problem 52', 1000, 128, 128, 'Description for Problem 52', 'Input description for Problem 52', 'Output description for Problem 52', 'zzcoder', 4, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(53, 'P0053', 'Sample Problem 53', 1000, 128, 128, 'Description for Problem 53', 'Input description for Problem 53', 'Output description for Problem 53', 'zzcoder', 2, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(54, 'P0054', 'Sample Problem 54', 1000, 128, 128, 'Description for Problem 54', 'Input description for Problem 54', 'Output description for Problem 54', 'zzcoder', 5, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(55, 'P0055', 'Sample Problem 55', 1000, 128, 128, 'Description for Problem 55', 'Input description for Problem 55', 'Output description for Problem 55', 'zzcoder', 4, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(56, 'P0056', 'Sample Problem 56', 1000, 128, 128, 'Description for Problem 56', 'Input description for Problem 56', 'Output description for Problem 56', 'zzcoder', 5, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(57, 'P0057', 'Sample Problem 57', 1000, 128, 128, 'Description for Problem 57', 'Input description for Problem 57', 'Output description for Problem 57', 'zzcoder', 6, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(58, 'P0058', 'Sample Problem 58', 1000, 128, 128, 'Description for Problem 58', 'Input description for Problem 58', 'Output description for Problem 58', 'zzcoder', 0, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(59, 'P0059', 'Sample Problem 59', 1000, 128, 128, 'Description for Problem 59', 'Input description for Problem 59', 'Output description for Problem 59', 'zzcoder', 3, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(60, 'P0060', 'Sample Problem 60', 1000, 128, 128, 'Description for Problem 60', 'Input description for Problem 60', 'Output description for Problem 60', 'zzcoder', 6, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(61, 'P0061', 'Sample Problem 61', 1000, 128, 128, 'Description for Problem 61', 'Input description for Problem 61', 'Output description for Problem 61', 'zzcoder', 3, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(62, 'P0062', 'Sample Problem 62', 1000, 128, 128, 'Description for Problem 62', 'Input description for Problem 62', 'Output description for Problem 62', 'zzcoder', 3, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(63, 'P0063', 'Sample Problem 63', 1000, 128, 128, 'Description for Problem 63', 'Input description for Problem 63', 'Output description for Problem 63', 'zzcoder', 3, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(64, 'P0064', 'Sample Problem 64', 1000, 128, 128, 'Description for Problem 64', 'Input description for Problem 64', 'Output description for Problem 64', 'zzcoder', 1, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(65, 'P0065', 'Sample Problem 65', 1000, 128, 128, 'Description for Problem 65', 'Input description for Problem 65', 'Output description for Problem 65', 'zzcoder', 3, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(66, 'P0066', 'Sample Problem 66', 1000, 128, 128, 'Description for Problem 66', 'Input description for Problem 66', 'Output description for Problem 66', 'zzcoder', 1, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(67, 'P0067', 'Sample Problem 67', 1000, 128, 128, 'Description for Problem 67', 'Input description for Problem 67', 'Output description for Problem 67', 'zzcoder', 1, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(68, 'P0068', 'Sample Problem 68', 1000, 128, 128, 'Description for Problem 68', 'Input description for Problem 68', 'Output description for Problem 68', 'zzcoder', 4, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(69, 'P0069', 'Sample Problem 69', 1000, 128, 128, 'Description for Problem 69', 'Input description for Problem 69', 'Output description for Problem 69', 'zzcoder', 4, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(70, 'P0070', 'Sample Problem 70', 1000, 128, 128, 'Description for Problem 70', 'Input description for Problem 70', 'Output description for Problem 70', 'zzcoder', 3, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(71, 'P0071', 'Sample Problem 71', 1000, 128, 128, 'Description for Problem 71', 'Input description for Problem 71', 'Output description for Problem 71', 'zzcoder', 6, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(72, 'P0072', 'Sample Problem 72', 1000, 128, 128, 'Description for Problem 72', 'Input description for Problem 72', 'Output description for Problem 72', 'zzcoder', 5, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(73, 'P0073', 'Sample Problem 73', 1000, 128, 128, 'Description for Problem 73', 'Input description for Problem 73', 'Output description for Problem 73', 'zzcoder', 0, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(74, 'P0074', 'Sample Problem 74', 1000, 128, 128, 'Description for Problem 74', 'Input description for Problem 74', 'Output description for Problem 74', 'zzcoder', 6, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(75, 'P0075', 'Sample Problem 75', 1000, 128, 128, 'Description for Problem 75', 'Input description for Problem 75', 'Output description for Problem 75', 'zzcoder', 4, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(76, 'P0076', 'Sample Problem 76', 1000, 128, 128, 'Description for Problem 76', 'Input description for Problem 76', 'Output description for Problem 76', 'zzcoder', 6, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(77, 'P0077', 'Sample Problem 77', 1000, 128, 128, 'Description for Problem 77', 'Input description for Problem 77', 'Output description for Problem 77', 'zzcoder', 2, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(78, 'P0078', 'Sample Problem 78', 1000, 128, 128, 'Description for Problem 78', 'Input description for Problem 78', 'Output description for Problem 78', 'zzcoder', 1, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(79, 'P0079', 'Sample Problem 79', 1000, 128, 128, 'Description for Problem 79', 'Input description for Problem 79', 'Output description for Problem 79', 'zzcoder', 0, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(80, 'P0080', 'Sample Problem 80', 1000, 128, 128, 'Description for Problem 80', 'Input description for Problem 80', 'Output description for Problem 80', 'zzcoder', 4, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(81, 'P0081', 'Sample Problem 81', 1000, 128, 128, 'Description for Problem 81', 'Input description for Problem 81', 'Output description for Problem 81', 'zzcoder', 2, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(82, 'P0082', 'Sample Problem 82', 1000, 128, 128, 'Description for Problem 82', 'Input description for Problem 82', 'Output description for Problem 82', 'zzcoder', 0, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(83, 'P0083', 'Sample Problem 83', 1000, 128, 128, 'Description for Problem 83', 'Input description for Problem 83', 'Output description for Problem 83', 'zzcoder', 5, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(84, 'P0084', 'Sample Problem 84', 1000, 128, 128, 'Description for Problem 84', 'Input description for Problem 84', 'Output description for Problem 84', 'zzcoder', 1, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(85, 'P0085', 'Sample Problem 85', 1000, 128, 128, 'Description for Problem 85', 'Input description for Problem 85', 'Output description for Problem 85', 'zzcoder', 6, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(86, 'P0086', 'Sample Problem 86', 1000, 128, 128, 'Description for Problem 86', 'Input description for Problem 86', 'Output description for Problem 86', 'zzcoder', 3, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(87, 'P0087', 'Sample Problem 87', 1000, 128, 128, 'Description for Problem 87', 'Input description for Problem 87', 'Output description for Problem 87', 'zzcoder', 0, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(88, 'P0088', 'Sample Problem 88', 1000, 128, 128, 'Description for Problem 88', 'Input description for Problem 88', 'Output description for Problem 88', 'zzcoder', 6, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(89, 'P0089', 'Sample Problem 89', 1000, 128, 128, 'Description for Problem 89', 'Input description for Problem 89', 'Output description for Problem 89', 'zzcoder', 5, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(90, 'P0090', 'Sample Problem 90', 1000, 128, 128, 'Description for Problem 90', 'Input description for Problem 90', 'Output description for Problem 90', 'zzcoder', 4, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(91, 'P0091', 'Sample Problem 91', 1000, 128, 128, 'Description for Problem 91', 'Input description for Problem 91', 'Output description for Problem 91', 'zzcoder', 3, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(92, 'P0092', 'Sample Problem 92', 1000, 128, 128, 'Description for Problem 92', 'Input description for Problem 92', 'Output description for Problem 92', 'zzcoder', 1, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(93, 'P0093', 'Sample Problem 93', 1000, 128, 128, 'Description for Problem 93', 'Input description for Problem 93', 'Output description for Problem 93', 'zzcoder', 1, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(94, 'P0094', 'Sample Problem 94', 1000, 128, 128, 'Description for Problem 94', 'Input description for Problem 94', 'Output description for Problem 94', 'zzcoder', 0, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(95, 'P0095', 'Sample Problem 95', 1000, 128, 128, 'Description for Problem 95', 'Input description for Problem 95', 'Output description for Problem 95', 'zzcoder', 5, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(96, 'P0096', 'Sample Problem 96', 1000, 128, 128, 'Description for Problem 96', 'Input description for Problem 96', 'Output description for Problem 96', 'zzcoder', 2, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(97, 'P0097', 'Sample Problem 97', 1000, 128, 128, 'Description for Problem 97', 'Input description for Problem 97', 'Output description for Problem 97', 'zzcoder', 6, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(98, 'P0098', 'Sample Problem 98', 1000, 128, 128, 'Description for Problem 98', 'Input description for Problem 98', 'Output description for Problem 98', 'zzcoder', 1, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00'),
-(99, 'P0099', 'Sample Problem 99', 1000, 128, 128, 'Description for Problem 99', 'Input description for Problem 99', 'Output description for Problem 99', 'zzcoder', 5, 'Hint for problem', 0, 8, 8, '2025-01-01 00:00:00', '2025-01-01 00:00:00')
+INSERT INTO zzcoder.problem (problem_id,title,time_limit,memory_limit,stack_limit,description,input_description,output_description,source,difficulty,hint,status,create_user,update_user,create_time,update_time) VALUES
+	 ('P0001','测试题目-两数之和',1000,128,0,'输入两个数，输出两个数之和。、
+
+---
+下面用于测试 **Markdown** 和 $\\LaTeX$ 渲染的文本。  
+# 测试题面
+下面是一些常见的功能：
+---
+
+## Markdown 基本语法
+
+- **加粗文本**
+- *斜体文本*
+- ~~删除线文本~~
+- [超链接](https://example.com)
+
+代码块：
+
+```python
+def add(a, b):
+    return a + b
+print(add(2, 3))
+````
+
+表格：
+
+| 姓名 | 年龄 | 分数 |
+| -- | -- | -- |
+| 张三 | 18 | 95 |
+| 李四 | 19 | 88 |
+
+---
+
+## LaTeX 数学公式
+
+行内公式示例：
+二次方程的解公式：$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$
+
+块级公式示例：
+
+$$
+\\int_0^1 x^2 \\, dx = \\frac{1}{3}
+$$
+
+矩阵示例：
+
+$$
+A = \\begin{bmatrix}
+1 & 2 & 3 \\\\\\\\
+4 & 5 & 6 \\\\\\\\
+7 & 8 & 9
+\\end{bmatrix}
+$$
+
+---
+
+## 混合示例
+
+题目要求：
+已知函数 $f(x)=x^2+2x+1$，请写出其导数。
+
+提示：**请在下面的编辑框输入答案代码**。','输入两个数 a, b','输出 $a + b$','zzcoder',0,'$0 \\le a \\le 100000$ ,
+$0 \\le b \\le 100000$','0',8,8,'2025-01-01 08:00:00','2025-08-24 22:50:25'),
+	 ('P0002','Sample Problem 2',1000,128,128,'Description for Problem 2','Input description for Problem 2','Output description for Problem 2','zzcoder',0,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00'),
+	 ('P0003','Sample Problem 3',1000,128,128,'Description for Problem 3','Input description for Problem 3','Output description for Problem 3','zzcoder',5,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00'),
+	 ('P0004','Sample Problem 4',1000,128,128,'Description for Problem 4','Input description for Problem 4','Output description for Problem 4','zzcoder',0,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00'),
+	 ('P0005','Sample Problem 5',1000,128,128,'Description for Problem 5','Input description for Problem 5','Output description for Problem 5','zzcoder',1,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00'),
+	 ('P0006','Sample Problem 6',1000,128,128,'Description for Problem 6','Input description for Problem 6','Output description for Problem 6','zzcoder',5,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00'),
+	 ('P0007','Sample Problem 7',1000,128,128,'Description for Problem 7','Input description for Problem 7','Output description for Problem 7','zzcoder',6,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00'),
+	 ('P0008','Sample Problem 8',1000,128,128,'Description for Problem 8','Input description for Problem 8','Output description for Problem 8','zzcoder',6,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00'),
+	 ('P0009','Sample Problem 9',1000,128,128,'Description for Problem 9','Input description for Problem 9','Output description for Problem 9','zzcoder',1,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00'),
+	 ('P0010','Sample Problem 10',1000,128,128,'Description for Problem 10','Input description for Problem 10','Output description for Problem 10','zzcoder',0,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00');
+INSERT INTO zzcoder.problem (problem_id,title,time_limit,memory_limit,stack_limit,description,input_description,output_description,source,difficulty,hint,status,create_user,update_user,create_time,update_time) VALUES
+	 ('P0011','Sample Problem 11',1000,128,128,'Description for Problem 11','Input description for Problem 11','Output description for Problem 11','zzcoder',3,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00'),
+	 ('P0012','Sample Problem 12',1000,128,128,'Description for Problem 12','Input description for Problem 12','Output description for Problem 12','zzcoder',1,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00'),
+	 ('P0013','Sample Problem 13',1000,128,128,'Description for Problem 13','Input description for Problem 13','Output description for Problem 13','zzcoder',6,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00'),
+	 ('P0014','Sample Problem 14',1000,128,128,'Description for Problem 14','Input description for Problem 14','Output description for Problem 14','zzcoder',5,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00'),
+	 ('P0015','Sample Problem 15',1000,128,128,'Description for Problem 15','Input description for Problem 15','Output description for Problem 15','zzcoder',6,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00'),
+	 ('P0016','Sample Problem 16',1000,128,128,'Description for Problem 16','Input description for Problem 16','Output description for Problem 16','zzcoder',6,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00'),
+	 ('P0017','Sample Problem 17',1000,128,128,'Description for Problem 17','Input description for Problem 17','Output description for Problem 17','zzcoder',1,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00'),
+	 ('P0018','Sample Problem 18',1000,128,128,'Description for Problem 18','Input description for Problem 18','Output description for Problem 18','zzcoder',0,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00'),
+	 ('P0019','Sample Problem 19',1000,128,128,'Description for Problem 19','Input description for Problem 19','Output description for Problem 19','zzcoder',4,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00'),
+	 ('P0020','Sample Problem 20',1000,128,128,'Description for Problem 20','Input description for Problem 20','Output description for Problem 20','zzcoder',0,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00');
+INSERT INTO zzcoder.problem (problem_id,title,time_limit,memory_limit,stack_limit,description,input_description,output_description,source,difficulty,hint,status,create_user,update_user,create_time,update_time) VALUES
+	 ('P0021','Sample Problem 21',1000,128,128,'Description for Problem 21','Input description for Problem 21','Output description for Problem 21','zzcoder',3,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00'),
+	 ('P0022','Sample Problem 22',1000,128,128,'Description for Problem 22','Input description for Problem 22','Output description for Problem 22','zzcoder',5,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00'),
+	 ('P0023','Sample Problem 23',1000,128,128,'Description for Problem 23','Input description for Problem 23','Output description for Problem 23','zzcoder',1,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00'),
+	 ('P0024','Sample Problem 24',1000,128,128,'Description for Problem 24','Input description for Problem 24','Output description for Problem 24','zzcoder',3,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00'),
+	 ('P0025','Sample Problem 25',1000,128,128,'Description for Problem 25','Input description for Problem 25','Output description for Problem 25','zzcoder',5,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00'),
+	 ('P0026','Sample Problem 26',1000,128,128,'Description for Problem 26','Input description for Problem 26','Output description for Problem 26','zzcoder',1,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00'),
+	 ('P0027','Sample Problem 27',1000,128,128,'Description for Problem 27','Input description for Problem 27','Output description for Problem 27','zzcoder',5,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00'),
+	 ('P0028','Sample Problem 28',1000,128,128,'Description for Problem 28','Input description for Problem 28','Output description for Problem 28','zzcoder',2,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00'),
+	 ('P0029','Sample Problem 29',1000,128,128,'Description for Problem 29','Input description for Problem 29','Output description for Problem 29','zzcoder',0,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00'),
+	 ('P0030','Sample Problem 30',1000,128,128,'Description for Problem 30','Input description for Problem 30','Output description for Problem 30','zzcoder',0,'Hint for problem','0',8,8,'2025-01-01 08:00:00','2025-01-01 08:00:00');

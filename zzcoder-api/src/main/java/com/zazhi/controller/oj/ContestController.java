@@ -57,7 +57,6 @@ public class ContestController {
     @RequiresAuthentication
     public Result registerContest(Long contestId) {
         log.info("报名比赛");
-
         contestService.registerContest(contestId);
         return Result.success();
     }
@@ -67,11 +66,11 @@ public class ContestController {
     @Operation(summary = "获取比赛题目")
     public Result<List<ContestProblemVO>> getContestProblems(Long contestId) {
         log.info("获取比赛题目");
-
         return Result.success(contestService.getContestProblems(contestId));
     }
 
     @GetMapping("/clist")
+    @Operation(summary = "从clist获取即将开始的比赛")
     public Result<List<UpcomingContestVO>> getUpcomingContestsFromClist(
             @RequestParam Boolean upcoming,
             @RequestParam String resourceRegex

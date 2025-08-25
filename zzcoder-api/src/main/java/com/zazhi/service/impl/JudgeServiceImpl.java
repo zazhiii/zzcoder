@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.zazhi.common.enums.JudgeStatus;
 import com.zazhi.common.pojo.entity.*;
 import com.zazhi.common.pojo.vo.ProblemWithTestCaseVO;
+import com.zazhi.common.pojo.vo.UserProblemSubmissionVO;
 import com.zazhi.common.utils.MessageQueueUtil;
 import com.zazhi.common.pojo.dto.JudgeDTO;
 import com.zazhi.common.pojo.dto.SubmissionQueryDTO;
@@ -19,6 +20,8 @@ import com.zazhi.common.pojo.vo.SubmissionPageVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author zazhi
@@ -43,8 +46,8 @@ public class JudgeServiceImpl implements JudgeService {
      * @return
      */
     public Long submitCode(JudgeDTO judgeDTO) {
+        // 保存提交记录
         Integer userId = ThreadLocalUtil.getCurrentId();
-
         Submission submission = Submission.builder()
                 .userId(userId)
                 .problemId(judgeDTO.getProblemId())
@@ -52,19 +55,14 @@ public class JudgeServiceImpl implements JudgeService {
                 .language(judgeDTO.getLanguage())
                 .status(JudgeStatus.PENDING)
                 .build();
-        Long submissionId = judgeMapper.insertSubmission(submission);
+        judgeMapper.insertSubmission(submission);
 
-        // 生成提交id ( 将submission的主键作为任务id )
-        Long taskId = submission.getId();
-
-        // TODO 可以优化为一次查询
+        // 查出题目信息和测试用例
         ProblemWithTestCaseVO problemWithTestCase = problemMapper.getProblemWithTestCases(judgeDTO.getProblemId());
-//        Problem problem = problemMapper.getById(judgeDTO.getProblemId());
-//        List<TestCase> testCases = problemMapper.getTestCases(problem.getId());
 
         // 生成判题任务
         JudgeTask judgeTask = JudgeTask.builder()
-                .taskId(taskId)
+                .taskId(submission.getId())
                 .language(judgeDTO.getLanguage())
                 .code(judgeDTO.getCode())
                 .timeLimit(problemWithTestCase.getTimeLimit())
@@ -73,7 +71,7 @@ public class JudgeServiceImpl implements JudgeService {
                 .fullJudge(judgeDTO.getFullJudge())
                 .build();
         messageQueueUtil.sendJudgeTask(judgeTask);
-        return submissionId;
+        return submission.getId();
     }
 
     /**
@@ -106,5 +104,16 @@ public class JudgeServiceImpl implements JudgeService {
     public SubmissionInfoVO getSubmissionInfo(Long submitId) {
 
         return judgeMapper.getSubmissionInfoById(submitId);
+    }
+
+    /**
+     * 获取某题目用户的所有提交记录
+     * @param problemId
+     * @return
+     */
+    @Override
+    public List<UserProblemSubmissionVO> getUserSubmissionsByProblemId(Integer problemId) {
+        Integer userId = ThreadLocalUtil.getCurrentId();
+        return judgeMapper.getUserSubmissionsByProblemId(userId, problemId);
     }
 }
