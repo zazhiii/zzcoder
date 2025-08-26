@@ -6,6 +6,7 @@ import com.zazhi.common.pojo.entity.TestCaseResult;
 import com.zazhi.judger.common.enums.LanguageType;
 import com.zazhi.judger.common.exception.*;
 import com.zazhi.judger.common.pojo.*;
+import com.zazhi.judger.common.utils.MessageQueueUtil;
 import com.zazhi.judger.dockerpool.ContainerPoolExecutor;
 import com.zazhi.judger.dockerpool.containers.CodeExecContainer;
 import com.zazhi.judger.sandbox.SandBox;
@@ -25,6 +26,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JudgeServiceImpl implements JudgeService {
     private final ContainerPoolExecutor<CodeExecContainer> pool;
+
+    private final MessageQueueUtil messageQueueUtil;
 
     /**
      * 执行判题任务的方法
@@ -54,7 +57,6 @@ public class JudgeServiceImpl implements JudgeService {
             long maxMemoryUsed = 0L;
             for(TestCase testCase : testCases) {
                 TestCaseResult caseResult = new TestCaseResult();
-                caseResult.setId(testCase.getId());
 
                 CodeRunResult codeRunResult = new CodeRunResult();
                 try {
@@ -110,6 +112,15 @@ public class JudgeServiceImpl implements JudgeService {
                             .fullJudge(false)
                             .build();
                 }
+
+                caseResult.setTestCaseId(testCase.getId());
+                caseResult.setSubmissionId(task.getTaskId());
+
+                // 发送单个测试点结果到消息队列
+                if(task.getFullJudge()){
+                    messageQueueUtil.sendTestCaseResult(caseResult);
+                }
+
                 result.getTestCaseResults().add(caseResult);
             }
 

@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TestCaseResult {
-    private int id;
-//    private String input;
-//    private String output;
+    private int index; // 第几个测试用例
+    private Long testCaseId; // 测试用例ID
+    private Long submissionId; // 提交ID
     private Long timeUsed; // 单个测试用例耗时
     private Long memoryUsed; // 单个测试用例内存
     private JudgeStatus status; // 如 AC, WA, TLE, MLE 等

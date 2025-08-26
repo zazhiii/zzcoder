@@ -3,6 +3,7 @@ package com.zazhi.service;
 import com.zazhi.common.pojo.entity.JudgeResult;
 import com.zazhi.common.pojo.dto.JudgeDTO;
 import com.zazhi.common.pojo.dto.SubmissionQueryDTO;
+import com.zazhi.common.pojo.entity.TestCaseResult;
 import com.zazhi.common.pojo.result.PageResult;
 import com.zazhi.common.pojo.vo.SubmissionInfoVO;
 import com.zazhi.common.pojo.vo.SubmissionPageVO;
@@ -44,4 +45,10 @@ public interface JudgeService {
      * @return
      */
     List<UserProblemSubmissionVO> getUserSubmissionsByProblemId(Integer problemId);
+
+    /**
+     * 添加测试用例结果
+     * @param testCaseResult
+     */
+    void addTestCaseResult(TestCaseResult testCaseResult);
 }

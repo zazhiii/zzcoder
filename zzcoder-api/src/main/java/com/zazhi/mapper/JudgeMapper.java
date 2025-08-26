@@ -3,6 +3,7 @@ package com.zazhi.mapper;
 import com.github.pagehelper.Page;
 import com.zazhi.common.pojo.dto.SubmissionQueryDTO;
 import com.zazhi.common.pojo.entity.Submission;
+import com.zazhi.common.pojo.entity.TestCaseResult;
 import com.zazhi.common.pojo.vo.SubmissionInfoVO;
 import com.zazhi.common.pojo.vo.SubmissionPageVO;
 import com.zazhi.common.pojo.vo.UserProblemSubmissionVO;
@@ -50,4 +51,9 @@ public interface JudgeMapper {
             "where user_id = #{userId} and problem_id = #{problemId} " +
             "order by create_time desc")
     List<UserProblemSubmissionVO> getUserSubmissionsByProblemId(Integer userId, Integer problemId);
+
+
+    @Insert("insert into test_case_result (test_case_id, submission_id, time_used, memory_used, status, error_message) " +
+            "values (#{testCaseId}, #{submissionId}, #{timeUsed}, #{memoryUsed}, #{status}, #{errorMessage})")
+    void addTestCaseResult(TestCaseResult testCaseResult);
 }

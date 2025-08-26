@@ -1,6 +1,8 @@
 package com.zazhi.listener;
 
 import com.zazhi.common.pojo.entity.JudgeResult;
+import com.zazhi.common.pojo.entity.TestCaseResult;
+import com.zazhi.controller.oj.JudgeSseController;
 import com.zazhi.service.JudgeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,12 +14,23 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @RequiredArgsConstructor
 public class JudgeResultListener {
-
     private final JudgeService judgeService;
+
+    private final JudgeSseController judgeSseController;
 
     @RabbitListener(queues = "judge_result_queue")
     public void receiveJudgeResult(JudgeResult judgeResult) {
         log.info("JUDGE RESULT: {}", judgeResult);
+        // 通过SSE向前端发送判题结果
+        judgeSseController.sendStatus(judgeResult.getTaskId(), judgeResult.getStatus().getName());
         judgeService.updateSubmission(judgeResult);
+    }
+
+    @RabbitListener(queues = "test_case_result_queue")
+    public void receiveTestCaseResult(TestCaseResult testCaseResult) {
+        log.info("TEST CASE RESULT: {}", testCaseResult);
+        judgeSseController.sendTestCaseStatus(testCaseResult.getSubmissionId(),
+                testCaseResult.getTestCaseId(), testCaseResult.getStatus().getName());
+        judgeService.addTestCaseResult(testCaseResult);
     }
 }

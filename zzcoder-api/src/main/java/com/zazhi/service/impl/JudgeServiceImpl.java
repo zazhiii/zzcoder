@@ -116,4 +116,13 @@ public class JudgeServiceImpl implements JudgeService {
         Integer userId = ThreadLocalUtil.getCurrentId();
         return judgeMapper.getUserSubmissionsByProblemId(userId, problemId);
     }
+
+    /**
+     * 添加测试用例结果
+     * @param testCaseResult
+     */
+    @Override
+    public void addTestCaseResult(TestCaseResult testCaseResult) {
+        judgeMapper.addTestCaseResult(testCaseResult);
+    }
 }

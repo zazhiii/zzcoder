@@ -34,6 +34,11 @@ public class MessageConverterConfig {
     }
 
     @Bean
+    public Queue testCaseResultQueue() {
+        return new Queue("test_case_result_queue");
+    }
+
+    @Bean
     public Binding bindJudgeTaskQueue(DirectExchange judgeExchange, Queue judgeTaskQueue) {
         return BindingBuilder.bind(judgeTaskQueue).to(judgeExchange).with("judge_task_routing_key");
     }
@@ -43,6 +48,10 @@ public class MessageConverterConfig {
         return BindingBuilder.bind(judgeResultQueue).to(judgeExchange).with("judge_result_routing_key");
     }
 
+    @Bean
+    public Binding bindTestCaseResultQueue(DirectExchange testCaseExchange, Queue testCaseResultQueue) {
+        return BindingBuilder.bind(testCaseResultQueue).to(testCaseExchange).with("test_case_result_routing_key");
+    }
 
     @Bean
     public MessageConverter messageConverter(){
