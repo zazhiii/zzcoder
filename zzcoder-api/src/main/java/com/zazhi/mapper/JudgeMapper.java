@@ -56,4 +56,10 @@ public interface JudgeMapper {
     @Insert("insert into test_case_result (test_case_id, submission_id, time_used, memory_used, status, error_message) " +
             "values (#{testCaseId}, #{submissionId}, #{timeUsed}, #{memoryUsed}, #{status}, #{errorMessage})")
     void addTestCaseResult(TestCaseResult testCaseResult);
+
+    @Select("select id from test_case where problem_id = #{problemId}")
+    List<Long> getTestCaseIdsByProblemId(Integer problemId);
+
+    @Select("select count(*) from submission s left join test_case tc on s.problem_id = tc.problem_id where s.id = #{taskId}")
+    Integer getTestCaseCountBySubmissionId(Long taskId);
 }

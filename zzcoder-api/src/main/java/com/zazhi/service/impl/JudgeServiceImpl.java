@@ -125,4 +125,24 @@ public class JudgeServiceImpl implements JudgeService {
     public void addTestCaseResult(TestCaseResult testCaseResult) {
         judgeMapper.addTestCaseResult(testCaseResult);
     }
+
+    /**
+     * 查询题目所有测试用例
+     * @param problemId
+     * @return
+     */
+    @Override
+    public List<Long> getTestCaseIdsByProblemId(Integer problemId) {
+        return judgeMapper.getTestCaseIdsByProblemId(problemId);
+    }
+
+    /**
+     * 根据提交id获取测试用例数量
+     * @param taskId
+     * @return
+     */
+    @Override
+    public Integer getTestCaseCountBySubmissionId(Long taskId) {
+        return judgeMapper.getTestCaseCountBySubmissionId(taskId);
+    }
 }

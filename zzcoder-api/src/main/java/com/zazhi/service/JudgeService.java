@@ -51,4 +51,18 @@ public interface JudgeService {
      * @param testCaseResult
      */
     void addTestCaseResult(TestCaseResult testCaseResult);
+
+    /**
+     * 查询题目所有测试用例
+     * @param problemId
+     * @return
+     */
+    List<Long> getTestCaseIdsByProblemId(Integer problemId);
+
+    /**
+     *  通过提交ID获取该提交的测试用例数量
+     * @param taskId
+     * @return
+     */
+    Integer getTestCaseCountBySubmissionId(Long taskId);
 }

@@ -23,14 +23,14 @@ public class JudgeResultListener {
         log.info("JUDGE RESULT: {}", judgeResult);
         // 通过SSE向前端发送判题结果
         judgeSseController.sendStatus(judgeResult.getTaskId(), judgeResult.getStatus().getName());
+        // 更新数据库
         judgeService.updateSubmission(judgeResult);
     }
 
     @RabbitListener(queues = "test_case_result_queue")
     public void receiveTestCaseResult(TestCaseResult testCaseResult) {
         log.info("TEST CASE RESULT: {}", testCaseResult);
-        judgeSseController.sendTestCaseStatus(testCaseResult.getSubmissionId(),
-                testCaseResult.getTestCaseId(), testCaseResult.getStatus().getName());
+        judgeSseController.sendTestCaseStatus(testCaseResult.getSubmissionId(), testCaseResult);
         judgeService.addTestCaseResult(testCaseResult);
     }
 }

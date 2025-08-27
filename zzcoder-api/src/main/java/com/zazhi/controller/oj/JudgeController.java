@@ -59,4 +59,10 @@ public class JudgeController {
     public Result<List<UserProblemSubmissionVO>> getUserSubmissionsByProblemId(@PathVariable Integer problemId) {
         return Result.success(judgeService.getUserSubmissionsByProblemId(problemId));
     }
+
+    @Operation(summary = "查询题目所有测试数据id")
+    @GetMapping("/test-case-ids/{problemId}")
+    public Result<List<Long>> getTestCaseIdsByProblemId(@PathVariable Integer problemId) {
+        return Result.success(judgeService.getTestCaseIdsByProblemId(problemId));
+    }
 }
