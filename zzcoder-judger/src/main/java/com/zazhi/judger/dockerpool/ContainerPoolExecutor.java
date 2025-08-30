@@ -71,6 +71,7 @@ public class ContainerPoolExecutor<T extends DockerContainer> {
      * @param container 要释放的容器
      */
     public void releaseContainer(T container) {
+        container.stop(); // fix: 防止容器进程残留
         containerQueue.offer(container);
         containerStatusMap.put(container.getContainerId(), ContainerStatus.IDLE);
         container.setLastUsedTime(System.currentTimeMillis());

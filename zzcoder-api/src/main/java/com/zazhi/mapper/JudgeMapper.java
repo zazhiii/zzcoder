@@ -1,7 +1,7 @@
 package com.zazhi.mapper;
 
 import com.github.pagehelper.Page;
-import com.zazhi.common.pojo.dto.SubmissionQueryDTO;
+import com.zazhi.common.pojo.dto.SubmissionPageDTO;
 import com.zazhi.common.pojo.entity.Submission;
 import com.zazhi.common.pojo.entity.TestCaseResult;
 import com.zazhi.common.pojo.vo.SubmissionInfoVO;
@@ -19,10 +19,10 @@ public interface JudgeMapper {
 
     /**
      * 分页条件查询提交记录列表
-     * @param submissionQueryDTO
+     * @param submissionPageDTO
      * @return
      */
-    Page<SubmissionPageVO> getSubmissions(SubmissionQueryDTO submissionQueryDTO);
+    Page<SubmissionPageVO> pageSubmissions(SubmissionPageDTO submissionPageDTO);
 
     /**
      * 插入提交记录

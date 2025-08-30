@@ -24,7 +24,7 @@ public class SubmissionPageVO {
     private Integer problemId;// 题目id
     private String title;// 题目标题
     private String language;// 语言
-    private String status;// 状态 (PENDING JUDGING COMPLETED)
+    private String status;// 状态 (PENDING JUDGING AC WA ...)
     private Integer timeUsed;// 时间
     private Integer memoryUsed;// 内存
 }

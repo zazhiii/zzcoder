@@ -2,7 +2,7 @@ package com.zazhi.service;
 
 import com.zazhi.common.pojo.entity.JudgeResult;
 import com.zazhi.common.pojo.dto.JudgeDTO;
-import com.zazhi.common.pojo.dto.SubmissionQueryDTO;
+import com.zazhi.common.pojo.dto.SubmissionPageDTO;
 import com.zazhi.common.pojo.entity.TestCaseResult;
 import com.zazhi.common.pojo.result.PageResult;
 import com.zazhi.common.pojo.vo.SubmissionInfoVO;
@@ -21,10 +21,10 @@ public interface JudgeService {
 
     /**
      * 分页条件查询提交记录列表
-     * @param submissionQueryDTO
+     * @param submissionPageDTO
      * @return
      */
-    PageResult<SubmissionPageVO> getSubmissions(SubmissionQueryDTO submissionQueryDTO);
+    PageResult<SubmissionPageVO> pageSubmissions(SubmissionPageDTO submissionPageDTO);
 
     /**
      * 更新提交记录

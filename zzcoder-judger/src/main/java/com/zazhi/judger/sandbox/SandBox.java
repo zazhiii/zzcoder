@@ -9,7 +9,6 @@ import java.io.*;
 import java.util.concurrent.TimeUnit;
 
 public abstract class SandBox {
-
     protected CodeExecContainer container;
 
     public SandBox(CodeExecContainer codeExecContainer) {
@@ -57,6 +56,10 @@ public abstract class SandBox {
      * @return 代码运行结果
      */
     public CodeRunResult execute(CodeExecContainer container, String stdin) {
+         // fix: 每次执行代码前重启容器，清除上次运行的残留数据
+        container.stop();
+        container.start();
+
         String[] cmd = combineCommands(buildTimeCommand(), buildRunCommand());
         CmdExecResult res;
         try { // TODO: 超时等待时间应该是比限制时间多一点的的时长

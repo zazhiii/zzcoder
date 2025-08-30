@@ -1,7 +1,7 @@
 package com.zazhi.controller.oj;
 
 import com.zazhi.common.pojo.dto.JudgeDTO;
-import com.zazhi.common.pojo.dto.SubmissionQueryDTO;
+import com.zazhi.common.pojo.dto.SubmissionPageDTO;
 import com.zazhi.common.pojo.result.PageResult;
 import com.zazhi.common.pojo.result.Result;
 import com.zazhi.common.pojo.vo.UserProblemSubmissionVO;
@@ -15,12 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author zazhi
@@ -48,10 +44,10 @@ public class JudgeController {
         return Result.success(judgeService.getSubmissionInfo(submitId));
     }
 
-    @PostMapping("/submission")
+    @GetMapping("/submission/page")
     @Operation(summary = "获取提交记录")
-    public Result<PageResult<SubmissionPageVO>> getSubmissions(@RequestBody SubmissionQueryDTO submissionQueryDTO) {
-        return Result.success(judgeService.getSubmissions(submissionQueryDTO));
+    public Result<PageResult<SubmissionPageVO>> pageSubmissions(SubmissionPageDTO submissionPageDTO) {
+        return Result.success(judgeService.pageSubmissions(submissionPageDTO));
     }
 
     @Operation(summary = "获取某题目用户的所有提交记录")

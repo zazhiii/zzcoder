@@ -8,7 +8,7 @@ import com.zazhi.common.pojo.vo.ProblemWithTestCaseVO;
 import com.zazhi.common.pojo.vo.UserProblemSubmissionVO;
 import com.zazhi.common.utils.MessageQueueUtil;
 import com.zazhi.common.pojo.dto.JudgeDTO;
-import com.zazhi.common.pojo.dto.SubmissionQueryDTO;
+import com.zazhi.common.pojo.dto.SubmissionPageDTO;
 import com.zazhi.mapper.JudgeMapper;
 import com.zazhi.mapper.ProblemMapper;
 import com.zazhi.mapper.UserMapper;
@@ -76,12 +76,12 @@ public class JudgeServiceImpl implements JudgeService {
 
     /**
      * 分页条件查询提交记录列表
-     * @param submissionQueryDTO
+     * @param submissionPageDTO
      * @return
      */
-    public PageResult<SubmissionPageVO> getSubmissions(SubmissionQueryDTO submissionQueryDTO) {
-        PageHelper.startPage(submissionQueryDTO.getCurrentPage(), submissionQueryDTO.getLimit());
-        Page<SubmissionPageVO> res = judgeMapper.getSubmissions(submissionQueryDTO);
+    public PageResult<SubmissionPageVO> pageSubmissions(SubmissionPageDTO submissionPageDTO) {
+        PageHelper.startPage(submissionPageDTO.getPage(), submissionPageDTO.getPageSize());
+        Page<SubmissionPageVO> res = judgeMapper.pageSubmissions(submissionPageDTO);
         return new PageResult<>(res.getTotal(), res.getResult());
     }
 
