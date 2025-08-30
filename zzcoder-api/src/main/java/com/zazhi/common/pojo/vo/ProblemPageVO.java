@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ProblemPageVO implements Serializable {
     private Integer id;
-    private String problemId; // 题目编号
+    private String problemNumber; // 题目编号
     private String title; // 题目标题
     private Integer difficulty; // 难度
     private List<String> tags; // 标签

@@ -1,9 +1,9 @@
 package com.zazhi.service;
 
 import com.zazhi.common.pojo.dto.ProblemSetDTO;
-import com.zazhi.common.pojo.entity.ProblemSet;
 import com.zazhi.common.pojo.result.PageResult;
 import com.zazhi.common.pojo.vo.ProblemSetPageVO;
+import com.zazhi.common.pojo.vo.ProblemSetUpdateDTO;
 import com.zazhi.common.pojo.vo.ProblemSetVO;
 
 import java.util.List;
@@ -17,25 +17,18 @@ public interface ProblemSetService {
 
     /**
      * 修改题单信息
-     * @param problemSetDTO
+     * @param problemSetUpdateDTO
      */
-    void updateProblemSet(ProblemSetDTO problemSetDTO);
+    void updateProblemSet(ProblemSetUpdateDTO problemSetUpdateDTO, Integer id);
 
     /**
-     * 分页查询公开题单
+     * 分页查询题单
      * @param page
      * @param size
      * @param title
      * @return
      */
-    PageResult<ProblemSetPageVO> pagePublicProblemSet(Integer page, Integer size, String title);
-
-
-    /**
-     * 查询我的所有题单
-     * @return
-     */
-    List<ProblemSetPageVO> listMyProblemSet();
+    PageResult<ProblemSetPageVO> pageProblemSet(Integer page, Integer size, String title, Integer status);
 
     /**
      * 添加题目到题单
@@ -56,11 +49,11 @@ public interface ProblemSetService {
      * @param id
      * @return
      */
-    ProblemSetVO getProblemSet(Integer id);
+    ProblemSetVO getProblemSetDetail(Integer id);
 
     /**
      * 删除题单
-     * @param id
+     * @param id 题单ID
      */
     void deleteProblemSet(Integer id);
 }

@@ -1,6 +1,6 @@
 package com.zazhi.config;
 
-import com.zazhi.common.pojo.properties.AliOssProperties;
+import com.zazhi.config.properties.AliOssProperties;
 import com.zazhi.common.utils.AliOssUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

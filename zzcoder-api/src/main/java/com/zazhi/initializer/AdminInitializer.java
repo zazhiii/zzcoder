@@ -6,7 +6,7 @@ import com.zazhi.common.pojo.entity.Role;
 import com.zazhi.common.pojo.entity.User;
 import com.zazhi.mapper.AuthMapper;
 import com.zazhi.mapper.UserMapper;
-import com.zazhi.common.pojo.properties.AdminProperties;
+import com.zazhi.config.properties.AdminProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;

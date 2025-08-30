@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zazhi.mapper.ProblemSetMapper">
 
-    <update id="updateProblemSet" parameterType="com.zazhi.common.pojo.entity.ProblemSet">
+    <update id="update" parameterType="com.zazhi.common.pojo.entity.ProblemSet">
         update problem_set
         <set>
             <if test="title != null">
@@ -23,57 +23,77 @@
         where id = #{id}
     </update>
 
-    <select id="pagePublicProblemSet" parameterType="string" resultType="com.zazhi.common.pojo.vo.ProblemSetPageVO">
+    <select id="pageProblemSet" parameterType="string" resultType="com.zazhi.common.pojo.vo.ProblemSetPageVO">
         select
         ps.id,
         ps.title,
+        ps.status,
+        ps.create_time,
+        COUNT(psi.id) as problem_count,
         u.id as create_user_id,
         u.username as create_user_name
-        from problem_set ps left join user u on ps.create_user = u.id
+        from problem_set ps
+        left join user u on ps.create_user = u.id
+        LEFT JOIN problem_set_item psi ON ps.id = psi.problem_set_id
         <where>
-            ps.status = 1
             <if test="title != null and title.trim() != ''">
                 and ps.title like concat('%', #{title}, '%')
             </if>
+            <if test="status != null">
+                and ps.status = #{status}
+            </if>
         </where>
+        GROUP BY ps.id
     </select>
 
-    <resultMap id="getProblemSetMap" type="com.zazhi.common.pojo.vo.ProblemSetVO">
-        <id column="id" property="id"/>
-        <result column="title" property="title"/>
-        <result column="description" property="description"/>
-        <result column="create_user" property="createUser"/>
-        <result column="create_time" property="createTime"/>
-        <collection property="problems" ofType="com.zazhi.common.pojo.vo.ProblemPageVO">
-            <id column="pid" property="id"/>
-            <result column="problem_id" property="problemId"/>
-            <result column="problem_title" property="title"/>
-            <result column="difficulty" property="difficulty"/>
-            <collection property="tags" ofType="com.zazhi.common.pojo.entity.ProblemTag">
-                <id column="tid" property="id"/>
-                <result column="tag_name" property="name"/>
-            </collection>
-        </collection>
-    </resultMap>
-    <select id="getProblemSet" parameterType="java.lang.Integer" resultType="com.zazhi.common.pojo.vo.ProblemSetVO" resultMap="getProblemSetMap">
-        SELECT
-            ps.id id,
-            ps.title title,
-            ps.description description,
-            ps.create_user create_user,
-            ps.create_time create_time,
-            p.id pid,
-            p.problem_id problem_id,
-            p.title problem_title,
-            p.difficulty difficulty,
-            t.id tid,
-            t.name tag_name
-        FROM
-            problem_set ps
-        LEFT JOIN problem_problem_set pps ON ps.id = pps.problem_set_id
-        LEFT JOIN problem p ON pps.problem_id = p.id
-        LEFT JOIN problem_tag pt ON p.id = pt.pid
-        LEFT JOIN tag t ON pt.tid = t.id
-        WHERE ps.id = #{id}
-    </select>
+<!--    <resultMap id="getProblemSetMap" type="com.zazhi.common.pojo.vo.ProblemSetVO">-->
+<!--        <id column="id" property="id"/>-->
+<!--        <result column="title" property="title"/>-->
+<!--        <result column="description" property="description"/>-->
+<!--        <result column="create_user" property="createUser"/>-->
+<!--        <result column="create_time" property="createTime"/>-->
+<!--        <collection property="internalProblems" ofType="com.zazhi.common.pojo.vo.ProblemSetItemInternalVO">-->
+<!--            <id column="pid" property="id"/>-->
+<!--            <result column="problem_id" property="problemId"/>-->
+<!--            <result column="internal_title" property="title"/>-->
+<!--            <result column="internal_difficulty" property="difficulty"/>-->
+<!--&lt;!&ndash;            <result column="external_Title" property="externalTitle"/>&ndash;&gt;-->
+<!--&lt;!&ndash;            <result column="external_difficulty" property="externalDifficulty"/>&ndash;&gt;-->
+<!--&lt;!&ndash;            <result column="source" property="source"/>&ndash;&gt;-->
+<!--&lt;!&ndash;            <result column="url" property="url"/>&ndash;&gt;-->
+<!--        </collection>-->
+<!--        <collection property="externalProblems" ofType="com.zazhi.common.pojo.vo.ProblemSetItemExternalVO">-->
+<!--            <id column="pid" property="id"/>-->
+<!--            <result column="external_title" property="title"/>-->
+<!--            <result column="external_difficulty" property="difficulty"/>-->
+<!--            <result column="source" property="source"/>-->
+<!--            <result column="url" property="url"/>-->
+<!--        </collection>-->
+<!--    </resultMap>-->
+<!--    <select id="getProblemSetDetail" parameterType="java.lang.Integer" resultType="com.zazhi.common.pojo.vo.ProblemSetVO"-->
+<!--            resultMap="getProblemSetMap">-->
+<!--        SELECT-->
+<!--        &lt;!&ndash; 题单信息 &ndash;&gt;-->
+<!--        ps.id id,-->
+<!--        ps.title,-->
+<!--        ps.description,-->
+<!--        ps.create_user,-->
+<!--        ps.create_time,-->
+<!--        &lt;!&ndash; 内部题目信息 &ndash;&gt;-->
+<!--        p.id as pid,-->
+<!--        p.id as problem_id,-->
+<!--        p.title as internal_title,-->
+<!--        p.difficulty as internal_difficulty,-->
+<!--        &lt;!&ndash; 外部题目信息 &ndash;&gt;-->
+<!--        ep.title as external_title,-->
+<!--        ep.difficulty as external_difficulty,-->
+<!--        ep.source,-->
+<!--        ep.url-->
+<!--        FROM-->
+<!--        problem_set ps-->
+<!--        LEFT JOIN problem_set_item psi ON ps.id = psi.problem_set_id-->
+<!--        LEFT JOIN problem p ON psi.problem_id = p.id-->
+<!--        LEFT JOIN external_problem ep ON psi.external_problem_id = ep.id-->
+<!--        WHERE ps.id = #{id}-->
+<!--    </select>-->
 </mapper>

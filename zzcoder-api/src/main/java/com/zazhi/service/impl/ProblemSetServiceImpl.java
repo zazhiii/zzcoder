@@ -4,14 +4,13 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zazhi.common.pojo.dto.ProblemSetDTO;
 import com.zazhi.common.pojo.entity.ProblemSet;
-import com.zazhi.common.pojo.vo.ProblemSetPageVO;
+import com.zazhi.common.pojo.vo.*;
 import com.zazhi.mapper.ProblemSetMapper;
 import com.zazhi.common.pojo.result.PageResult;
 import com.zazhi.service.ProblemSetService;
 import com.zazhi.common.utils.ThreadLocalUtil;
-import com.zazhi.common.pojo.vo.ProblemSetVO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,19 +21,19 @@ import java.util.List;
  * @description: 题单相关接口
  */
 @Service
+@RequiredArgsConstructor
 public class ProblemSetServiceImpl implements ProblemSetService {
-
-    @Autowired
-    ProblemSetMapper problemSetMapper;
+    private final ProblemSetMapper problemSetMapper;
 
     /**
      * 添加题单
-     * @param problemSetDTO
+     * @param problemSetDTO 添加题单参数
      */
     public void addProblemSet(ProblemSetDTO problemSetDTO) {
         ProblemSet problemSet = ProblemSet.builder()
                 .title(problemSetDTO.getTitle())
                 .description(problemSetDTO.getDescription())
+                .status(problemSetDTO.getStatus())
                 .createUser(ThreadLocalUtil.getCurrentId())
                 .updateUser(ThreadLocalUtil.getCurrentId())
                 .build();
@@ -43,14 +42,20 @@ public class ProblemSetServiceImpl implements ProblemSetService {
 
     /**
      * 修改题单信息
-     * @param problemSetDTO
+     * @param problemSetUpdateDTO 修改题单参数
      */
-    public void updateProblemSet(ProblemSetDTO problemSetDTO) {
-        ProblemSet problemSet = new ProblemSet();
-        BeanUtils.copyProperties(problemSetDTO, problemSet);
+    public void updateProblemSet(ProblemSetUpdateDTO problemSetUpdateDTO, Integer id) {
+        ProblemSet problemSet = problemSetMapper.getById(id);
+        if(problemSet == null){
+            throw new RuntimeException("题单不存在");
+        }
+        if(!problemSet.getCreateUser().equals(ThreadLocalUtil.getCurrentId())){
+            throw new RuntimeException("只能修改自己的题单");
+        }
+        BeanUtils.copyProperties(problemSetUpdateDTO, problemSet);
         Integer userId = ThreadLocalUtil.getCurrentId();
         problemSet.setUpdateUser(userId);
-        problemSetMapper.updateProblemSet(problemSet);
+        problemSetMapper.update(problemSet);
     }
 
     /**
@@ -60,18 +65,10 @@ public class ProblemSetServiceImpl implements ProblemSetService {
      * @param title
      * @return
      */
-    public PageResult<ProblemSetPageVO> pagePublicProblemSet(Integer page, Integer size, String title) {
+    public PageResult<ProblemSetPageVO> pageProblemSet(Integer page, Integer size, String title, Integer status) {
         PageHelper.startPage(page, size);
-        Page<ProblemSetPageVO> problemSets = problemSetMapper.pagePublicProblemSet(title);
+        Page<ProblemSetPageVO> problemSets = problemSetMapper.pageProblemSet(title, status);
         return new PageResult<>(problemSets.getTotal(), problemSets.getResult());
-    }
-
-    /**
-     * 查询我的所有题单
-     * @return
-     */
-    public List<ProblemSetPageVO> listMyProblemSet() {
-        return problemSetMapper.listPrivateProblemSet(ThreadLocalUtil.getCurrentId());
     }
 
     /**
@@ -97,8 +94,17 @@ public class ProblemSetServiceImpl implements ProblemSetService {
      * @param id
      * @return
      */
-    public ProblemSetVO getProblemSet(Integer id) {
-        return problemSetMapper.getProblemSet(id);
+    public ProblemSetVO getProblemSetDetail(Integer id) {
+        ProblemSetVO problemSetVO = new ProblemSetVO();
+        ProblemSetInfoVO problemSetInfo = problemSetMapper.getProblemSetInfo(id);
+        BeanUtils.copyProperties(problemSetInfo, problemSetVO);
+        // 本站题目
+        List<ProblemSetItemInternalVO> internalProblems = problemSetMapper.getInternalProblems(id);
+        problemSetVO.setInternalProblems(internalProblems);
+        // 外部题目
+        List<ProblemSetItemExternalVO> externalProblems = problemSetMapper.getExternalProblems(id);
+        problemSetVO.setExternalProblems(externalProblems);
+        return problemSetVO;
     }
 
     /**
@@ -107,12 +113,18 @@ public class ProblemSetServiceImpl implements ProblemSetService {
      * @param problemSetId
      */
     public void deleteProblemSet(Integer problemSetId) {
+        ProblemSet problemSet = problemSetMapper.getById(problemSetId);
+        if (problemSet == null) {
+            throw new RuntimeException("题单不存在");
+        }
+        if (!problemSet.getCreateUser().equals(ThreadLocalUtil.getCurrentId())) {
+            throw new RuntimeException("只能删除自己的题单");
+        }
         // 题单中有题目则不能删除
         Integer problemCount = problemSetMapper.getProblemCount(problemSetId);
         if (problemCount > 0) {
             throw new RuntimeException("题单中有题目, 不能删除");
         }
-        // TODO 只能删除自己的题单
         problemSetMapper.deleteProblemSet(problemSetId);
     }
 }

@@ -4,44 +4,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zazhi.mapper.ProblemMapper">
 
-    <!-- 插入题目 -->
-    <insert id="insert" parameterType="com.zazhi.common.pojo.entity.Problem">
-        INSERT INTO `problem` (
-        `problem_id`,
-        `title`,
-        `time_limit`,
-        `memory_limit`,
-        `stack_limit`,
-        `description`,
-        `input_description`,
-        `output_description`,
-        `source`,
-        `difficulty`,
-        `hint`,
-        `status`,
-        `create_user`,
-        `update_user`
-        ) VALUES (
-        #{problemId},
-        #{title},
-        #{timeLimit},
-        #{memoryLimit},
-        #{stackLimit},
-        #{description},
-        #{inputDescription},
-        #{outputDescription},
-        #{source},
-        #{difficulty},
-        #{hint},
-        #{status},
-        #{createUser},
-        #{updateUser}
-        )
-    </insert>
-
     <resultMap id="pageMap" type="com.zazhi.common.pojo.vo.ProblemPageVO">
         <id column="id" property="id"/>
-        <result column="problem_id" property="problemId"/>
+        <result column="problem_number" property="problemNumber"/>
         <result column="title" property="title"/>
         <result column="difficulty" property="difficulty"/>
         <collection property="tags" ofType="java.lang.String">
@@ -51,7 +16,7 @@
     <select id="pageByIds" parameterType="java.util.List" resultMap="pageMap">
         select
         p.id,
-        p.problem_id,
+        p.problem_number,
         p.title,
         p.difficulty,
         t.name

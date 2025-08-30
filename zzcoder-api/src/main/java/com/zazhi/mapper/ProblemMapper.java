@@ -9,6 +9,7 @@ import com.zazhi.common.pojo.vo.ProblemPageVO;
 import com.zazhi.common.pojo.vo.ProblemWithTestCaseVO;
 import com.zazhi.common.pojo.vo.TagVO;
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -21,6 +22,37 @@ public interface ProblemMapper {
      *
      * @param problem
      */
+    @Insert("INSERT INTO `problem` (\n" +
+            "        `problem_number`,\n" +
+            "        `title`,\n" +
+            "        `time_limit`,\n" +
+            "        `memory_limit`,\n" +
+            "        `stack_limit`,\n" +
+            "        `description`,\n" +
+            "        `input_description`,\n" +
+            "        `output_description`,\n" +
+            "        `source`,\n" +
+            "        `difficulty`,\n" +
+            "        `hint`,\n" +
+            "        `status`,\n" +
+            "        `create_user`,\n" +
+            "        `update_user`\n" +
+            "        ) VALUES (\n" +
+            "        #{problemId},\n" +
+            "        #{title},\n" +
+            "        #{timeLimit},\n" +
+            "        #{memoryLimit},\n" +
+            "        #{stackLimit},\n" +
+            "        #{description},\n" +
+            "        #{inputDescription},\n" +
+            "        #{outputDescription},\n" +
+            "        #{source},\n" +
+            "        #{difficulty},\n" +
+            "        #{hint},\n" +
+            "        #{status},\n" +
+            "        #{createUser},\n" +
+            "        #{updateUser}\n" +
+            "        )")
     void insert(Problem problem);
 
     /**

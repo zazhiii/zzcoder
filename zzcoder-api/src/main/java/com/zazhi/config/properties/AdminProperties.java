@@ -1,4 +1,4 @@
-package com.zazhi.common.pojo.properties;
+package com.zazhi.config.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

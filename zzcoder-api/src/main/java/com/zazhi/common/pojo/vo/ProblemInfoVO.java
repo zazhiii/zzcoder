@@ -22,7 +22,7 @@ import java.util.List;
 public class ProblemInfoVO implements Serializable {
     private Integer id; // 主键id
 
-    private String problemId; // 题目展示id
+    private String problemNumber; // 题目展示id
 
     private String title; // 题目标题
 

@@ -22,8 +22,10 @@ public class ProblemSetVO {
     private Integer id;              // 题单ID
     private String title;          // 题单标题
     private String description;    // 题单描述
-    private Long createUser;       // 创建人（用户ID）
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Integer status;        // 状态（0私有，1公开）
+    private Integer createUserId;       // 创建人（用户ID）
+    private String createUsername;       // 创建人（用户ID）
     private Timestamp createTime;  // 创建时间
-    private List<ProblemPageVO> problems; // 题目列表
+    private List<ProblemSetItemInternalVO> internalProblems; // 内部题目列表
+    private List<ProblemSetItemExternalVO> externalProblems; // 外部题目列表
 }
