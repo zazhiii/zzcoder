@@ -46,8 +46,16 @@ public class JudgeController {
 
     @GetMapping("/submission/page")
     @Operation(summary = "获取提交记录")
-    public Result<PageResult<SubmissionPageVO>> pageSubmissions(SubmissionPageDTO submissionPageDTO) {
-        return Result.success(judgeService.pageSubmissions(submissionPageDTO));
+    public Result<PageResult<SubmissionPageVO>> pageSubmissions(
+            @RequestParam Integer page,
+            @RequestParam Integer pageSize,
+            @RequestParam(required = false) Integer problemId,
+            @RequestParam(required = false) Integer userId,
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String language
+    ) {
+        return Result.success(judgeService.pageSubmissions(page, pageSize, problemId, userId, username, status, language));
     }
 
     @Operation(summary = "获取某题目用户的所有提交记录")

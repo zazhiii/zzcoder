@@ -6,6 +6,7 @@ import com.zazhi.common.pojo.dto.UserUpdateDTO;
 import com.zazhi.common.pojo.entity.Permission;
 import com.zazhi.common.pojo.entity.Role;
 import com.zazhi.common.pojo.entity.User;
+import com.zazhi.common.pojo.vo.UserSubmitStatVO;
 
 import java.util.List;
 
@@ -62,4 +63,28 @@ public interface UserService {
      * @param userInfo
      */
     void updateUserInfo(UserUpdateDTO userInfo);
+
+    /**
+     * 获取用户已解决题目数
+     * @return 题目数量
+     */
+    Integer getSolvedProblemCount();
+
+    /**
+     * 获取用户通过次数
+     * @return 通过次数
+     */
+    Integer getSubmissionCount();
+
+    /**
+     * 获取用户通过次数
+     * @return 通过次数
+     */
+    Integer getAcCount();
+
+    /**
+     * 获取用户提交统计信息
+     * @return 提交统计信息
+     */
+    UserSubmitStatVO getSubmitStat();
 }

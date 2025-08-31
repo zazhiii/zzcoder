@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zazhi.mapper.JudgeMapper">
-    <select id="pageSubmissions" resultType="com.zazhi.common.pojo.vo.SubmissionPageVO" parameterType="com.zazhi.common.pojo.dto.SubmissionPageDTO">
+    <select id="pageSubmissions" resultType="com.zazhi.common.pojo.vo.SubmissionPageVO" parameterType="string">
         select
         s.id, s.problem_id, s.user_id, s.submit_time, s.language, s.status, s.result, s.time_used, s.memory_used, u.username, p.title
         from submission s

@@ -23,9 +23,8 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/problem")
-//@Validated
 @Slf4j
-@Tag(name = "题目相关接口")
+@Tag(name = "题目")
 @RequiredArgsConstructor
 public class ProblemController {
     private final ProblemService problemService;
@@ -58,5 +57,10 @@ public class ProblemController {
         return Result.success(problemService.getTestCases(problemId));
     }
 
-
+    @GetMapping("/search")
+    @Operation(summary = "搜索题目")
+    public Result<List<ProblemPageVO>> searchProblem(@RequestParam String keyword){
+        log.info("搜索题目，关键词：{}", keyword);
+        return Result.success(problemService.searchProblem(keyword));
+    }
 }

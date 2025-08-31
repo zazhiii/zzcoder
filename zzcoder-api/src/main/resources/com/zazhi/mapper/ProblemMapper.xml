@@ -44,7 +44,7 @@
 <!--        LEFT JOIN tag t ON pt.tag_id = t.id-->
         <where>
             <if test="keyword != null and keyword.trim() != ''">
-                AND ( title LIKE CONCAT('%', #{keyword}, '%') OR p.problem_id LIKE CONCAT('%', #{keyword}, '%') )
+                AND ( title LIKE CONCAT('%', #{keyword}, '%') OR p.problem_number LIKE CONCAT('%', #{keyword}, '%') )
             </if>
             <if test="tagId != null and tagId.size() > 0">
                 AND p.id IN
@@ -114,7 +114,7 @@
 
     <resultMap id="getProblemInfoByIdMap" type="com.zazhi.common.pojo.vo.ProblemInfoVO">
         <id column="id" property="id"/>
-        <result column="problem_id" property="problemId"/>
+        <result column="problem_id" property="problemNumber"/>
         <result column="title" property="title"/>
         <result column="time_limit" property="timeLimit"/>
         <result column="memory_limit" property="memoryLimit"/>

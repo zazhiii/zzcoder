@@ -86,4 +86,11 @@ public interface ProblemService {
      * @return
      */
     List<TagVO> getProblemTags(Integer problemId);
+
+    /**
+     * 搜索题目
+     * @param keyword 关键词
+     * @return 题目列表
+     */
+    List<ProblemPageVO> searchProblem(String keyword);
 }

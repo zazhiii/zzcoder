@@ -22,36 +22,36 @@ public interface ProblemMapper {
      *
      * @param problem
      */
-    @Insert("INSERT INTO `problem` (\n" +
-            "        `problem_number`,\n" +
-            "        `title`,\n" +
-            "        `time_limit`,\n" +
-            "        `memory_limit`,\n" +
-            "        `stack_limit`,\n" +
-            "        `description`,\n" +
-            "        `input_description`,\n" +
-            "        `output_description`,\n" +
-            "        `source`,\n" +
-            "        `difficulty`,\n" +
-            "        `hint`,\n" +
-            "        `status`,\n" +
-            "        `create_user`,\n" +
-            "        `update_user`\n" +
-            "        ) VALUES (\n" +
-            "        #{problemId},\n" +
-            "        #{title},\n" +
-            "        #{timeLimit},\n" +
-            "        #{memoryLimit},\n" +
-            "        #{stackLimit},\n" +
-            "        #{description},\n" +
-            "        #{inputDescription},\n" +
-            "        #{outputDescription},\n" +
-            "        #{source},\n" +
-            "        #{difficulty},\n" +
-            "        #{hint},\n" +
-            "        #{status},\n" +
-            "        #{createUser},\n" +
-            "        #{updateUser}\n" +
+    @Insert("INSERT INTO `problem` (" +
+            "        `problem_number`," +
+            "        `title`," +
+            "        `time_limit`," +
+            "        `memory_limit`," +
+            "        `stack_limit`," +
+            "        `description`," +
+            "        `input_description`," +
+            "        `output_description`," +
+            "        `source`," +
+            "        `difficulty`," +
+            "        `hint`," +
+            "        `status`," +
+            "        `create_user`," +
+            "        `update_user`" +
+            "        ) VALUES (" +
+            "        #{problemId}," +
+            "        #{title}," +
+            "        #{timeLimit}," +
+            "        #{memoryLimit}," +
+            "        #{stackLimit}," +
+            "        #{description}," +
+            "        #{inputDescription}," +
+            "        #{outputDescription}," +
+            "        #{source}," +
+            "        #{difficulty}," +
+            "        #{hint}," +
+            "        #{status}," +
+            "        #{createUser}," +
+            "        #{updateUser}" +
             "        )")
     void insert(Problem problem);
 
@@ -126,4 +126,15 @@ public interface ProblemMapper {
      * @return
      */
     ProblemWithTestCaseVO getProblemWithTestCases(Integer problemId);
+
+    /**
+     * 搜索题目
+     * @param keyword 关键词
+     * @return 题目列表
+     */
+    @Select("select id, problem_number, title, difficulty from problem " +
+            "where title like CONCAT('%', #{keyword}, '%') " +
+            "   or problem_number like CONCAT('%', #{keyword}, '%') " +
+            "order by id desc limit 50")
+    List<ProblemPageVO> searchProblem(String keyword);
 }

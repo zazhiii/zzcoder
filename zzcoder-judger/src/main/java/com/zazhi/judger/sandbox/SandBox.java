@@ -57,8 +57,8 @@ public abstract class SandBox {
      */
     public CodeRunResult execute(CodeExecContainer container, String stdin) {
          // fix: 每次执行代码前重启容器，清除上次运行的残留数据
-        container.stop();
-        container.start();
+//        container.stop();
+//        container.start();
 
         String[] cmd = combineCommands(buildTimeCommand(), buildRunCommand());
         CmdExecResult res;

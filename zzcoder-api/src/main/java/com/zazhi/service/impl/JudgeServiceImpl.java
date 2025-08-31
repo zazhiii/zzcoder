@@ -76,12 +76,12 @@ public class JudgeServiceImpl implements JudgeService {
 
     /**
      * 分页条件查询提交记录列表
-     * @param submissionPageDTO
      * @return
      */
-    public PageResult<SubmissionPageVO> pageSubmissions(SubmissionPageDTO submissionPageDTO) {
-        PageHelper.startPage(submissionPageDTO.getPage(), submissionPageDTO.getPageSize());
-        Page<SubmissionPageVO> res = judgeMapper.pageSubmissions(submissionPageDTO);
+    public PageResult<SubmissionPageVO> pageSubmissions(Integer page, Integer pageSize, Integer problemId, Integer userId,
+                                                        String username, String status, String language) {
+        PageHelper.startPage(page, pageSize);
+        Page<SubmissionPageVO> res = judgeMapper.pageSubmissions(problemId, userId, username, status, language);
         return new PageResult<>(res.getTotal(), res.getResult());
     }
 

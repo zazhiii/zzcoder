@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/problem-set")
 @Slf4j
-@Tag(name = "题单相关接口")
+@Tag(name = "题单")
 @RequiredArgsConstructor
 public class ProblemSetController {
     private final ProblemSetService problemSetService;
@@ -68,24 +68,24 @@ public class ProblemSetController {
         return Result.success();
     }
 
-    @Operation(summary = "添加题目到题单")
-    @PostMapping("/add-problem")
+    @Operation(summary = "从题单删除内部题目")
+    @DeleteMapping("/internal")
     @RequiresAuthentication
-    public Result addProblemToProblemSet(@RequestParam("problemSetId") Integer problemSetId,
-                                         @RequestParam("problemId") Integer problemId) {
-        log.info("添加题目到题单, problemSetId: {}, problemId: {}", problemSetId, problemId);
-        problemSetService.addProblemToProblemSet(problemSetId, problemId);
+    public Result<Void> deleteInternalProblem(@RequestParam("problemSetId") Integer problemSetId,
+                                              @RequestParam("problemId") Integer problemId) {
+        log.info("从题单删除题目, problemSetId: {}, problemId: {}", problemSetId, problemId);
+        problemSetService.deleteInternalProblem(problemSetId, problemId);
         return Result.success();
     }
 
-    @Operation(summary = "从题单删除题目")
-    @DeleteMapping("/delete-problem")
+    @Operation(summary = "从题单删除外部题目")
+    @DeleteMapping("/external")
     @RequiresAuthentication
-    public Result deleteProblemFromProblemSet(@RequestParam("problemSetId") Integer problemSetId,
+    public Result<Void> deleteExternalProblem(@RequestParam("problemSetId") Integer problemSetId,
                                               @RequestParam("problemId") Integer problemId) {
-        log.info("从题单删除题目, problemSetId: {}, problemId: {}", problemSetId, problemId);
-        problemSetService.deleteProblemFromProblemSet(problemSetId, problemId);
-        return Result.success();
+        log.info("从题单删除外部题目, problemSetId: {}, problemId: {}", problemSetId, problemId);
+        problemSetService.deleteExternalProblem(problemSetId, problemId);
+        return  Result.success();
     }
 
     @Operation(summary = "删除题单")
@@ -94,6 +94,16 @@ public class ProblemSetController {
     public Result<Void> deleteProblemSet(@PathVariable("id") Integer id) {
         log.info("删除题单, id: {}", id);
         problemSetService.deleteProblemSet(id);
+        return Result.success();
+    }
+
+    @Operation(summary = "添加本站题目到题单")
+    @PostMapping("/add-problem/internal")
+    @RequiresAuthentication
+    public Result<Void> addInternalProblem(@RequestParam("problemSetId") Integer problemSetId,
+                                           @RequestParam("problemId") Integer problemId) {
+        log.info("添加题目到题单, problemSetId: {}, problemId: {}", problemSetId, problemId);
+        problemSetService.addInternalProblem(problemSetId, problemId);
         return Result.success();
     }
 }

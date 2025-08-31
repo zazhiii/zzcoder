@@ -7,6 +7,7 @@ import com.zazhi.common.utils.RedisUtil;
 import com.zazhi.service.impl.VerificationCodeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,25 +21,20 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api")
-//@Validated
 @Slf4j
 @Tag(name = "注册、登录、更改密码、权限相关接口")
+@RequiredArgsConstructor
 public class AuthController {
+    private final VerificationCodeService verificationCodeService;
 
-    @Autowired
-    private VerificationCodeService verificationCodeService;
+    private final AuthService authService;
 
-    @Autowired
-    private AuthService authService;
+    private final RedisUtil redisUtil;
 
-    @Autowired
-    private RedisUtil redisUtil;
-
-    @PostMapping("/send-email-code")
+    @GetMapping("/send-email-code")
     @Operation(summary = "发送邮箱验证码")
-    public Result<Void> sendEmailCode(@RequestBody @Validated SendCodeDTO sendCodeDTO){
+    public Result<Void> sendEmailCode(@Validated SendCodeDTO sendCodeDTO){
         log.info("开始发送验证码，{}", sendCodeDTO.getEmail());
-
         authService.sendEmailCode(sendCodeDTO);
         return Result.success();
     }

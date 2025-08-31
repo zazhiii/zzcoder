@@ -6,6 +6,7 @@ import com.zazhi.common.pojo.dto.UserUpdateDTO;
 import com.zazhi.common.pojo.entity.Permission;
 import com.zazhi.common.pojo.entity.Role;
 import com.zazhi.common.pojo.entity.User;
+import com.zazhi.common.pojo.vo.UserSubmitStatVO;
 import com.zazhi.exception.model.VerificationCodeException;
 import com.zazhi.mapper.UserMapper;
 import com.zazhi.service.UserService;
@@ -134,6 +135,34 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(userInfo, user);
         user.setId(ThreadLocalUtil.getCurrentId());
         userMapper.update(user);
+    }
+
+    @Override
+    public Integer getSolvedProblemCount() {
+        Integer userId = ThreadLocalUtil.getCurrentId();
+        return userMapper.getSolvedProblemCount(userId);
+    }
+
+    @Override
+    public Integer getSubmissionCount() {
+        Integer userId = ThreadLocalUtil.getCurrentId();
+        return userMapper.getSubmissionCount(userId);
+    }
+
+
+    @Override
+    public Integer getAcCount() {
+        return 0;
+    }
+
+    /**
+     * 获取用户提交统计信息
+     *
+     * @return
+     */
+    @Override
+    public UserSubmitStatVO getSubmitStat() {
+        return userMapper.getSubmitStat(ThreadLocalUtil.getCurrentId());
     }
 
 

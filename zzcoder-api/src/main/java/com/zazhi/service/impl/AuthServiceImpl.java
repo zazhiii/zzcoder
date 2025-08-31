@@ -3,6 +3,8 @@ package com.zazhi.service.impl;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import com.zazhi.common.enums.EmailCodeBusinessType;
+import com.zazhi.common.exception.AuthError;
+import com.zazhi.common.exception.model.BizException;
 import com.zazhi.common.pojo.dto.*;
 import com.zazhi.common.utils.*;
 import com.zazhi.config.properties.VerifyCodeProperties;
@@ -65,7 +67,7 @@ public class AuthServiceImpl implements AuthService {
         Integer userId = ThreadLocalUtil.getCurrentId();
         User user = userMapper.findById(userId);
         if(!DigestUtil.md5Hex(oldPassword).equals(user.getPassword())){
-            throw new BizException(ORIGINAL_PASSWORD_INCORRECT);
+            throw new BizException(AuthError.ORIGINAL_PASSWORD_INCORRECT);
         }
         redisUtil.delete(JWT_TOKEN + userId);
         userMapper.updatePsw(userId, DigestUtil.md5Hex(newPassword));
@@ -198,7 +200,7 @@ public class AuthServiceImpl implements AuthService {
     public void addRole(String roleName, String description) {
         Role role = authMapper.getRoleByName(roleName);
         if(role != null){
-            throw new BizException(ROLE_EXISTS);
+            throw new BizException(AuthError.ROLE_EXISTS);
         }
         role = Role.builder()
                 .name(roleName)
@@ -264,7 +266,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void sendEmailCode(SendCodeDTO sendCodeDTO) {
         if(!EmailCodeBusinessType.isValid(sendCodeDTO.getBusinessType())){
-            throw new BizException(INVALID_BUSINESS_TYPE);
+            throw new BizException(AuthError.INVALID_BUSINESS_TYPE);
         }
 
         String code = RandomUtil.randomNumbers(verifyCodeProperties.getLength());
@@ -286,7 +288,7 @@ public class AuthServiceImpl implements AuthService {
         try {
             mailUtil.sendHtmlMail(sendCodeDTO.getEmail(), "【ZZCoder】您的验证码", htmlContent);
         } catch (Exception e) {
-            throw new BizException(EMAIL_SEND_FAIL);
+            throw new BizException(AuthError.EMAIL_SEND_FAIL);
         }
 
         String key = sendCodeDTO.getBusinessType() + ":" + EMAIL_CODE + sendCodeDTO.getEmail();

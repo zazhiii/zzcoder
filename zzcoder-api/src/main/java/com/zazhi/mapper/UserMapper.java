@@ -3,6 +3,7 @@ package com.zazhi.mapper;
 import com.zazhi.common.pojo.entity.Permission;
 import com.zazhi.common.pojo.entity.Role;
 import com.zazhi.common.pojo.entity.User;
+import com.zazhi.common.pojo.vo.UserSubmitStatVO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -83,4 +84,32 @@ public interface UserMapper {
 
     @Select("select * from user where username = #{username}")
     User getByName(String username);
+
+    /**
+     * 获取用户已解决题目数
+     * @param userId 用户ID
+     * @return 题目数量
+     */
+    @Select("select count(distinct problem_id) from submission where user_id = #{userId} and status = 'AC'")
+    Integer getSolvedProblemCount(Integer userId);
+
+    /**
+     * 获取用户提交记录数
+     * @param userId 用户ID
+     * @return 提交记录数
+     */
+    @Select("select count(*) from submission where user_id = #{userId}")
+    Integer getSubmissionCount(Integer userId);
+
+    /**
+     * 获取用户通过次数
+     * @param userId 用户ID
+     * @return 通过次数
+     */
+    @Select("select " +
+            "count(s.id) as total_submit, " +
+            "sum(if(s.status='AC', 1, 0)) as ac_submit, " +
+            "count(distinct if(s.status='AC', s.problem_id, null)) as ac_problem " +
+            "from submission s where s.user_id = #{userId};")
+    UserSubmitStatVO getSubmitStat(Integer userId);
 }

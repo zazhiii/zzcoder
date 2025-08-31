@@ -8,6 +8,7 @@ import com.zazhi.common.pojo.result.PageResult;
 import com.zazhi.common.pojo.vo.SubmissionInfoVO;
 import com.zazhi.common.pojo.vo.SubmissionPageVO;
 import com.zazhi.common.pojo.vo.UserProblemSubmissionVO;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -20,11 +21,18 @@ public interface JudgeService {
     Long submitCode(JudgeDTO judgeDTO);
 
     /**
-     * 分页条件查询提交记录列表
-     * @param submissionPageDTO
+     * 获取提交记录
+     * @param page
+     * @param pageSize
+     * @param problemId
+     * @param userId
+     * @param username
+     * @param status
+     * @param language
      * @return
      */
-    PageResult<SubmissionPageVO> pageSubmissions(SubmissionPageDTO submissionPageDTO);
+    PageResult<SubmissionPageVO> pageSubmissions(Integer page, Integer pageSize, Integer problemId, Integer userId,
+                                                 String username, String status, String language);
 
     /**
      * 更新提交记录

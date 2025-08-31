@@ -145,5 +145,15 @@ public class ProblemServiceImpl implements ProblemService {
         return problemMapper.getProblemTags(problemId);
     }
 
+    /**
+     * 搜索题目
+     * @param keyword 关键词
+     * @return 题目列表
+     */
+    @Override
+    public List<ProblemPageVO> searchProblem(String keyword) {
+        return problemMapper.searchProblem(keyword);
+    }
+
 
 }

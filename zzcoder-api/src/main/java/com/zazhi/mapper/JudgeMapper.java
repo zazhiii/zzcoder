@@ -19,10 +19,14 @@ public interface JudgeMapper {
 
     /**
      * 分页条件查询提交记录列表
-     * @param submissionPageDTO
+     * @param problemId
+     * @param userId
+     * @param username
+     * @param status
+     * @param language
      * @return
      */
-    Page<SubmissionPageVO> pageSubmissions(SubmissionPageDTO submissionPageDTO);
+    Page<SubmissionPageVO> pageSubmissions(Integer problemId, Integer userId, String username, String status, String language);
 
     /**
      * 插入提交记录

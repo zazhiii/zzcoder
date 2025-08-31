@@ -6,8 +6,6 @@ import com.zazhi.common.pojo.vo.ProblemSetPageVO;
 import com.zazhi.common.pojo.vo.ProblemSetUpdateDTO;
 import com.zazhi.common.pojo.vo.ProblemSetVO;
 
-import java.util.List;
-
 public interface ProblemSetService {
     /**
      * 添加题单
@@ -32,17 +30,17 @@ public interface ProblemSetService {
 
     /**
      * 添加题目到题单
-     * @param problemSetId
-     * @param problemId
+     * @param problemSetId 题单ID
+     * @param problemId 题目ID
      */
-    void addProblemToProblemSet(Integer problemSetId, Integer problemId);
+    void addInternalProblem(Integer problemSetId, Integer problemId);
 
     /**
      * 从题单删除题目
      * @param problemSetId
      * @param problemId
      */
-    void deleteProblemFromProblemSet(Integer problemSetId, Integer problemId);
+    void deleteInternalProblem(Integer problemSetId, Integer problemId);
 
     /**
      * 题单详细信息
@@ -56,4 +54,11 @@ public interface ProblemSetService {
      * @param id 题单ID
      */
     void deleteProblemSet(Integer id);
+
+    /**
+     * 从题单删除外部题目
+     * @param problemSetId 题单ID
+     * @param problemId 题目ID
+     */
+    void deleteExternalProblem(Integer problemSetId, Integer problemId);
 }

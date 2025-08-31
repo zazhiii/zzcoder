@@ -42,16 +42,16 @@ public interface ProblemSetMapper {
      * @param problemSetId
      * @param problemId
      */
-    @Insert("insert into problem_problem_set(problem_set_id, problem_id) values(#{problemSetId}, #{problemId})")
-    void addProblemToProblemSet(Integer problemSetId, Integer problemId);
+    @Insert("insert into problem_set_item(problem_set_id, problem_id) values(#{problemSetId}, #{problemId})")
+    void addInternalProblem(Integer problemSetId, Integer problemId);
 
     /**
      * 从题单删除题目
      * @param problemSetId
      * @param problemId
      */
-    @Delete("delete from problem_problem_set where problem_set_id = #{problemSetId} and problem_id = #{problemId}")
-    void deleteProblemFromProblemSet(Integer problemSetId, Integer problemId);
+    @Delete("delete from problem_set_item where problem_set_id = #{problemSetId} and problem_id = #{problemId}")
+    void deleteInternalProblem(Integer problemSetId, Integer problemId);
 
     /**
      * 题单详细信息
@@ -97,13 +97,15 @@ public interface ProblemSetMapper {
      * @param id 题单id
      * @return 题目列表
      */
-    @Select("select p.id, p.title, p.difficulty, p.source, p.url " +
-            "from problem_set ps " +
-            "         left join problem_set_item psi on ps.id = psi.problem_set_id " +
-            "         inner join external_problem p on psi.external_problem_id = p.id " +
-            "where ps.id = #{id}")
+    @Select("select * from external_problem ep where ep.problem_set_id = #{id}")
     List<ProblemSetItemExternalVO> getExternalProblems(Integer id);
 
     @Select("select * from problem_set where id = #{id}")
     ProblemSet getById(Integer id);
+
+    @Select("select count(*) from problem_set_item where problem_set_id = #{problemSetId} and problem_id = #{problemId}")
+    Integer countProblemInProblemSet(Integer problemSetId, Integer problemId);
+
+    @Delete("delete from external_problem where id = #{problemId}")
+    void deleteExternalProblem(Integer problemId);
 }
