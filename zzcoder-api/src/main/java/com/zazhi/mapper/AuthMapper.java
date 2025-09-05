@@ -12,22 +12,23 @@ public interface AuthMapper {
 
     /**
      * 添加角色
-     * @param role
+     * @param role 角色
      */
     @Insert("insert into role (name, description) values (#{name}, #{description})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void addRole(Role role);
 
     /**
-     * 删除角色
-     * @param role
+     * 更新角色描述
+     * @param description 角色描述
+     * @param id 角色ID
      */
-    @Update("update role set name = #{name}, description = #{description} where id = #{id}")
-    void updateRole(Role role);
+    @Update("update role set description = #{description} where id = #{id}")
+    void updateRole(String description, Integer id);
 
     /**
      * 删除角色
-     * @param id
+     * @param id 角色ID
      */
     @Delete("delete from role where id = #{id}")
     void deleteRole(Integer id);
@@ -64,8 +65,8 @@ public interface AuthMapper {
 
     /**
      * 根据角色名称查询角色
-     * @param roleName
-     * @return
+     * @param roleName 角色名称
+     * @return 角色
      */
     @Select("select * from role where name = #{roleName}")
     Role getRoleByName(String roleName);
@@ -95,4 +96,28 @@ public interface AuthMapper {
      */
     @Select("select count(*) > 0 from user_role where user_id = #{userId} and role_id = #{roleId}")
     Boolean userHasRole(Integer userId, Integer roleId);
+
+    /**
+     * 根据角色ID获取用户ID列表
+     * @param roleId 角色ID
+     * @return 用户ID列表
+     */
+    @Select("select user_id from user_role where role_id = #{roleId}")
+    List<Integer> getUserIdsByRoleId(Integer roleId);
+
+    /**
+     * 删除用户的角色
+     * @param roleId 角色ID
+     * @param userId 用户ID
+     */
+    @Delete("delete from user_role where role_id = #{roleId} and user_id = #{userId}")
+    void deleteRoleFromUser(Integer roleId, Integer userId);
+
+    /**
+     * 删除角色的权限
+     * @param roleId 角色ID
+     * @param permissionId 权限ID
+     */
+    @Delete("delete from role_permission where role_id = #{roleId} and permission_id = #{permissionId}")
+    void deletePermissionFromRole(Integer roleId, Integer permissionId);
 }

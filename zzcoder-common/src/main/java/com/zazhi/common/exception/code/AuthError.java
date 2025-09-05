@@ -1,4 +1,4 @@
-package com.zazhi.common.exception;
+package com.zazhi.common.exception.code;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,7 +24,10 @@ public enum AuthError implements IErrorCode {
     ORIGINAL_PASSWORD_INCORRECT(10011, "原始密码不正确"),
     ROLE_EXISTS(10012, "角色已存在"),
     INVALID_BUSINESS_TYPE(10013, "无效的业务类型"),
-    EMAIL_SEND_FAIL(10014, "邮件发送失败");
+    EMAIL_SEND_FAIL(10014, "邮件发送失败"),
+    CAPTCHA_INCORRECT(10015, "验证码错误"),
+    CAPTCHA_EXPIRED(10016, "验证码已过期"),
+    EMAIL_CODE_INCORRECT_OR_EXPIRED(10017, "邮箱验证码错误或已过期");
 
     private final int code;
     private final String message;

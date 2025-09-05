@@ -1,4 +1,4 @@
-package com.zazhi.common.constant;
+package com.zazhi.common.constants;
 
 public class PermissionConstants {
     // 角色权限
@@ -7,7 +7,9 @@ public class PermissionConstants {
     public static final String ROLE_DELETE = "role:delete";
     public static final String ROLE_LIST = "role:list";
     public static final String ROLE_ADD_PERMISSION = "role:add-permission";
+    public static final String ROLE_REMOVE_PERMISSION = "role:remove-permission";
     public static final String USER_ADD_ROLE = "user:add-role";
+    public static final String USER_REMOVE_ROLE = "user:remove-role";
 
     // 权限权限
     public static final String PERMISSION_LIST = "permission:list";

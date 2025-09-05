@@ -1,21 +1,27 @@
 package com.zazhi.service.impl;
 
+import cn.hutool.json.JSONUtil;
+import com.zazhi.common.constants.RedisKeyConstants;
+import com.zazhi.common.enums.EmailCodeBizType;
+import com.zazhi.common.exception.code.AuthError;
+import com.zazhi.common.exception.model.BizException;
 import com.zazhi.common.pojo.dto.UpdateEmailDTO;
 import com.zazhi.common.pojo.dto.UserInfoDTO;
 import com.zazhi.common.pojo.dto.UserUpdateDTO;
-import com.zazhi.common.pojo.entity.Permission;
-import com.zazhi.common.pojo.entity.Role;
 import com.zazhi.common.pojo.entity.User;
+import com.zazhi.common.pojo.vo.RoleAndPermissionVO;
 import com.zazhi.common.pojo.vo.UserSubmitStatVO;
-import com.zazhi.exception.model.VerificationCodeException;
+import com.zazhi.common.utils.RedisUtil;
+import com.zazhi.common.utils.ThreadLocalUtil;
 import com.zazhi.mapper.UserMapper;
 import com.zazhi.service.UserService;
-import com.zazhi.common.utils.ThreadLocalUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import static com.zazhi.common.constants.RedisKeyConstants.USER_ROLE_PERMISSIONS;
 
 /**
  * @author zazhi
@@ -23,19 +29,17 @@ import java.util.List;
  * @description: 用户相关业务
  */
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+    private final UserMapper userMapper;
 
-    @Autowired
-    UserMapper userMapper;
-
-    @Autowired
-    VerificationCodeService verificationCodeService;
+    private final RedisUtil redisUtil;
 
     /**
      * 根据用户id查询用户
      *
-     * @param userId
-     * @return
+     * @param userId 用户ID
+     * @return 用户实体
      */
     public User getUserById(Integer userId) {
         return userMapper.findById(userId);
@@ -44,19 +48,19 @@ public class UserServiceImpl implements UserService {
     /**
      * 获取用户基本信息
      *
-     * @return
+     * @return UserInfoDTO
      */
     public UserInfoDTO getUserInfo() {
+        // 基本信息
         Integer userId = ThreadLocalUtil.getCurrentId();
         User user = userMapper.findById(userId);
         UserInfoDTO userInfoDTO = new UserInfoDTO();
         BeanUtils.copyProperties(user, userInfoDTO);
 
-        // 获取用户角色和权限
-        List<Role> roles = userMapper.getUserRolesById(userId);
-        List<Permission> permissions = userMapper.findPermissionsByRoles(roles);
-        userInfoDTO.setRoles(roles.stream().map(Role::getName).toList());
-        userInfoDTO.setPermissions(permissions.stream().map(Permission::getName).toList());
+        // 角色和权限
+        RoleAndPermissionVO roleAndPermissionVO = userMapper.getRoleAndPermissionByUserId(userId);
+        userInfoDTO.setRoles(roleAndPermissionVO.getRoles());
+        userInfoDTO.setPermissions(roleAndPermissionVO.getPermissions());
 
         return userInfoDTO;
     }
@@ -64,20 +68,25 @@ public class UserServiceImpl implements UserService {
     /**
      * 更新用户邮箱
      *
-     * @param updateEmailDTO
+     * @param updateEmailDTO 更新邮箱DTO
      */
     public void updateEmail(UpdateEmailDTO updateEmailDTO) {
         String newEmail = updateEmailDTO.getNewEmail();
-        String code = updateEmailDTO.getEmailVerificationCode();
-        if (verificationCodeService.verifyCode(newEmail, code)) {
-            User user = new User();
-            Integer userId = ThreadLocalUtil.getCurrentId();
-            user.setId(userId);
-            user.setEmail(newEmail);
-            userMapper.update(user);
-        } else {
-            throw new VerificationCodeException();
+        String code = updateEmailDTO.getCode();
+
+        // 校验验证码
+        String key = RedisKeyConstants.format(RedisKeyConstants.EMAIL_CODE,
+                EmailCodeBizType.UPDATE_EMAIL.getCode(), newEmail);
+        String storeCode = redisUtil.get(key);
+        if (storeCode == null || !storeCode.equals(code)) {
+            throw new BizException(AuthError.EMAIL_CODE_INCORRECT_OR_EXPIRED);
         }
+
+        User user = User.builder()
+                .id(ThreadLocalUtil.getCurrentId())
+                .email(newEmail)
+                .build();
+        userMapper.update(user);
     }
 
     /**
@@ -94,37 +103,6 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 查询用户角色
-     *
-     * @param userId
-     * @return
-     */
-    public List<Role> getUserRolesById(Integer userId) {
-        return userMapper.getUserRolesById(userId);
-    }
-
-    /**
-     * 查询用户权限
-     *
-     * @param roles
-     * @return
-     */
-    public List<Permission> getUserPermissionsByRoles(List<Role> roles) {
-        return userMapper.findPermissionsByRoles(roles);
-    }
-
-    /**
-     * 根据用户名查询用户
-     *
-     * @param username
-     * @return
-     */
-    @Override
-    public User getUserByName(String username) {
-        return userMapper.getByName(username);
-    }
-
-    /**
      * 更新用户信息
      *
      * @param userInfo
@@ -137,24 +115,6 @@ public class UserServiceImpl implements UserService {
         userMapper.update(user);
     }
 
-    @Override
-    public Integer getSolvedProblemCount() {
-        Integer userId = ThreadLocalUtil.getCurrentId();
-        return userMapper.getSolvedProblemCount(userId);
-    }
-
-    @Override
-    public Integer getSubmissionCount() {
-        Integer userId = ThreadLocalUtil.getCurrentId();
-        return userMapper.getSubmissionCount(userId);
-    }
-
-
-    @Override
-    public Integer getAcCount() {
-        return 0;
-    }
-
     /**
      * 获取用户提交统计信息
      *
@@ -165,5 +125,19 @@ public class UserServiceImpl implements UserService {
         return userMapper.getSubmitStat(ThreadLocalUtil.getCurrentId());
     }
 
+    @Override
+    public RoleAndPermissionVO getRoleAndPermission(Integer userId) {
+        // 先从缓存中获取
+        String rolePermission = redisUtil.get(RedisKeyConstants.format(USER_ROLE_PERMISSIONS, userId));
+        if (rolePermission != null) {
+            return JSONUtil.toBean(rolePermission, RoleAndPermissionVO.class);
+        }
+        // 缓存中没有，从数据库中获取
+        RoleAndPermissionVO roleAndPermissionVO = userMapper.getRoleAndPermissionByUserId(userId);
+        // 放入缓存
+        String jsonStr = JSONUtil.toJsonStr(roleAndPermissionVO);
+        redisUtil.set(RedisKeyConstants.format(USER_ROLE_PERMISSIONS, userId), jsonStr, 7, TimeUnit.DAYS);
 
+        return roleAndPermissionVO;
+    }
 }

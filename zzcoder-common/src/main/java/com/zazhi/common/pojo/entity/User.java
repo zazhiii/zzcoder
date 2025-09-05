@@ -1,10 +1,8 @@
 package com.zazhi.common.pojo.entity;
 
-import com.zazhi.common.pojo.entity.BaseEntity;
 import lombok.*;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter

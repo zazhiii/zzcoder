@@ -1,4 +1,4 @@
-package com.zazhi.common.constant;
+package com.zazhi.common.constants;
 
 /**
  * @author LXH15

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>更新邮箱验证码</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f6f6f6;
+            padding: 20px;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px 40px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .code {
+            font-size: 28px;
+            font-weight: bold;
+            color: #f56c6c;
+            margin: 20px 0;
+        }
+        .footer {
+            font-size: 12px;
+            color: #888;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 th:text="'更新邮箱 - ' + ${appName}">更新邮箱 - ZZCoder</h2>
+    <p>您好！</p>
+    <p th:text="'您正在请求重置 ' + ${appName} + ' 的登录密码，验证码如下：'">您正在请求更新邮箱，验证码如下：</p>
+    <p class="code" th:text="${code}">123456</p>
+    <p th:text="'请在 ' + ${expire} + ' 分钟内完成操作，验证码仅供本人使用。'">请在 5 分钟内完成操作，验证码仅供本人使用。</p>
+    <div class="footer">
+        <p>如果您未发起此请求，请忽略此邮件。</p>
+        <p th:text="${appName} + ' 团队'">ZZCoder 团队</p>
+    </div>
+</div>
+</body>
+</html>

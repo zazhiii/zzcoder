@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.zazhi.common.constant.PermissionConstants.PROBLEM_TAG_ADD;
+import static com.zazhi.common.constants.PermissionConstants.PROBLEM_TAG_ADD;
 
 /**
  * @author zazhi

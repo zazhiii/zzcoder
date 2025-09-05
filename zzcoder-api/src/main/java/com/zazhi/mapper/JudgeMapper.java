@@ -1,7 +1,6 @@
 package com.zazhi.mapper;
 
 import com.github.pagehelper.Page;
-import com.zazhi.common.pojo.dto.SubmissionPageDTO;
 import com.zazhi.common.pojo.entity.Submission;
 import com.zazhi.common.pojo.entity.TestCaseResult;
 import com.zazhi.common.pojo.vo.SubmissionInfoVO;

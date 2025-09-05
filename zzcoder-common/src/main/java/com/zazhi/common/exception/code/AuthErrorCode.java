@@ -1,6 +1,9 @@
-package com.zazhi.common.enums;
+package com.zazhi.common.exception.code;
 
-public enum AuthErrorCode {
+import lombok.Getter;
+
+@Getter
+public enum AuthErrorCode implements IErrorCode {
     // 通用
     INVALID_REQUEST(400, "非法请求"),
     UNAUTHORIZED(401, "未授权"),

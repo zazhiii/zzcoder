@@ -1,6 +1,6 @@
 package com.zazhi.common.exception.model;
 
-import com.zazhi.common.exception.IErrorCode;
+import com.zazhi.common.exception.code.IErrorCode;
 import lombok.Getter;
 
 @Getter

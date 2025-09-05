@@ -2,8 +2,8 @@ package com.zazhi.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.zazhi.common.exception.ProblemError;
-import com.zazhi.common.exception.ProblemSetError;
+import com.zazhi.common.exception.code.ProblemError;
+import com.zazhi.common.exception.code.ProblemSetError;
 import com.zazhi.common.exception.model.BizException;
 import com.zazhi.common.pojo.dto.ProblemSetDTO;
 import com.zazhi.common.pojo.entity.Problem;

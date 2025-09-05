@@ -1,6 +1,5 @@
 package com.zazhi.common.enums;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**

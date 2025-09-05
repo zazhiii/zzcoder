@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author zazhi
@@ -28,7 +29,7 @@ public class UserInfoDTO {
 
     private String cfUsername;
 
-    private List<String> roles;
+    private Set<String> roles;
 
-    private List<String> permissions;
+    private Set<String> permissions;
 }

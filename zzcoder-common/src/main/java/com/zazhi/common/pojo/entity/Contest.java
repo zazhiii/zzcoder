@@ -1,6 +1,5 @@
 package com.zazhi.common.pojo.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.zazhi.common.enums.ContestStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.zazhi.common.constant.PermissionConstants.*;
+import static com.zazhi.common.constants.PermissionConstants.*;
 
 /**
  * @author zazhi

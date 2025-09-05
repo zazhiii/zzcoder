@@ -8,7 +8,6 @@ import com.zazhi.common.pojo.vo.ProblemWithTestCaseVO;
 import com.zazhi.common.pojo.vo.UserProblemSubmissionVO;
 import com.zazhi.common.utils.MessageQueueUtil;
 import com.zazhi.common.pojo.dto.JudgeDTO;
-import com.zazhi.common.pojo.dto.SubmissionPageDTO;
 import com.zazhi.mapper.JudgeMapper;
 import com.zazhi.mapper.ProblemMapper;
 import com.zazhi.mapper.UserMapper;

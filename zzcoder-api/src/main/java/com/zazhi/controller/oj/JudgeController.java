@@ -1,7 +1,6 @@
 package com.zazhi.controller.oj;
 
 import com.zazhi.common.pojo.dto.JudgeDTO;
-import com.zazhi.common.pojo.dto.SubmissionPageDTO;
 import com.zazhi.common.pojo.result.PageResult;
 import com.zazhi.common.pojo.result.Result;
 import com.zazhi.common.pojo.vo.UserProblemSubmissionVO;

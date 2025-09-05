@@ -35,4 +35,26 @@
         </where>
     </select>
 
+    <resultMap id="rolePermissionMap" type="com.zazhi.common.pojo.vo.RoleAndPermissionVO">
+        <id property="userId" column="user_id"/>
+        <collection property="roles" ofType="java.lang.String">
+            <result column="role_name"/>
+        </collection>
+        <collection property="permissions" ofType="java.lang.String">
+            <result column="permission_name"/>
+        </collection>
+    </resultMap>
+    <select id="getRoleAndPermissionByUserId" resultMap="rolePermissionMap">
+        SELECT
+        u.id AS user_id,
+        r.name AS role_name,
+        p.name AS permission_name
+        FROM user u
+        LEFT JOIN user_role ur ON u.id = ur.user_id
+        LEFT JOIN role r ON ur.role_id = r.id
+        LEFT JOIN role_permission rp ON r.id = rp.role_id
+        LEFT JOIN permission p ON rp.permission_id = p.id
+        WHERE u.id = #{userId}
+    </select>
+
 </mapper>

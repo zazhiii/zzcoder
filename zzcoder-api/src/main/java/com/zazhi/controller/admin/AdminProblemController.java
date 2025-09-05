@@ -12,7 +12,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import static com.zazhi.common.constant.PermissionConstants.*;
+import static com.zazhi.common.constants.PermissionConstants.*;
 
 /**
  * @author zazhi

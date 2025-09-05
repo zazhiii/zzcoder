@@ -1,7 +1,5 @@
 package com.zazhi.common.pojo.vo;
 
-import com.zazhi.common.pojo.entity.ProblemTag;
-import com.zazhi.common.pojo.entity.TestCase;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

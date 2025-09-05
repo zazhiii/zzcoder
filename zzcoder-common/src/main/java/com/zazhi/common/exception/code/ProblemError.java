@@ -1,4 +1,4 @@
-package com.zazhi.common.exception;
+package com.zazhi.common.exception.code;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

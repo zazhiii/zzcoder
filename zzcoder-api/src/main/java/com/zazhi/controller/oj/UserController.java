@@ -3,7 +3,6 @@ package com.zazhi.controller.oj;
 import com.zazhi.common.pojo.dto.UpdateEmailDTO;
 import com.zazhi.common.pojo.dto.UserInfoDTO;
 import com.zazhi.common.pojo.dto.UserUpdateDTO;
-import com.zazhi.common.pojo.entity.User;
 import com.zazhi.common.pojo.result.Result;
 import com.zazhi.common.pojo.vo.UserSubmitStatVO;
 import com.zazhi.service.UserService;
@@ -12,7 +11,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**

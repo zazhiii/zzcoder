@@ -3,6 +3,7 @@ package com.zazhi.shiro;
 import com.zazhi.common.pojo.entity.Permission;
 import com.zazhi.common.pojo.entity.Role;
 import com.zazhi.common.pojo.entity.User;
+import com.zazhi.common.pojo.vo.RoleAndPermissionVO;
 import com.zazhi.service.UserService;
 import com.zazhi.common.utils.JwtUtil;
 import com.zazhi.common.utils.RedisUtil;
@@ -24,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.zazhi.common.constant.RedisKeyConstants.JWT_TOKEN;
+import static com.zazhi.common.constants.RedisKeyConstants.JWT_TOKEN;
 
 @Slf4j
 @Component
@@ -49,24 +50,13 @@ public class AccountRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         Integer userId = (Integer) principals.getPrimaryPrincipal();
         // 这里查询数据库获取用户的角色和权限
-        List<Role> roles = userService.getUserRolesById(userId);
-        List<Permission> permissions = userService.getUserPermissionsByRoles(roles);
-
-        // 将角色和权限名称加入到 Set 集合中
-        Set<String> roleNames = new HashSet<>();
-        Set<String> permissionNames = new HashSet<>();
-        for (Role role : roles) {
-            roleNames.add(role.getName());
-        }
-        for (Permission permission : permissions) {
-            permissionNames.add(permission.getName());
-        }
+        RoleAndPermissionVO roleAndPermission = userService.getRoleAndPermission(userId);
 
         // 创建 SimpleAuthorizationInfo 对象
         // 并使用 addRoles 和 addStringPermissions 方法将角色和权限添加到授权信息中。
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-        authorizationInfo.setRoles(roleNames);
-        authorizationInfo.setStringPermissions(permissionNames);
+        authorizationInfo.setRoles(roleAndPermission.getRoles());
+        authorizationInfo.setStringPermissions(roleAndPermission.getPermissions());
         return authorizationInfo;
     }
 

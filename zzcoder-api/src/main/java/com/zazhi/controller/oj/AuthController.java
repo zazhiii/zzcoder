@@ -3,14 +3,11 @@ package com.zazhi.controller.oj;
 import com.zazhi.common.pojo.dto.*;
 import com.zazhi.common.pojo.result.Result;
 import com.zazhi.service.AuthService;
-import com.zazhi.common.utils.RedisUtil;
-import com.zazhi.service.impl.VerificationCodeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,14 +19,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 @Slf4j
-@Tag(name = "注册、登录、更改密码、权限相关接口")
+@Tag(name = "Auth 相关接口")
 @RequiredArgsConstructor
 public class AuthController {
-    private final VerificationCodeService verificationCodeService;
-
     private final AuthService authService;
-
-    private final RedisUtil redisUtil;
 
     @GetMapping("/send-email-code")
     @Operation(summary = "发送邮箱验证码")
@@ -41,9 +34,8 @@ public class AuthController {
 
     @PostMapping("/register")
     @Operation(summary = "用户注册")
-    public Result register(@RequestBody @Validated RegisterDTO registerDTO){
+    public Result<Void> register(@RequestBody @Validated RegisterDTO registerDTO){
         log.info("开始注册：{}", registerDTO);
-
         authService.register(registerDTO);
         return Result.success();
     }
@@ -68,30 +60,26 @@ public class AuthController {
 
     @PostMapping("/update-password")
     @Operation(summary = "更新密码")
-    public Result updatePsw(@Validated @RequestBody UpdatePasswordDTO updatePasswordDTO, @RequestHeader("Authorization") String token){
+    public Result<Void> updatePsw(@Validated @RequestBody UpdatePasswordDTO updatePasswordDTO, @RequestHeader("Authorization") String token){
         log.info("更新密码");
-
-        // 更新密码
-        authService.updatePsw(updatePasswordDTO, token);
+        authService.updatePassword(updatePasswordDTO, token);
         return Result.success();
     }
 
     @PostMapping("/update-password-by-email")
     @Operation(summary = "通过邮箱验证码更改密码")
-    public Result updatePswByEmail(@Validated @RequestBody UpdatePasswordByEmailDTO updatePasswordByEmailDTO){
+    public Result<Void> updatePswByEmail(@Validated @RequestBody UpdatePasswordByEmailDTO updatePasswordByEmailDTO){
         log.info("通过邮箱更新密码：{}", updatePasswordByEmailDTO.getEmail());
 
-        authService.updatePswByEmail(updatePasswordByEmailDTO);
+        authService.updatePasswordByEmail(updatePasswordByEmailDTO);
         return Result.success();
     }
 
     @GetMapping("/logout")
     @Operation(summary = "登出")
     @RequiresAuthentication
-    public Result logout(@RequestHeader("Authorization") String token){
+    public Result<Void> logout(@RequestHeader("Authorization") String token){
         log.info("登出：{}", token);
-
-//        redisUtil.delete(token);
         authService.logout(token);
         return Result.success();
     }

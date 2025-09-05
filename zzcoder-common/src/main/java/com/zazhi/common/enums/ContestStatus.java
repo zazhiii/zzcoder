@@ -2,6 +2,8 @@ package com.zazhi.common.enums;
 
 import lombok.Getter;
 
+import java.util.Objects;
+
 @Getter
 public enum ContestStatus implements BaseEnum<Integer> {
     UPCOMING(0, "未开始"),
@@ -23,7 +25,7 @@ public enum ContestStatus implements BaseEnum<Integer> {
 
     public static ContestStatus fromCode(Integer code) {
         for (ContestStatus status : ContestStatus.values()) {
-            if (status.getCode() == code) {
+            if (Objects.equals(status.getCode(), code)) {
                 return status;
             }
         }

@@ -1,6 +1,4 @@
-package com.zazhi.common.exception;
-
-import lombok.Data;
+package com.zazhi.common.exception.code;
 
 /**
  *
