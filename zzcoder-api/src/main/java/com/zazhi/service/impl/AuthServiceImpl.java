@@ -62,7 +62,7 @@ public class AuthServiceImpl implements AuthService {
         String newPassword = updatePasswordDTO.getNewPassword();
         // 判断原密码是否正确
         Integer userId = ThreadLocalUtil.getCurrentId();
-        User user = userMapper.findById(userId);
+        User user = userMapper.getById(userId);
         if (!DigestUtil.md5Hex(oldPassword).equals(user.getPassword())) {
             throw new BizException(AuthError.ORIGINAL_PASSWORD_INCORRECT);
         }

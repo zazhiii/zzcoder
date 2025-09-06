@@ -36,17 +36,16 @@ public class UserController {
 
     @PutMapping("/email")
     @Operation(summary = "更新用户邮箱")
-    public Result updateEmail(@RequestBody UpdateEmailDTO updateEmailDTO){
+    public Result<Void> updateEmail(@RequestBody UpdateEmailDTO updateEmailDTO){
         log.info("更新邮箱");
-
         userService.updateEmail(updateEmailDTO);
         return Result.success();
     }
 
     @PutMapping("/avatar")
     @Operation(summary = "上传用户头像")
-    public Result updateAvatar(@RequestParam String avatarUrl){
-        log.info("更新用户头像，{}", avatarUrl);
+    public Result<Void> updateAvatar(@RequestParam String avatarUrl){
+        log.info("上传用户头像，{}", avatarUrl);
         userService.updateAvatar(avatarUrl);
         return Result.success();
     }
@@ -66,32 +65,4 @@ public class UserController {
         log.info("获取用户提交统计信息");
         return Result.success(userService.getSubmitStat());
     }
-
-//    @GetMapping("/solved-count")
-//    @Operation(summary = "已解决题目数量")
-//    @RequiresAuthentication
-//    public Result<Integer> getSolvedProblemCount(){
-//        log.info("获取用户已解决题目数量");
-//        Integer count = userService.getSolvedProblemCount();
-//        return Result.success(count);
-//    }
-//
-//    @GetMapping("/submission-count")
-//    @Operation(summary = "提交记录数量")
-//    @RequiresAuthentication
-//    public Result<Integer> getSubmissionCount(){
-//        log.info("获取用户提交记录数量");
-//        Integer count = userService.getSubmissionCount();
-//        return Result.success(count);
-//    }
-//
-//    @GetMapping("/ac-count")
-//    @Operation(summary = "通过次数")
-//    @RequiresAuthentication
-//    public Result<Integer> getAcCount(){
-//        log.info("获取用户通过次数");
-//        Integer count = userService.getAcCount();
-//        return Result.success(count);
-//    }
-
 }

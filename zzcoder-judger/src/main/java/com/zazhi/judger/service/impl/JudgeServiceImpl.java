@@ -31,6 +31,7 @@ public class JudgeServiceImpl implements JudgeService {
 
     /**
      * 执行判题任务的方法
+     *
      * @param task
      * @return
      */
@@ -55,30 +56,33 @@ public class JudgeServiceImpl implements JudgeService {
             List<TestCase> testCases = task.getTestCases();
             long maxTimeUsed = 0L;
             long maxMemoryUsed = 0L;
-            for(TestCase testCase : testCases) {
+            for (TestCase testCase : testCases) {
                 TestCaseResult caseResult = new TestCaseResult();
 
                 CodeRunResult codeRunResult = new CodeRunResult();
                 try {
-                    codeRunResult = sandBox.execute(container, testCase.getInput().trim() + "\n");
+                    // 超时等待时间比实际时间限制稍微长一点 (1s)
+                    Integer timeoutSeconds = (task.getTimeLimit() + 999) / 1000 + 1;
+                    String in = testCase.getInput().trim() + "\n";
+                    codeRunResult = sandBox.execute(container, in, timeoutSeconds);
                 } catch (TimeLimitExceededException e) {
                     caseResult.setStatus(JudgeStatus.TLE);
-                } catch (MemoryLimitExceededException e){
+                } catch (MemoryLimitExceededException e) {
                     caseResult.setStatus(JudgeStatus.MLE);
-                } catch (RuntimeErrorException e){
+                } catch (RuntimeErrorException e) {
                     caseResult.setStatus(JudgeStatus.RE);
                     caseResult.setErrorMessage(e.getDetails());
                 }
 
-                if(codeRunResult.getTimeUsed() > task.getTimeLimit()){
+                if (codeRunResult.getTimeUsed() > task.getTimeLimit()) {
                     caseResult.setStatus(JudgeStatus.TLE);
                 }
-                if(codeRunResult.getMemoryUsed() > task.getMemoryLimit() * 1024L) {
+                if (codeRunResult.getMemoryUsed() > task.getMemoryLimit() * 1024L) {
                     caseResult.setStatus(JudgeStatus.MLE);
                 }
 
                 // 没有TLE也没有MLE，则比较输出。
-                if(caseResult.getStatus() == null){
+                if (caseResult.getStatus() == null) {
                     String expectedOutput = testCase.getOutput();
                     String actualOutput = codeRunResult.getStdout();
 
@@ -97,13 +101,13 @@ public class JudgeServiceImpl implements JudgeService {
                 }
 
                 //  若单个用例没有AC，则设置整个结果的状态
-                if(!caseResult.getStatus().equals(JudgeStatus.AC)) {
+                if (!caseResult.getStatus().equals(JudgeStatus.AC)) {
                     result.setStatus(caseResult.getStatus());
                     result.setErrorMessage(caseResult.getErrorMessage());
                 }
 
                 // 非全评测模式下，如果测试点不通过，则不需要继续执行后续测试点
-                if(!task.getFullJudge() && !caseResult.getStatus().equals(JudgeStatus.AC)){
+                if (!task.getFullJudge() && !caseResult.getStatus().equals(JudgeStatus.AC)) {
                     return JudgeResult.builder()
                             .taskId(task.getTaskId())
                             .status(caseResult.getStatus())
@@ -117,7 +121,7 @@ public class JudgeServiceImpl implements JudgeService {
                 caseResult.setSubmissionId(task.getTaskId());
 
                 // 发送单个测试点结果到消息队列
-                if(task.getFullJudge()){
+                if (task.getFullJudge()) {
                     messageQueueUtil.sendTestCaseResult(caseResult);
                 }
 
@@ -125,7 +129,7 @@ public class JudgeServiceImpl implements JudgeService {
             }
 
             // 全部测试点测评完成
-            if(result.getStatus() == null) {
+            if (result.getStatus() == null) {
                 result.setStatus(JudgeStatus.AC);
             }
             result.setTimeUsed(maxTimeUsed);
@@ -133,13 +137,13 @@ public class JudgeServiceImpl implements JudgeService {
         } catch (SystemException e) {
             result.setStatus(JudgeStatus.SE);
             result.setErrorMessage(e.getMessage());
-        } catch (CompilationException e){
+        } catch (CompilationException e) {
             result.setStatus(JudgeStatus.CE);
             result.setErrorMessage(e.getMessage());
-        } catch (Exception e){
+        } catch (Exception e) {
             result.setStatus(JudgeStatus.SE);
             result.setErrorMessage("unknown error: " + e.getMessage());
-        }finally {
+        } finally {
             pool.releaseContainer(container);
         }
         return result;

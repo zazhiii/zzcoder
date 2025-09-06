@@ -1,3 +1,4 @@
+# mq
 rabbitmq:
   host: localhost
   port: 5672
@@ -38,9 +39,10 @@ alioss:
 
 minio:
   endpoint: http://localhost:9000
-  access-key: 4b69bykSKeUHSTugKDAS
-  secret-key: hDaXiWjQcAHoGRqUzDd5QFHEl2rEgo8GkQHQx9Wl
+  access-key: 8QWAKgmka4hy8WUVH8dH
+  secret-key: KRxrnd8RQxilaNWZnbOyV18eATwhkmIOQkXxiuXS
   bucket-name: zzcoder
+  domain: minio.localhost
 
 logging:
   level:

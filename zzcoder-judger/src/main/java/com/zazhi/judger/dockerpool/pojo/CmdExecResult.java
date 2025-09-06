@@ -12,6 +12,5 @@ import lombok.Data;
 public class CmdExecResult {
     private String stdout;
     private String stderr;
-    private boolean isTimeout;
-    private int exitCode;
+    private Boolean timeout; // 是否超时
 }

@@ -20,13 +20,13 @@ spring:
       host: ${redis.host}
       port: ${redis.port}
       password: ${redis.password}
-
   # minio
   minio:
     endpoint: ${minio.endpoint}
     access-key: ${minio.access-key}
     secret-key: ${minio.secret-key}
     bucket-name: ${minio.bucket-name}
+    domain: ${minio.domain}
   # mail
   mail:
     host: ${mail.host}
@@ -80,6 +80,9 @@ springdoc:
     - group: 'admin'
       paths-to-match: '/**'
       packages-to-scan: com.zazhi.controller.admin
+    - group: 'common'
+      paths-to-match: '/**'
+      packages-to-scan: com.zazhi.controller.common
 knife4j:
   enable: true
   setting:

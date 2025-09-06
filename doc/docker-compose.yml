@@ -1,0 +1,116 @@
+version: '1.0'
+
+services:
+  # MySQL数据库
+  mysql:
+    image: mysql:8.0
+    container_name: zzcoder-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password  # 根密码
+      MYSQL_DATABASE: app_db             # 初始数据库
+      MYSQL_USER: app_user               # 应用用户
+      MYSQL_PASSWORD: app_password       # 应用用户密码
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql        # 数据持久化
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql  # 初始化脚本(可选)
+    networks:
+      - zzcoder-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis缓存
+  redis:
+    image: redis:7.0-alpine
+    container_name: app-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data                 # 数据持久化
+    networks:
+      - zzcoder-network
+    command: redis-server --requirepass redis_password  # 设置密码
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "redis_password", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # RabbitMQ消息队列
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: app-rabbitmq
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbit_user    # 用户名
+      RABBITMQ_DEFAULT_PASS: rabbit_password # 密码
+    ports:
+      - "5672:5672"    # 消息队列端口
+      - "15672:15672"  # 管理界面端口
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq     # 数据持久化
+    networks:
+      - zzcoder-network
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # MinIO对象存储
+  minio:
+    image: minio/minio:RELEASE.2025-03-12T18-04-18Z
+    container_name: zzcoder-minio
+    restart: always
+    environment:
+      MINIO_ROOT_USER: minioadmin     # 访问密钥
+      MINIO_ROOT_PASSWORD: minioadmin # 密钥
+    ports:
+      - "9000:9000"    # API端口
+      - "9090:9090"    # 控制台端口
+    volumes:
+      - minio-data:/data                    # 数据持久化
+    command: server /data --console-address ":9090"
+    networks:
+      - zzcoder-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Nginx服务器
+  nginx:
+    image: nginx:stable-alpine3.21-perl
+    container_name: zzcoder-nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d        # 配置文件
+      - ./nginx/ssl:/etc/nginx/ssl              # SSL证书(可选)
+      - ./nginx/html:/usr/share/nginx/html      # 静态文件
+      - ./nginx/logs:/var/log/nginx             # 日志文件
+    depends_on:
+      - minio  # 确保MinIO先启动
+    networks:
+      - zzcoder-network
+
+# 网络配置
+networks:
+  zzcoder-network:
+    driver: bridge
+
+# 数据卷配置
+volumes:
+  mysql-data:
+  redis-data:
+  rabbitmq-data:
+  minio-data:

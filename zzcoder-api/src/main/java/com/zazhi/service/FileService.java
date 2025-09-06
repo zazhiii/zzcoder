@@ -9,4 +9,10 @@ public interface FileService {
      * @param file
      */
     String uploadFile(MultipartFile file);
+
+    /**
+     * 通过url删除文件
+     * @param url 文件url
+     */
+    void deleteFileByUrl(String url);
 }

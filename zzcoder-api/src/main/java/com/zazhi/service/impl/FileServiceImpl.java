@@ -1,14 +1,14 @@
 package com.zazhi.service.impl;
 
+import com.zazhi.common.exception.code.FileError;
+import com.zazhi.common.exception.model.BizException;
+import com.zazhi.common.utils.MinioUtil;
+import com.zazhi.config.MinioConfig;
 import com.zazhi.service.FileService;
-import com.zazhi.common.utils.AliOssUtil;
+import io.minio.MinioProperties;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.util.UUID;
 
 /**
  * @author zazhi
@@ -18,28 +18,41 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class FileServiceImpl implements FileService {
-    private final AliOssUtil aliOssUtil;
+    private final MinioUtil minioUtil;
+
+    private final MinioConfig minioConfig;
 
     /**
      * 上传文件
      *
-     * @param file
+     * @param file 文件
      */
     public String uploadFile(MultipartFile file) {
         try {
-            //原始文件名
-            String originalFilename = file.getOriginalFilename();
-            //截取原始文件名的后缀   dfdfdf.png
-            String extension = null;
-            if (originalFilename != null) {
-                extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+            String objectName = minioUtil.upload(file);
+            return minioConfig.getDomain() + "/" + objectName;
+        } catch (Exception e) {
+            throw new BizException(FileError.FILE_UPLOAD_FAIL);
+        }
+    }
+
+    /**
+     * 通过url删除文件
+     *
+     * @param url 文件url
+     */
+    @Override
+    public void deleteFileByUrl(String url) {
+        try {
+            String domain = minioConfig.getDomain() + "/";
+            if (url.startsWith(domain)) {
+                String objectName = url.substring(domain.length());
+                minioUtil.remove(objectName);
+            } else {
+                throw new BizException(FileError.FILE_URL_INVALID);
             }
-            //构造新文件名称
-            String objectName = UUID.randomUUID().toString() + extension;
-            //文件的请求路径
-            return aliOssUtil.upload(file.getBytes(), objectName);
-        } catch (IOException e) {
-            throw new RuntimeException("上传失败");
+        } catch (Exception e) {
+            throw new BizException(FileError.FILE_DELETE_FAIL);
         }
     }
 }

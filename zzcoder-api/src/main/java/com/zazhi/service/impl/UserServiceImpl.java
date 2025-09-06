@@ -4,6 +4,7 @@ import cn.hutool.json.JSONUtil;
 import com.zazhi.common.constants.RedisKeyConstants;
 import com.zazhi.common.enums.EmailCodeBizType;
 import com.zazhi.common.exception.code.AuthError;
+import com.zazhi.common.exception.code.FileError;
 import com.zazhi.common.exception.model.BizException;
 import com.zazhi.common.pojo.dto.UpdateEmailDTO;
 import com.zazhi.common.pojo.dto.UserInfoDTO;
@@ -11,11 +12,14 @@ import com.zazhi.common.pojo.dto.UserUpdateDTO;
 import com.zazhi.common.pojo.entity.User;
 import com.zazhi.common.pojo.vo.RoleAndPermissionVO;
 import com.zazhi.common.pojo.vo.UserSubmitStatVO;
+import com.zazhi.common.utils.MinioUtil;
 import com.zazhi.common.utils.RedisUtil;
 import com.zazhi.common.utils.ThreadLocalUtil;
 import com.zazhi.mapper.UserMapper;
+import com.zazhi.service.FileService;
 import com.zazhi.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -30,10 +34,13 @@ import static com.zazhi.common.constants.RedisKeyConstants.USER_ROLE_PERMISSIONS
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     private final RedisUtil redisUtil;
+
+    private final FileService fileService;
 
     /**
      * 根据用户id查询用户
@@ -42,7 +49,7 @@ public class UserServiceImpl implements UserService {
      * @return 用户实体
      */
     public User getUserById(Integer userId) {
-        return userMapper.findById(userId);
+        return userMapper.getById(userId);
     }
 
     /**
@@ -53,7 +60,7 @@ public class UserServiceImpl implements UserService {
     public UserInfoDTO getUserInfo() {
         // 基本信息
         Integer userId = ThreadLocalUtil.getCurrentId();
-        User user = userMapper.findById(userId);
+        User user = userMapper.getById(userId);
         UserInfoDTO userInfoDTO = new UserInfoDTO();
         BeanUtils.copyProperties(user, userInfoDTO);
 
@@ -92,20 +99,29 @@ public class UserServiceImpl implements UserService {
     /**
      * 更新用户头像
      *
-     * @param avatarUrl
+     * @param avatarUrl 头像URL
      */
+    @Override
     public void updateAvatar(String avatarUrl) {
         Integer userId = ThreadLocalUtil.getCurrentId();
-        User user = new User();
+        User user = userMapper.getById(userId);
+        // 删除旧头像
+        if(user.getAvatarUrl() != null){
+            try {
+                fileService.deleteFileByUrl(user.getAvatarUrl());
+            } catch (Exception e) {
+                log.error("删除旧头像失败，url: {}", user.getAvatarUrl(), e);
+            }
+        }
+        // 更新新头像
         user.setAvatarUrl(avatarUrl);
-        user.setId(userId);
         userMapper.update(user);
     }
 
     /**
      * 更新用户信息
      *
-     * @param userInfo
+     * @param userInfo 用户信息DTO
      */
     @Override
     public void updateUserInfo(UserUpdateDTO userInfo) {

@@ -52,7 +52,7 @@ public interface UserMapper {
      * @return
      */
     @Select("select * from user where id = #{userId}")
-    User findById(Integer userId);
+    User getById(Integer userId);
 
     /**
      * 更新用户的密码
@@ -64,17 +64,9 @@ public interface UserMapper {
 
     /**
      * 更新用户信息通用方法
-     * @param user
+     * @param user 用户对象
      */
     void update(User user);
-
-    /**
-     * 通过用户id查询用户角色
-     * @param userId
-     * @return
-     */
-    @Select("select r.* from user_role ur left join role r on ur.role_id = r.id where ur.user_id = #{userId}")
-    List<Role> getUserRolesById(Integer userId);
 
     /**
      * 通过角色查询权限
@@ -85,22 +77,6 @@ public interface UserMapper {
 
     @Select("select * from user where username = #{username}")
     User getByName(String username);
-
-    /**
-     * 获取用户已解决题目数
-     * @param userId 用户ID
-     * @return 题目数量
-     */
-    @Select("select count(distinct problem_id) from submission where user_id = #{userId} and status = 'AC'")
-    Integer getSolvedProblemCount(Integer userId);
-
-    /**
-     * 获取用户提交记录数
-     * @param userId 用户ID
-     * @return 提交记录数
-     */
-    @Select("select count(*) from submission where user_id = #{userId}")
-    Integer getSubmissionCount(Integer userId);
 
     /**
      * 获取用户通过次数

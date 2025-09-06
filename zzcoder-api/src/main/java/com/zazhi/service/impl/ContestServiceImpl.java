@@ -106,7 +106,7 @@ public class ContestServiceImpl implements ContestService {
         ContestVO contestVO = new ContestVO();
         BeanUtils.copyProperties(contest, contestVO);
         // 设置创建人名称
-        User user = userMapper.findById(contest.getCreateUser());
+        User user = userMapper.getById(contest.getCreateUser());
         contestVO.setCreateUserName(user.getUsername());
         // 设置比赛时长
         // 设置报名人数

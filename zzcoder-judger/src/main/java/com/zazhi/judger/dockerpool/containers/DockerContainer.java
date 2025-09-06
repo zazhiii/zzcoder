@@ -57,6 +57,35 @@ public abstract class DockerContainer {
                 .exec();
     }
 
+    public CmdExecResult execCmd(String[] cmd) throws InterruptedException {
+
+        String execID = this.createCmd(cmd).getId();
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ByteArrayOutputStream err = new ByteArrayOutputStream();
+
+        dockerClient.execStartCmd(execID)
+                .exec(new ResultCallback.Adapter<Frame>() {
+                    @Override
+                    public void onNext(Frame frame) {
+                        try {
+                            if (frame.getStreamType() == StreamType.STDOUT) {
+                                out.write(frame.getPayload());
+                            } else if (frame.getStreamType() == StreamType.STDERR) {
+                                err.write(frame.getPayload());
+                            }
+                        } catch (IOException e) {
+                            throw new RuntimeException("Error writing to output streams", e);
+                        }
+                    }
+                }).awaitCompletion();
+
+        return CmdExecResult.builder()
+                .stdout(out.toString(StandardCharsets.UTF_8))
+                .stderr(err.toString(StandardCharsets.UTF_8))
+                .build();
+    }
+
     public CmdExecResult execCmd(String[] cmd, int timeout, TimeUnit unit) throws InterruptedException {
 
         String execID = this.createCmd(cmd).getId();
@@ -64,7 +93,7 @@ public abstract class DockerContainer {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ByteArrayOutputStream err = new ByteArrayOutputStream();
 
-        boolean awaited = dockerClient.execStartCmd(execID)
+        dockerClient.execStartCmd(execID)
                 .exec(new ResultCallback.Adapter<Frame>() {
                     @Override
                     public void onNext(Frame frame) {
@@ -83,7 +112,6 @@ public abstract class DockerContainer {
         return CmdExecResult.builder()
                 .stdout(out.toString(StandardCharsets.UTF_8))
                 .stderr(err.toString(StandardCharsets.UTF_8))
-                .isTimeout(!awaited)
                 .build();
     }
 
@@ -116,7 +144,38 @@ public abstract class DockerContainer {
         return CmdExecResult.builder()
                 .stdout(out.toString())
                 .stderr(err.toString())
-                .isTimeout(!awaited)
+                .timeout(!awaited)
+                .build();
+    }
+
+    public CmdExecResult execCmd(String[] cmd, String stdin) throws InterruptedException {
+        String execID = this.createCmd(cmd).getId();
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ByteArrayOutputStream err = new ByteArrayOutputStream();
+
+        InputStream in = new ByteArrayInputStream(stdin.getBytes());
+
+        dockerClient.execStartCmd(execID)
+                .withStdIn(in)
+                .exec(new ResultCallback.Adapter<Frame>() {
+                    @Override
+                    public void onNext(Frame frame) {
+                        try {
+                            if (frame.getStreamType() == StreamType.STDOUT) {
+                                out.write(frame.getPayload());
+                            } else if (frame.getStreamType() == StreamType.STDERR) {
+                                err.write(frame.getPayload());
+                            }
+                        } catch (IOException e) {
+                            throw new RuntimeException("Error writing to output streams", e);
+                        }
+                    }
+                }).awaitCompletion();
+
+        return CmdExecResult.builder()
+                .stdout(out.toString())
+                .stderr(err.toString())
                 .build();
     }
 

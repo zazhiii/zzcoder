@@ -47,11 +47,6 @@ public class DockerContainerTest {
         CmdExecResult res = container.execCmd(compileCmd, 10, TimeUnit.SECONDS);
         System.out.println("编译结果: " + res.getStdout());
         System.out.println("编译错误: " + res.getStderr());
-
-        String[] runCmd = {"java", "Main"};
-        CmdExecResult runRes = container.execCmd(runCmd, "1 2\n", 10, TimeUnit.SECONDS);
-        System.out.println("运行结果: " + runRes.getStdout());
-        System.out.println("运行错误: " + runRes.getStderr());
     }
 
 }
