@@ -31,12 +31,6 @@ mail:
         auth: true
         starttls:
           enable: true
-alioss:
-  endpoint: oss-cn-beijing.aliyuncs.com
-  access-key-id: LTAI5tDzEcVJ43Ja7bLWBMyH
-  access-key-secret: 9j7zMZfZ7uPJBkpY2yd5D1tyiTREiB
-  bucket-name: big-eventzazhiii
-
 minio:
   endpoint: http://localhost:9000
   access-key: 8QWAKgmka4hy8WUVH8dH
