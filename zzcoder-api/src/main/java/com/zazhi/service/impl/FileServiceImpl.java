@@ -30,7 +30,7 @@ public class FileServiceImpl implements FileService {
     public String uploadFile(MultipartFile file) {
         try {
             String objectName = minioUtil.upload(file);
-            return minioConfig.getDomain() + "/" + objectName;
+            return "http://" + minioConfig.getDomain() + "/" + minioConfig.getBucketName() + "/" + objectName;
         } catch (Exception e) {
             throw new BizException(FileError.FILE_UPLOAD_FAIL);
         }
@@ -44,9 +44,9 @@ public class FileServiceImpl implements FileService {
     @Override
     public void deleteFileByUrl(String url) {
         try {
-            String domain = minioConfig.getDomain() + "/";
-            if (url.startsWith(domain)) {
-                String objectName = url.substring(domain.length());
+            String prefix = "http://" + minioConfig.getDomain() + "/" + minioConfig.getBucketName() + "/";
+            if (url.startsWith(prefix)) {
+                String objectName = url.substring(prefix.length());
                 minioUtil.remove(objectName);
             } else {
                 throw new BizException(FileError.FILE_URL_INVALID);

@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserService {
         Integer userId = ThreadLocalUtil.getCurrentId();
         User user = userMapper.getById(userId);
         // 删除旧头像
-        if(user.getAvatarUrl() != null){
+        if(user.getAvatarUrl() != null && !user.getAvatarUrl().equals(avatarUrl)) {
             try {
                 fileService.deleteFileByUrl(user.getAvatarUrl());
             } catch (Exception e) {

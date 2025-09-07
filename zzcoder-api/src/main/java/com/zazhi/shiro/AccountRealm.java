@@ -1,5 +1,6 @@
 package com.zazhi.shiro;
 
+import com.zazhi.common.constants.RedisKeyConstants;
 import com.zazhi.common.pojo.entity.Permission;
 import com.zazhi.common.pojo.entity.Role;
 import com.zazhi.common.pojo.entity.User;
@@ -80,7 +81,7 @@ public class AccountRealm extends AuthorizingRealm {
         }
 
         // 判断 token 是否过期
-        String key = JWT_TOKEN + map.get("id");
+        String key = RedisKeyConstants.format(JWT_TOKEN, map.get("id"));
         if (redisUtil.get(key) == null) {
             throw new AuthenticationException("token已过期，请重新登录");
         }
