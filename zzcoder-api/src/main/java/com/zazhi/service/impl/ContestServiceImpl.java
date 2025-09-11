@@ -141,6 +141,10 @@ public class ContestServiceImpl implements ContestService {
         if(contest == null){
             throw new RuntimeException("比赛不存在");
         }
+        Integer count = contestMapper.CountContestUser(contestId, ThreadLocalUtil.getCurrentId());
+        if(count > 0){
+            throw new RuntimeException("不能重复报名");
+        }
         contestMapper.registerContest(contestId, ThreadLocalUtil.getCurrentId());
     }
 

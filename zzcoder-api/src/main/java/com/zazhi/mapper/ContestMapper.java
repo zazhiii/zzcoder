@@ -102,13 +102,6 @@ public interface ContestMapper {
     List<Contest> getActiveOrUpcomingContests();
 
     /**
-     * 获取公开比赛
-     * @return
-     */
-    @Select("select * from contest where visible = 0")
-    List<Contest> getPublicContests();
-
-    /**
      * 分页查询比赛
      * @param keyword
      * @param status
@@ -116,4 +109,14 @@ public interface ContestMapper {
      * @return
      */
     Page<ContestPageVO> page(String keyword, Integer status, Integer type);
+
+    /**
+     * 查询是否报名
+     * @param contestId
+     * @param userId
+     * @return
+     */
+    @Select("select count(*) from contest_user " +
+            "where contest_id = #{contestId} and user_id = #{userId}")
+    Integer CountContestUser(Long contestId, Integer userId);
 }

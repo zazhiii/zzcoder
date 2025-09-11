@@ -1,6 +1,6 @@
 package com.zazhi.initializer;
 
-import cn.hutool.crypto.digest.MD5;
+import cn.hutool.crypto.digest.DigestUtil;
 import com.zazhi.common.pojo.entity.Permission;
 import com.zazhi.common.pojo.entity.Role;
 import com.zazhi.common.pojo.entity.User;
@@ -20,7 +20,6 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class AdminInitializer implements ApplicationRunner {
-
     private final AuthMapper authMapper;
 
     private final UserMapper userMapper;
@@ -41,10 +40,17 @@ public class AdminInitializer implements ApplicationRunner {
         if(user == null){
             user = User.builder()
                     .username(adminUsername)
-                    .password(MD5.create().digestHex(adminPassword))
+                    .password(DigestUtil.md5Hex(adminPassword))
                     .email(adminEmail)
                     .build();
             userMapper.insert(user);
+        }else if(!user.getUsername().equals(adminUsername)
+                || !user.getPassword().equals(DigestUtil.md5Hex(adminPassword))
+                || !user.getEmail().equals(adminEmail)){
+            user.setUsername(adminUsername);
+            user.setPassword(DigestUtil.md5Hex(adminPassword));
+            user.setEmail(adminEmail);
+            userMapper.update(user);
         }
 
         if(role == null){
