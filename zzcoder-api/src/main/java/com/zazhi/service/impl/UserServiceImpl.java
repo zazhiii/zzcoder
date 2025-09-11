@@ -4,15 +4,13 @@ import cn.hutool.json.JSONUtil;
 import com.zazhi.common.constants.RedisKeyConstants;
 import com.zazhi.common.enums.EmailCodeBizType;
 import com.zazhi.common.exception.code.AuthError;
-import com.zazhi.common.exception.code.FileError;
 import com.zazhi.common.exception.model.BizException;
 import com.zazhi.common.pojo.dto.UpdateEmailDTO;
-import com.zazhi.common.pojo.dto.UserInfoDTO;
+import com.zazhi.common.pojo.dto.UserInfoVO;
 import com.zazhi.common.pojo.dto.UserUpdateDTO;
 import com.zazhi.common.pojo.entity.User;
 import com.zazhi.common.pojo.vo.RoleAndPermissionVO;
 import com.zazhi.common.pojo.vo.UserSubmitStatVO;
-import com.zazhi.common.utils.MinioUtil;
 import com.zazhi.common.utils.RedisUtil;
 import com.zazhi.common.utils.ThreadLocalUtil;
 import com.zazhi.mapper.UserMapper;
@@ -57,19 +55,19 @@ public class UserServiceImpl implements UserService {
      *
      * @return UserInfoDTO
      */
-    public UserInfoDTO getUserInfo() {
+    public UserInfoVO getUserInfo() {
         // 基本信息
         Integer userId = ThreadLocalUtil.getCurrentId();
         User user = userMapper.getById(userId);
-        UserInfoDTO userInfoDTO = new UserInfoDTO();
-        BeanUtils.copyProperties(user, userInfoDTO);
+        UserInfoVO userInfoVO = new UserInfoVO();
+        BeanUtils.copyProperties(user, userInfoVO);
 
         // 角色和权限
         RoleAndPermissionVO roleAndPermissionVO = userMapper.getRoleAndPermissionByUserId(userId);
-        userInfoDTO.setRoles(roleAndPermissionVO.getRoles());
-        userInfoDTO.setPermissions(roleAndPermissionVO.getPermissions());
+        userInfoVO.setRoles(roleAndPermissionVO.getRoles());
+        userInfoVO.setPermissions(roleAndPermissionVO.getPermissions());
 
-        return userInfoDTO;
+        return userInfoVO;
     }
 
     /**

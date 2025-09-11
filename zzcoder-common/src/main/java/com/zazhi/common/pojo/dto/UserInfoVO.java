@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.sql.Timestamp;
 import java.util.Set;
 
 /**
@@ -17,7 +17,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInfoDTO {
+public class UserInfoVO {
 
     private Long id;
 
@@ -32,4 +32,6 @@ public class UserInfoDTO {
     private Set<String> roles;
 
     private Set<String> permissions;
+
+    private Timestamp createTime;
 }

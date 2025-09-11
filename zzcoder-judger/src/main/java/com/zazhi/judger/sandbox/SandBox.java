@@ -79,9 +79,10 @@ public abstract class SandBox {
         }
 
         if (res.getStderr().startsWith("__TIME__:")) {
-            String[] parts = res.getStderr().substring("__TIME__".length() + 1).trim().split(" ");
-            long timeUsed = (long) (Double.parseDouble(parts[0].split(":")[1]) * 1000);
-            long memoryUsed = Long.parseLong(parts[1]);
+            String[] parts = res.getStderr().trim().split(" ");
+            // e.g. parts: ["__TIME__:0m", "1.5s", "27800"]
+            long timeUsed = (long) (Double.parseDouble(parts[1].substring(0, parts[1].length() - 1)) * 1000);
+            long memoryUsed = Long.parseLong(parts[2]);
             return new CodeRunResult(res.getStdout(), null, timeUsed, memoryUsed);
         } else {
             throw new RuntimeErrorException(res.getStderr().split("__TIME__:")[0].trim());

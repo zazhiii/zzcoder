@@ -1,7 +1,7 @@
 package com.zazhi.controller.oj;
 
 import com.zazhi.common.pojo.dto.UpdateEmailDTO;
-import com.zazhi.common.pojo.dto.UserInfoDTO;
+import com.zazhi.common.pojo.dto.UserInfoVO;
 import com.zazhi.common.pojo.dto.UserUpdateDTO;
 import com.zazhi.common.pojo.result.Result;
 import com.zazhi.common.pojo.vo.UserSubmitStatVO;
@@ -29,7 +29,7 @@ public class UserController {
     @GetMapping()
     @Operation(summary = "获取用户基本信息")
     @RequiresAuthentication
-    public Result<UserInfoDTO> getUerInfo(){
+    public Result<UserInfoVO> getUerInfo(){
         log.info("获取用户基本信息");
         return Result.success(userService.getUserInfo());
     }
@@ -50,7 +50,7 @@ public class UserController {
         return Result.success();
     }
 
-    @PutMapping()
+    @PutMapping("/profile")
     @Operation(summary = "更新用户基本信息")
     public Result<Void> updateUserInfo(@RequestBody UserUpdateDTO userInfo) {
         log.info("更新用户信息：{}", userInfo);

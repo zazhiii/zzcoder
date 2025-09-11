@@ -35,7 +35,7 @@ z-judger:
       keep-start-time: 30
       host-working-dir: "G:/zzcoder-judger-work"
       container-working-dir: "/app"
-      image-name: jger
+      image-name: jg
       memory-limit-mb: 1024
 
 # springdoc-openapi项目配置

@@ -1,15 +1,11 @@
 package com.zazhi.service;
 
 import com.zazhi.common.pojo.dto.UpdateEmailDTO;
-import com.zazhi.common.pojo.dto.UserInfoDTO;
+import com.zazhi.common.pojo.dto.UserInfoVO;
 import com.zazhi.common.pojo.dto.UserUpdateDTO;
-import com.zazhi.common.pojo.entity.Permission;
-import com.zazhi.common.pojo.entity.Role;
 import com.zazhi.common.pojo.entity.User;
 import com.zazhi.common.pojo.vo.RoleAndPermissionVO;
 import com.zazhi.common.pojo.vo.UserSubmitStatVO;
-
-import java.util.List;
 
 public interface UserService {
 
@@ -24,7 +20,7 @@ public interface UserService {
      * 获取用户基本信息
      * @return
      */
-    UserInfoDTO getUserInfo();
+    UserInfoVO getUserInfo();
 
     /**
      * 更新用户邮箱

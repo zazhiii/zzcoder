@@ -36,11 +36,8 @@ public class CodeExecContainerFactory implements DockerContainerFactory<CodeExec
     }
 
     public CodeExecContainer createDockerContainer(String containerName) {
-
         String hostWorkDir = Paths.get(this.hostWorkingDir).toAbsolutePath().toString();
-
         hostWorkDir = hostWorkDir + "/" + UUID.randomUUID();
-
         CreateContainerResponse createRes = dockerClient.createContainerCmd(imageName)
                 .withHostConfig(
                         HostConfig.newHostConfig()
@@ -50,6 +47,7 @@ public class CodeExecContainerFactory implements DockerContainerFactory<CodeExec
                 )
                 .withName(containerName)
                 .withWorkingDir(containerWorkingDir) // 设置工作目录
+                .withTty(true) // 这样可以让容器保持运行
                 .exec();
 
         return new CodeExecContainer(
@@ -60,15 +58,8 @@ public class CodeExecContainerFactory implements DockerContainerFactory<CodeExec
     }
 
     public CodeExecContainer createDockerContainer() {
-
         String hostWorkDir = Paths.get(this.hostWorkingDir).toAbsolutePath().toString();
-
         hostWorkDir = hostWorkDir + "/" + UUID.randomUUID();
-//
-//        if(!new File(hostWorkDir).mkdirs()) {
-//            throw new RuntimeException("Failed to create host working directory: " + hostWorkDir);
-//        }
-
         CreateContainerResponse createRes = dockerClient.createContainerCmd(imageName)
                 .withHostConfig(
                         HostConfig.newHostConfig()
@@ -77,9 +68,8 @@ public class CodeExecContainerFactory implements DockerContainerFactory<CodeExec
                                 .withMemorySwap(memoryLimitMb * 1024 * 1024L) // 禁止交换分区 (swap)
                 )
                 .withWorkingDir(containerWorkingDir) // 设置工作目录
+                .withTty(true) // 这样可以让容器保持运行
                 .exec();
-
         return new CodeExecContainer(dockerClient, createRes.getId(), "", hostWorkDir);
     }
-
 }
