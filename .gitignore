@@ -37,4 +37,6 @@ build/
 
 ### Mac OS ###
 .DS_Store
-zzcoder-service/src/main/resources/application-dev.yml
+
+zzcoder-api/src/main/resources/application-prod.yml
+

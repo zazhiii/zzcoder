@@ -75,6 +75,7 @@ public class UserServiceImpl implements UserService {
      *
      * @param updateEmailDTO 更新邮箱DTO
      */
+    @Override
     public void updateEmail(UpdateEmailDTO updateEmailDTO) {
         String newEmail = updateEmailDTO.getNewEmail();
         String code = updateEmailDTO.getCode();

@@ -57,6 +57,7 @@ public class AuthServiceImpl implements AuthService {
      * @param updatePasswordDTO 用户输入的旧密码和新密码
      * @param token             用户的token
      */
+    @Override
     public void updatePassword(UpdatePasswordDTO updatePasswordDTO, String token) {
         String oldPassword = updatePasswordDTO.getOldPassword();
         String newPassword = updatePasswordDTO.getNewPassword();
@@ -112,6 +113,7 @@ public class AuthServiceImpl implements AuthService {
      * @param loginDTO 登录信息
      * @return token
      */
+    @Override
     public String login(LoginDTO loginDTO) {
         String identification = loginDTO.getIdentification();
         // 根据用户输入的用户名或邮箱或手机号查找用户
@@ -147,6 +149,7 @@ public class AuthServiceImpl implements AuthService {
      * @param loginByEmailDTO 邮箱、验证码
      * @return token
      */
+    @Override
     public String loginByEmail(LoginByEmailDTO loginByEmailDTO) {
         String email = loginByEmailDTO.getEmail();
         String code = loginByEmailDTO.getEmailCode();
@@ -181,6 +184,7 @@ public class AuthServiceImpl implements AuthService {
      *
      * @param updatePasswordByEmailDTO 邮箱、验证码、新密码
      */
+    @Override
     public void updatePasswordByEmail(UpdatePasswordByEmailDTO updatePasswordByEmailDTO) {
         String email = updatePasswordByEmailDTO.getEmail();
         String code = updatePasswordByEmailDTO.getEmailCode();
@@ -235,6 +239,7 @@ public class AuthServiceImpl implements AuthService {
      *
      * @param id 角色ID
      */
+    @Override
     public void deleteRole(Integer id) {
         authMapper.deleteRole(id);
         // 删除相关用户的缓存
@@ -247,6 +252,7 @@ public class AuthServiceImpl implements AuthService {
      *
      * @return 角色列表
      */
+    @Override
     public List<Role> getRoles() {
         return authMapper.getRoles();
     }
@@ -257,6 +263,7 @@ public class AuthServiceImpl implements AuthService {
      * @param roleId  角色ID
      * @param permissionId 权限ID
      */
+    @Override
     public void addPermissionToRole(Integer roleId, Integer permissionId) {
         authMapper.addPermissionToRole(roleId, permissionId);
         // 删除相关用户的缓存
@@ -270,6 +277,7 @@ public class AuthServiceImpl implements AuthService {
      * @param roleId 角色ID
      * @param userId 用户ID
      */
+    @Override
     public void addRoleToUser(Integer roleId, Integer userId) {
         authMapper.addRoleToUser(roleId, userId);
         // 删除用户的缓存
@@ -281,6 +289,7 @@ public class AuthServiceImpl implements AuthService {
      *
      * @return 权限列表
      */
+    @Override
     public List<Permission> getPermissions() {
         return authMapper.getAllPermissions();
     }
@@ -293,7 +302,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void sendEmailCode(SendCodeDTO sendCodeDTO) {
         // 校验业务类型
-        if (!EmailCodeBizType.isValid(sendCodeDTO.getBusinessType())) {
+        if (!EmailCodeBizType.isValid(sendCodeDTO.getBizType())) {
             throw new BizException(AuthError.INVALID_BUSINESS_TYPE);
         }
 
@@ -304,7 +313,7 @@ public class AuthServiceImpl implements AuthService {
         context.setVariable("appName", "ZZCoder");
         context.setVariable("expire", emailCodeProperties.getExpire());
 
-        String templateName = switch (EmailCodeBizType.fromCode(sendCodeDTO.getBusinessType())) {
+        String templateName = switch (EmailCodeBizType.fromCode(sendCodeDTO.getBizType())) {
             case REGISTER -> "email/register-code.html";
             case LOGIN -> "email/login-code.html";
             case RESET_PASSWORD -> "email/reset-password-code.html";
@@ -320,7 +329,7 @@ public class AuthServiceImpl implements AuthService {
             throw new BizException(AuthError.EMAIL_SEND_FAIL);
         }
 
-        String key = RedisKeyConstants.format(EMAIL_CODE, sendCodeDTO.getBusinessType(), sendCodeDTO.getEmail());
+        String key = RedisKeyConstants.format(EMAIL_CODE, sendCodeDTO.getBizType(), sendCodeDTO.getEmail());
         redisUtil.set(key, code, emailCodeProperties.getExpire(), TimeUnit.MINUTES);
     }
 

@@ -11,6 +11,6 @@ import lombok.Data;
 @Data
 public class SendCodeDTO {
     @Email
-    private String email;        // 目标邮箱
-    private String businessType; // 业务类型，如 register、login、reset_password 等
+    private String email;
+    private String bizType;
 }
