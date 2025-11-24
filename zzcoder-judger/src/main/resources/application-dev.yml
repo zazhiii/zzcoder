@@ -5,12 +5,23 @@ zz:
     virtual-host: zzcoder
     username: zazhi
     password: 123456
-  # mysql
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    # url: jdbc:mysql://localhost:3306/zzcoder
-    host: localhost
-    port: 3306
-    database: zzcoder
-    username: root
-    password: 123456
+#  # mysql
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    # url: jdbc:mysql://localhost:3306/zzcoder
+#    host: localhost
+#    port: 3306
+#    database: zzcoder
+#    username: root
+#    password: 123456
+
+
+z-judger:
+  docker:
+    pool:
+      max-pool-size: 10
+      keep-start-time: 30
+      host-working-dir: "/www/wwwroot/zzcoder/judger/work"
+      container-working-dir: "/app"
+      image-name: jg
+      memory-limit-mb: 1024

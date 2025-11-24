@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zazhi.mapper.ProblemSetMapper">
+<mapper namespace="com.zazhi.zzcoder.mapper.ProblemSetMapper">
 
-    <update id="update" parameterType="com.zazhi.common.pojo.entity.ProblemSet">
+    <update id="update" parameterType="com.zazhi.zzcoder.common.pojo.entity.ProblemSet">
         update problem_set
         <set>
             <if test="title != null">
@@ -23,7 +23,7 @@
         where id = #{id}
     </update>
 
-    <select id="pageProblemSet" parameterType="string" resultType="com.zazhi.common.pojo.vo.ProblemSetPageVO">
+    <select id="pageProblemSet" parameterType="string" resultType="com.zazhi.zzcoder.common.pojo.vo.ProblemSetPageVO">
         select
         ps.id,
         ps.title,

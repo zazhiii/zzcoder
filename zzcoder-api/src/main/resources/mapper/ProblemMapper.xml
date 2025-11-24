@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zazhi.mapper.ProblemMapper">
+<mapper namespace="com.zazhi.zzcoder.mapper.ProblemMapper">
 
-    <resultMap id="pageMap" type="com.zazhi.common.pojo.vo.ProblemPageVO">
+    <resultMap id="pageMap" type="com.zazhi.zzcoder.common.pojo.vo.ProblemPageVO">
         <id column="id" property="id"/>
         <result column="problem_number" property="problemNumber"/>
         <result column="title" property="title"/>
@@ -30,7 +30,7 @@
     </select>
 
     <!-- 根据标签id集合查询题目id集合 -->
-    <select id="pageIds" parameterType="com.zazhi.common.pojo.dto.ProblemPageDTO">
+    <select id="pageIds" parameterType="com.zazhi.zzcoder.common.pojo.dto.ProblemPageDTO">
         select
         <!-- 题目 -->
         p.id
@@ -66,7 +66,7 @@
 <!--        GROUP BY p.problem_id-->
     </select>
 
-    <update id="update" parameterType="com.zazhi.common.pojo.entity.Problem">
+    <update id="update" parameterType="com.zazhi.zzcoder.common.pojo.entity.Problem">
         UPDATE problem
         <set>
             <if test="problemId != null">
@@ -112,7 +112,7 @@
         WHERE id = #{id}
     </update>
 
-    <resultMap id="getProblemInfoByIdMap" type="com.zazhi.common.pojo.vo.ProblemInfoVO">
+    <resultMap id="getProblemInfoByIdMap" type="com.zazhi.zzcoder.common.pojo.vo.ProblemInfoVO">
         <id column="id" property="id"/>
         <result column="problem_id" property="problemNumber"/>
         <result column="title" property="title"/>
@@ -132,7 +132,7 @@
             <result column="name"/>
         </collection>
         <!-- 样例集合 -->
-        <collection property="samples" ofType="com.zazhi.common.pojo.vo.SampleTestCaseVO">
+        <collection property="samples" ofType="com.zazhi.zzcoder.common.pojo.vo.SampleTestCaseVO">
             <result column="input" property="input"/>
             <result column="output" property="output"/>
             <result column="explanation" property="explanation"/>
@@ -156,11 +156,11 @@
     </select>
 
 
-    <resultMap id="getProblemWithTestCases" type="com.zazhi.common.pojo.vo.ProblemWithTestCaseVO">
+    <resultMap id="getProblemWithTestCases" type="com.zazhi.zzcoder.common.pojo.vo.ProblemWithTestCaseVO">
         <id column="id" property="problemId"/>
         <result column="time_limit" property="timeLimit"/>
         <result column="memory_limit" property="memoryLimit"/>
-        <collection property="testCases" ofType="com.zazhi.common.pojo.entity.TestCase">
+        <collection property="testCases" ofType="com.zazhi.zzcoder.common.pojo.entity.TestCase">
             <id property="id" column="tc_id"/>
             <result property="input" column="input"/>
             <result property="output" column="output"/>

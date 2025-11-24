@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zazhi.mapper.JudgeMapper">
-    <select id="pageSubmissions" resultType="com.zazhi.common.pojo.vo.SubmissionPageVO" parameterType="string">
+<mapper namespace="com.zazhi.zzcoder.mapper.JudgeMapper">
+    <select id="pageSubmissions" resultType="com.zazhi.zzcoder.common.pojo.vo.SubmissionPageVO" parameterType="string">
         select
         s.id, s.problem_id, s.user_id, s.submit_time, s.language, s.status, s.result, s.time_used, s.memory_used, u.username, p.title
         from submission s
@@ -29,7 +29,7 @@
         ORDER BY s.submit_time DESC
     </select>
 
-    <update id="updateSubmission" parameterType="com.zazhi.common.pojo.entity.Submission">
+    <update id="updateSubmission" parameterType="com.zazhi.zzcoder.common.pojo.entity.Submission">
         update submission
         <set>
             <if test="status != null">
@@ -48,7 +48,7 @@
         where id = #{id}
     </update>
 
-    <select id="getSubmissionInfoById" resultType="com.zazhi.common.pojo.vo.SubmissionInfoVO" parameterType="long">
+    <select id="getSubmissionInfoById" resultType="com.zazhi.zzcoder.common.pojo.vo.SubmissionInfoVO" parameterType="long">
         select
         s.id, s.user_id, s.problem_id, s.contest_id, s.submit_time, s.language, s.code, s.status, s.result, s.time_used, s.memory_used, s.error_message, u.username, p.title
         from submission s

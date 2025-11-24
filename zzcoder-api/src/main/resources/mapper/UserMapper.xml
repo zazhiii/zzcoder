@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zazhi.mapper.UserMapper">
+<mapper namespace="com.zazhi.zzcoder.mapper.UserMapper">
 
-    <update id="update" parameterType="com.zazhi.common.pojo.entity.User">
+    <update id="update" parameterType="com.zazhi.zzcoder.common.pojo.entity.User">
         update user
         <set>
             <if test="username != null and username != ''">username = #{username},</if>
@@ -21,7 +21,7 @@
         </where>
     </update>
 
-    <select id="findPermissionsByRoles" parameterType="java.util.List" resultType="com.zazhi.common.pojo.entity.Permission">
+    <select id="findPermissionsByRoles" parameterType="java.util.List" resultType="com.zazhi.zzcoder.common.pojo.entity.Permission">
         select p.*
         from permission p
         join role_permission rp on p.id = rp.permission_id
@@ -35,7 +35,7 @@
         </where>
     </select>
 
-    <resultMap id="rolePermissionMap" type="com.zazhi.common.pojo.vo.RoleAndPermissionVO">
+    <resultMap id="rolePermissionMap" type="com.zazhi.zzcoder.common.pojo.vo.RoleAndPermissionVO">
         <id property="userId" column="user_id"/>
         <collection property="roles" ofType="java.lang.String">
             <result column="role_name"/>
@@ -44,7 +44,7 @@
             <result column="permission_name"/>
         </collection>
     </resultMap>
-    <select id="getRoleAndPermissionByUserId" resultMap="rolePermissionMap">
+    <select id="getRoleAndPermission" resultMap="rolePermissionMap">
         SELECT
         u.id AS user_id,
         r.name AS role_name,
@@ -56,5 +56,6 @@
         LEFT JOIN permission p ON rp.permission_id = p.id
         WHERE u.id = #{userId}
     </select>
+
 
 </mapper>

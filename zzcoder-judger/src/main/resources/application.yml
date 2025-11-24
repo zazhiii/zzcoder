@@ -18,12 +18,6 @@ spring:
     virtual-host: ${zz.rabbitmq.virtual-host} # ????
     username: ${zz.rabbitmq.username} # ???
     password: ${zz.rabbitmq.password} # ??
-  # mysql
-  datasource:
-    driver-class-name: ${zz.datasource.driver-class-name} #com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${zz.datasource.host}:${zz.datasource.port}/${zz.datasource.database}
-    username: ${zz.datasource.username}
-    password: ${zz.datasource.password}
 docker:
   host: tcp://localhost:2375
   api-version: 1.41

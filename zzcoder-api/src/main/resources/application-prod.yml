@@ -1,0 +1,53 @@
+# mq
+rabbitmq:
+  host: localhost
+  port: 5672
+  virtual-host: zzcoder
+  username: zazhi
+  password: 123456
+# mysql
+datasource:
+  driver-class-name: com.mysql.cj.jdbc.Driver
+  # url: jdbc:mysql://localhost:3306/zzcoder
+  host: localhost
+  port: 3306
+  database: zzcoder
+  username: zzcoder
+  password: Gc5neErcYG6bRbNz
+# redis
+redis:
+  host: localhost
+  port: 6379
+  password: 123456
+# mail
+mail:
+  host: smtp.qq.com
+  port: 587
+  username: 2354807547@qq.com
+  password: kwylpojovuzadjjg
+  properties:
+    mail:
+      smtp:
+        auth: true
+        starttls:
+          enable: true
+minio:
+  endpoint: http://localhost:9000
+  access-key: gZEeLzRUcv0PXke4FZJu
+  secret-key: 1qCF0dhlcR4yGnlg7R2aWbSzkchaGgpKvNDn5WHo
+  bucket-name: zzcoder
+  domain: minio.loveshuang.xyz
+
+logging:
+  level:
+    com:
+      zazhi:
+        mapper: debug
+        service: debug
+        controller: debug
+
+clist:
+  Authorization: ApiKey zazhi:a355c7ed82cbaf55153bce5eb9bab1d0d2f0c1af
+  username: zazhi
+  api_key: a355c7ed82cbaf55153bce5eb9bab1d0d2f0c1af
+  url: https://clist.by/api/v4/contest/
