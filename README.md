@@ -3,23 +3,12 @@
 
 zzcoder 是一个在线判题（OJ）平台，支持编程题目的提交、自动评测和竞赛管理，适用于算法学习、自主训练和在线竞赛环境。
 
-## 🌟 项目亮点
-
-- 🧾 支持题目管理、题单管理、竞赛管理等核心模块
-- 🔐 使用 Shiro + JWT + RBAC 实现登录认证与权限控制
-- 🚀 判题服务基于 Docker 隔离执行，保证安全性和公平性
-- 🕓 使用线程池实现异步判题任务，提高系统吞吐量
-- 🛠️ RabbitMQ 实现后端服务与判题机间通信
-
-- ⏰ 定时任务自动更新比赛状态
-
-
 ## 🛠 技术栈
 
 | 模块       | 技术               |
 |------------|--------------------|
-| 后端       | Spring Boot, MyBatis|
-| 安全       | Apache Shiro, JWT, RBAC |
+| 后端       | Spring Boot, MyBatis-Plus|
+| 安全       | Spring Security, JWT, RBAC |
 | 消息队列   | RabbitMQ           |
 | 缓存       | Redis              |
 | 判题沙箱   | Docker             |
